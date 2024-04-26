@@ -1,0 +1,115 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutLogin.cshtml";
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.3/js/bootstrap.min.js"></script>
+    <title>HDUA</title>
+
+    <style>
+        body {
+            background-image: url('https://mdbootstrap.com/img/Photos/Others/images/78.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 100vh;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8" style="background-color:#C2E6D6">
+                <div class="card shadow-lg border border-black" style="background-color:#C2E6D6;">
+                    <div style="margin: 0 auto; text-align: center;">
+                        <h3 class="card-title text-black fs-3"><samp>Formulario creación de cuenta</samp></h3>
+                    </div>
+                    <div class="card-body">
+                        <form action="@Url.Action("Registrar","Login")" method="post">
+                            <div class="row">
+                                <div class="col-md-4 mb-3">
+                                    <label for="nombre" class="form-label"><samp>Nombre completo:</samp></label>
+                                    <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Ingresar nombre...">
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label for="tipoUsuario" class="form-label"><samp>Tipo de usuario:</samp></label>
+                                    <select class="form-select" id="tipoUsuario" name="tipoUsuario">
+                                        <option value="Seleccione">Seleccione</option>
+                                        @foreach (String i in @ViewBag.ltu)
+                                        {
+                                            <option>
+                                                @i
+                                            </option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label for="institucion" class="form-label"><samp>Institución:</samp></label>
+                                    <select class="form-select" id="institucion" name="institucion">
+                                        <option value="Seleccione">Seleccione</option>
+                                        @foreach (String i in @ViewBag.li)
+                                        {
+                                            <option>
+                                                @i
+                                            </option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-4 mb-3">
+                                    <label for="genero" class="form-label"><samp>Género:</samp></label>
+                                    <select class="form-select" id="genero" name="genero">
+                                        <option value="Seleccione">Seleccione</option>
+                                        @foreach (String i in @ViewBag.lgu)
+                                        {
+                                            <option>
+                                                @i
+                                            </option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label for="correo" class="form-label"><samp>Correo electrónico:</samp></label>
+                                    <input type="text" class="form-control" id="correo" name="correo" placeholder="Ingresar correo...">
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label for="contrasenia" class="form-label"><samp>Contraseña:</samp></label>
+                                    <input type="password" class="form-control" id="contrasenia" name="contrasenia">
+                                </div>
+                            </div>
+
+                            <div class="row text-center justify-content-center">
+                                <div class="col-md-4 mb-3">
+                                    <label for="contrasenia2" class="form-label"><samp>Confirmar contraseña:</samp></label>
+                                    <input type="password" class="form-control" id="contrasenia2" name="contrasenia2">
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12 text-center justify-content-center">
+                                    <button type="submit" class="btn btn-outline-secondary" style="display: block; margin: 0 auto; color: black">Finalizar</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+</body>
+</html>

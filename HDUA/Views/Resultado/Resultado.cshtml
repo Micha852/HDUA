@@ -1,0 +1,85 @@
+﻿@{
+    ViewData["Title"] = "Resultado";
+    Layout = "~/Views/Shared/layau2.cshtml";
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.3/js/bootstrap.min.js"></script>
+    <title>HDUA</title>
+    <style>
+        body {
+            background-image: url('https://mdbootstrap.com/img/Photos/Others/images/78.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 100vh;
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <div class="row mt-5">
+        <div class="col d-flex justify-content-end align-items-end">
+            <h3>___________________________</h3>
+        </div>
+
+        <div class="col d-flex justify-content-center align-items-center" style="background-color: rgba(128, 128, 128, 0.5);">
+            <h3 class="panel-heading"><samp>RESULTADOS DE LA BÚSQUEDA</samp></h3>
+        </div>
+
+        <div class="col d-flex justify-content-start align-items-start">
+            <h3>___________________________</h3>
+        </div>
+    </div>
+
+    <!--................................................................-->
+    <div id="carouselExampleDark" class="carousel carousel-dark slide" style="max-width: 800px; margin: 0 auto;">
+        <div class="carousel-inner">
+            <div class="carousel-item active" data-bs-interval="10000">
+                <svg class="bd-placeholder-img bd-placeholder-img-lg d-block w-100" width="800" height="400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: First slide" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#f5f5f5"></rect><text x="50%" y="50%" fill="#aaa" dy=".3em"></text></svg>
+                <div class="carousel-caption d-none d-md-block">
+                    <h5><samp>Resultado #</samp>1</h5>
+                    <p><samp>Puedes navegar hacia atrás o adelante para ver más resultados.</samp></p>
+                </div>
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="0" class="active" aria-label="Slide 1" aria-current="true"></button>
+        </div>
+    </div>
+
+
+    <!--................................................................-->
+    <div class="col d-flex justify-content-center align-items-center flex-column">
+        <div class="row-md-auto text-center">
+            <img src="~/img/flechatras.png" alt="Ícono" width="50" height="50">
+        </div>
+        <div class="row-md-auto text-center">
+            <a href="@Url.Action("Principal", "Principal")" class="btn btn-outline-light" style="display: block; margin: 0 auto; color: lightgray">Volver a buscar</a>
+        </div>
+    </div>
+
+
+
+</body>
+
+
+</html>
+

@@ -1,0 +1,46 @@
+﻿@{
+    Layout = "~/Views/Shared/layau2.cshtml";
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.3/js/bootstrap.min.js"></script>
+    <title>HDUA</title>
+    <style>
+        body{
+            background-image: url('img/principal.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 100vh;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="position-absolute top-50 start-50 translate-middle">
+        <div class="row">
+
+            <form action="/" method="post" id="cientifico" class="col input-group me-5">
+                <input type="text" class="form-control rounded-pill border border-dark" placeholder="Nombre científico" aria-label="Example text with button addon" aria-describedby="button-addon1">
+                <button class="btn-outline-dark" type="submit" id="button-addon1" formaction="@Url.Action("Resultado", "Resultado")"><samp>Buscar</samp></button>
+            </form>
+
+            <form action="/" method="post" id="vulgar" class="col input-group me-5">
+                <input type="text" class="form-control rounded-pill border border-dark" placeholder="Nombre vulgar" aria-label="Example text with button addon" aria-describedby="button-addon1">
+                <button class="btn-outline-dark" type="submit" id="button-addon1" formaction="@Url.Action("Resultado", "Resultado")"><samp>Buscar</samp></button>
+            </form>
+
+        </div>
+        <div class="row text-center mt-5">
+            <a href="@Url.Action("Avanzada", "Principal")" class="fs-4"><samp>Búsqueda por parámetros</samp><i class='bx bx-search'></i></a>
+        </div>
+    </div>
+</body>
+</html>
