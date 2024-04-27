@@ -13,5 +13,10 @@ namespace HDUA.Controllers
         {
             return View();
         }
+
+        public IActionResult GestionUsuario()
+        {
+            return View();
+        }
     }
 }
