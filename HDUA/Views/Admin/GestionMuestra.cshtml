@@ -95,174 +95,240 @@
                 <div class="modal-body" style="background-color: #C2E6D6">
                     <div id="carouselExampleControls" class="carousel slide" data-bs-interval="false">
                         <div class="carousel-inner ">
-                            <form action="/" method="post"></form>
-                            <!-- Parte 1 -->
-                            <div class="carousel-item active">
-                                <div class="container">
-                                    <div class="row">
+                            <form action="/" method="post">
+                                <!-- Parte 1 -->
+                                <div class="carousel-item active">
+                                    <div class="container">
+                                        <div class="row">
 
-                                        <h3 class="d-flex justify-content-center align-items-center"><samp>Generalidades</samp></h3>
+                                            <h3 class="d-flex justify-content-center align-items-center"><samp>Generalidades</samp></h3>
 
-                                        <div class="col me-5 ms-5">
-                                            <div class="row mt-3">
-                                                <input type="text" class="form-control" placeholder="Nombre científico" oninput="this.value = this.value.toUpperCase()">
-                                            </div>
-                                            <div class="row mt-3">
-                                                <input type="text" class="form-control" placeholder="Nombre vulgar" oninput="this.value = this.value.toUpperCase()">
-                                            </div>
-                                            <div class="row mt-3">
-                                                <label for="formFile" class="form-label"><samp>Seleccionar imágen de muestra</samp></label>
-                                                <input class="form-control" type="file" id="formFile">
-                                            </div>
-                                            <div class="row mt-3">
-                                                <label for="formFile" class="form-label"><samp>Fecha recolección</samp></label>
-                                                <input type="date" class="form-control" id="fecharecolecccion">
-                                            </div>
-                                        </div>
-
-                                        <div class="col me-5 ms-5">
-                                            <div class="row mt-3">
-                                                <select class="form-select">
-                                                    <option selected>Tipo venación</option>
-                                                </select>
+                                            <div class="col me-5 ms-5">
+                                                <div class="row mt-3">
+                                                    <input type="text" class="form-control" placeholder="Nombre científico" oninput="this.value = this.value.toUpperCase()">
+                                                </div>
+                                                <div class="row mt-3">
+                                                    <input type="text" class="form-control" placeholder="Nombre vulgar" oninput="this.value = this.value.toUpperCase()">
+                                                </div>
+                                                <div class="row mt-3">
+                                                    <label for="formFile" class="form-label"><samp>Seleccionar imágen de muestra</samp></label>
+                                                    <input class="form-control" type="file" id="formFile">
+                                                </div>
+                                                <div class="row mt-3">
+                                                    <label for="formFile" class="form-label"><samp>Fecha recolección</samp></label>
+                                                    <input type="date" class="form-control" id="fecharecolecccion">
+                                                </div>
                                             </div>
 
-                                            <div class="row mt-3">
-                                                <select class="form-select">
-                                                    <option selected>Tipo forma</option>
-                                                </select>
-                                            </div>
+                                            <div class="col me-5 ms-5">
+                                                <div class="row mt-3">
+                                                    <select class="form-select">
+                                                        <option value="Seleccione" >Tipo venación</option>
+                                                        @foreach (String i in @ViewBag.ltv)
+                                                        {
+                                                            <option>
+                                                                @i
+                                                            </option>
+                                                        }
+                                                    </select>
+                                                </div>
+
+                                                <div class="row mt-3">
+                                                    <select class="form-select">
+                                                        <option value="Seleccione">Tipo forma</option>
+                                                        @foreach (String i in @ViewBag.ltf)
+                                                        {
+                                                            <option>
+                                                                @i
+                                                            </option>
+                                                        }
+                                                    </select>
+                                                </div>
                                             
-                                            <div class="row mt-3">
-                                                <select class="form-select">
-                                                    <option selected>Tipo margen</option>
-                                                </select>
-                                            </div>
+                                                <div class="row mt-3">
+                                                    <select class="form-select">
+                                                        <option value="Seleccione">Tipo margen</option>
+                                                        @foreach (String i in @ViewBag.ltm)
+                                                        {
+                                                            <option>
+                                                                @i
+                                                            </option>
+                                                        }
+                                                    </select>
+                                                </div>
                                             
-                                            <div class="row mt-3">
-                                                <select class="form-select">
-                                                    <option selected>Procedencia</option>
-                                                </select>
-                                            </div>
+                                                <div class="row mt-3">
+                                                    <select class="form-select">
+                                                        <option value="Seleccione">Procedencia</option>
+                                                        @foreach (String i in @ViewBag.ltp)
+                                                        {
+                                                            <option>
+                                                                @i
+                                                            </option>
+                                                        }
+                                                    </select>
+                                                </div>
                                             
-                                            <div class="row mt-3">
-                                                <select class="form-select">
-                                                    <option selected>Altura</option>
-                                                </select>
-                                            </div>
+                                                <div class="row mt-3">
+                                                    <input type="number" class="form-control" min="1" max="100" placeholder="Altura de la procedencia">
+                                                </div>
+
                                             
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <!-- Parte 2 -->
-                            <div class="carousel-item">
-                                <div class="container">
-                                    <div class="row">
+                                <!-- Parte 2 -->
+                                <div class="carousel-item">
+                                    <div class="container">
+                                        <div class="row">
 
-                                        <h3 class="d-flex justify-content-center align-items-center"><samp>Especificaciones</samp></h3>
+                                            <h3 class="d-flex justify-content-center align-items-center"><samp>Especificaciones</samp></h3>
                                         
-                                        <div class="col me-5 ms-5">
-                                            <div class="row mt-3">
-                                                <select class="form-select">
-                                                    <option selected>Clase</option>
-                                                </select>
+                                            <div class="col me-5 ms-5">
+                                                <div class="row mt-3">
+                                                    <select class="form-select">
+                                                        <option value="Seleccione">Clase</option>
+                                                        @foreach (String i in @ViewBag.ltc)
+                                                        {
+                                                            <option>
+                                                                @i
+                                                            </option>
+                                                        }
+                                                    </select>
+                                                </div>
+
+                                                <div class="row mt-3">
+                                                    <select class="form-select">
+                                                        <option value="Seleccione">Especie</option>
+                                                        @foreach (String i in @ViewBag.lte)
+                                                        {
+                                                            <option>
+                                                                @i
+                                                            </option>
+                                                        }
+                                                    </select>
+                                                </div>
+
+                                                <div class="row mt-3">
+                                                    <select class="form-select">
+                                                        <option value="Seleccione">Género</option>
+                                                        @foreach (String i in @ViewBag.ltg)
+                                                        {
+                                                            <option>
+                                                                @i
+                                                            </option>
+                                                        }
+                                                    </select>
+                                                </div>
+
+                                                <div class="row mt-3">
+                                                    <select id="departmentSelect" class="form-select">
+                                                        <option value="Seleccione">Departamento</option>
+                                                        @foreach (String i in @ViewBag.ldep)
+                                                        {
+                                                            <option>
+                                                                @i
+                                                            </option>
+                                                        }
+                                                    </select>
+                                                </div>
+
+                                                <div class="row mt-3">
+                                                    <select id="municipioSelect" class="form-select">
+                                                        <option selected>Municipio</option>
+                                                    </select>
+                                                </div>
+
                                             </div>
 
-                                            <div class="row mt-3">
-                                                <select class="form-select">
-                                                    <option selected>Especie</option>
-                                                </select>
-                                            </div>
+                                            <div class="col me-5 ms-5">
+                                                <div class="row mt-3">
+                                                    <select class="form-select">
+                                                        <option value="Seleccione">Orden</option>
+                                                        @foreach (String i in @ViewBag.lto)
+                                                        {
+                                                            <option>
+                                                                @i
+                                                            </option>
+                                                        }
+                                                    </select>
+                                                </div>
 
-                                            <div class="row mt-3">
-                                                <select class="form-select">
-                                                    <option selected>Géneron</option>
-                                                </select>
-                                            </div>
+                                                <div class="row mt-3">
+                                                    <select class="form-select">
+                                                        <option value="Seleccione">Familia</option>
+                                                        @foreach (String i in @ViewBag.ltfami)
+                                                        {
+                                                            <option>
+                                                                @i
+                                                            </option>
+                                                        }
+                                                    </select>
+                                                </div>
 
-                                            <div class="row mt-3">
-                                                <select class="form-select">
-                                                    <option selected>Tipo Ubicación</option>
-                                                </select>
+                                                <div class="row mt-3">
+                                                    <select class="form-select">
+                                                        <option selected>Tipo ubicación</option>
+                                                    </select>
+                                                </div>
+
+                                                <div class="row mt-3">
+                                                    <select class="form-select">
+                                                        <option selected>Ubicación</option>
+                                                    </select>
+                                                </div>
+
+                                                <div class="row mt-3">
+                                                    <input type="text" class="form-control" placeholder="Coordenadas..." oninput="this.value = this.value.toUpperCase()">
+                                                </div>
+
                                             </div>
 
                                         </div>
-
-                                        <div class="col me-5 ms-5">
-                                            <div class="row mt-3">
-                                                <select class="form-select">
-                                                    <option selected>Orden</option>
-                                                </select>
-                                            </div>
-
-                                            <div class="row mt-3">
-                                                <select class="form-select">
-                                                    <option selected>Familia</option>
-                                                </select>
-                                            </div>
-
-                                            <div class="row mt-3">
-                                                <select class="form-select">
-                                                    <option selected>Departamento</option>
-                                                </select>
-                                            </div>
-
-                                            <div class="row mt-3">
-                                                <select class="form-select">
-                                                    <option selected>Ubicación</option>
-                                                </select>
-                                            </div>
-
-                                            <div class="row mt-3">
-                                                <input type="text" class="form-control" placeholder="Coordenadas..." oninput="this.value = this.value.toUpperCase()">
-                                            </div>
-
-                                        </div>
-
                                     </div>
                                 </div>
-                            </div>
 
-                            <!-- Parte 3 -->
-                            <div class="carousel-item">
-                                <div class="container">
+                                <!-- Parte 3 -->
+                                <div class="carousel-item">
+                                    <div class="container">
 
-                                    <h3 class="d-flex justify-content-center align-items-center"><samp>Asociar recolectores</samp></h3>
+                                        <h3 class="d-flex justify-content-center align-items-center"><samp>Asociar recolectores</samp></h3>
                                         
                                     
-                                    <div class="row mt-3 ms-5 justify-content-end">
-                                        <div class="col-auto">
-                                            <input type="text" class="form-control" id="buscar-recolector" placeholder="Buscar recolector">
+                                        <div class="row mt-3 ms-5 justify-content-end">
+                                            <div class="col-auto">
+                                                <input type="text" class="form-control" id="buscar-recolector" placeholder="Buscar recolector">
+                                            </div>
+                                            <div class="col-auto">
+                                                <i class='bx bx-search-alt' style="font-size: 1.5rem;"></i>
+                                            </div>
                                         </div>
-                                        <div class="col-auto">
-                                            <i class='bx bx-search-alt' style="font-size: 1.5rem;"></i>
-                                        </div>
+
+
+
+                                        <table class="table table-striped table-hover mt-3">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col"><samp>Nombre</samp></th>
+                                                    <th scope="col"><samp>Muestras ligadas</samp></th>
+                                                    <th scope="col"><samp>Seleccionar</samp></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td>
+                                                        <input type="checkbox">
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
                                     </div>
-
-
-
-                                    <table class="table table-striped table-hover mt-3">
-                                        <thead>
-                                            <tr>
-                                                <th scope="col"><samp>Nombre</samp></th>
-                                                <th scope="col"><samp>Muestras ligadas</samp></th>
-                                                <th scope="col"><samp>Seleccionar</samp></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td></td>
-                                                <td></td>
-                                                <td>
-                                                    <input type="checkbox">
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
                                 </div>
-                            </div>
+                            </form>
                         </div>
 
                         <!-- Controles del carrusel -->
@@ -290,6 +356,28 @@
         </div>
     </div>
 
+
+    <script>
+        $(document).ready(function () {
+            $('#departmentSelect').change(function () {
+                var departamentoSeleccionado = $(this).val();
+                if (departamentoSeleccionado !== 'Seleccione') {
+                    $.ajax({
+                        url: "@Url.Action("ObtenerMunicipiosPorDepartamento", "Admin")",
+                        type: 'POST',
+                        data: { nombreDepartamento: departamentoSeleccionado },
+                        success: function (data) {
+                            $('#municipioSelect').empty();
+                            $.each(data, function (index, municipio) {
+                                $('#municipioSelect').append('<option>' + municipio + '</option>');
+                            });
+                        }
+                    });
+                }
+            });
+        });
+
+    </script>
 
 </body>
 </html>

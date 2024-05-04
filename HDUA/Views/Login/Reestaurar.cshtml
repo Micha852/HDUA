@@ -38,11 +38,11 @@
                     </div>
 
                     <div class="card-body">
-                        <form>
+                        <form action="@Url.Action("RecuperarPword","Login")" method="post">
 
                             <div class="mb-3">
                                 <img src="~/img/email.png" alt="Ícono de usuario" width="40" height="40">
-                                <input type="text" class="form-control" id="usuario" placeholder="Correo...">
+                                <input type="text" class="form-control" id="usuario" placeholder="Correo..." name="correo">
                             </div>
 
                             <button type="submit" class="btn btn-outline-secondary" style="display: block; margin: 0 auto; color: black">Generar nueva contraseña</button>

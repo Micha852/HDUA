@@ -1,6 +1,7 @@
 ﻿using HDUA.DATA;
 using HDUA.Models;
 using Microsoft.AspNetCore.Mvc;
+using PROYECTO.SERVICIOS;
 
 namespace HDUA.Controllers
 {
@@ -42,6 +43,36 @@ namespace HDUA.Controllers
             procesos.RegistrarUsuario(usuario);
 
             return RedirectToAction("Principal", "Principal");
+        }
+
+        static string GenerateRandomSequence()
+        {
+            Random random = new Random();
+            string sequence = string.Empty;
+            for (int i = 0; i < 7; i++)
+            {
+                int randomNumber = random.Next(1, 10); // Genera un número aleatorio entre 1 y 9.
+                sequence += randomNumber.ToString();
+            }
+            return sequence;
+        }
+
+        [HttpPost]
+        public ActionResult RecuperarPword(String correo)
+        {
+            String contra = GenerateRandomSequence();
+            Boolean aux = procesos.BUSCARCOREO(correo, contra);
+            if (aux)
+            {
+                ServicioGmail enviar = new ServicioGmail();
+                enviar.SendEmailGmail(correo, "Recuperación de contraseña", "Esta es su nueva contraseña: " + contra);
+                return RedirectToAction("Login", "Login");
+            }
+            else
+            {
+                return View("Reestaurar");
+            }
+
         }
     }
 }

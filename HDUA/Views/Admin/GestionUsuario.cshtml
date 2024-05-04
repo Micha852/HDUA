@@ -70,9 +70,10 @@
                         <td></td>
                         <td></td>
                         <td>
-                            <button type="button" class="btn btn-link">
+                            <button type="button" class="btn btn-link btn-editar">
                                 <i class='bx bxs-edit' style="font-size: 1.5rem;"></i>
                             </button>
+
                         </td>
                     </tr>
                 </tbody>
@@ -90,6 +91,56 @@
     </div>
 
     
+    <div class="modal fade mt-5" id="modalEditarUsuario" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel"><samp>Editar Usuario</samp></h5>
+                    <button type="button" class="btn btn-outline-danger ms-auto" id="cerrarEditarUser" data-bs-dismiss="modal" aria-label="Close"><samp>X</samp></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formEditarUsuario">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="selectRol" class="form-label"><samp>Rol</samp></label>
+                                    <select class="form-select" id="selectRol" name="rol">
+                                        <option value="1"></option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="selectEstado" class="form-label"><samp>Estado</samp></label>
+                                    <select class="form-select" id="selectEstado" name="estado">
+                                        <option value="activo"></option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><samp>Cancelar</samp></button>
+                    <button type="button" class="btn btn-primary" id="btnGuardarUsuario"><samp>Finalizar</samp></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <script>
+        $(document).ready(function () {
+            $('.btn-editar').click(function () {
+                $('#modalEditarUsuario').modal('show');
+            });
+
+            // $('#btnGuardarUsuario').click(function () {
+            //     $('#modalEditarUsuario').modal('hide');
+            // });
+        });
+    </script>
 
 </body>
 

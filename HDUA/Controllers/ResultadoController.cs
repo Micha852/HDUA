@@ -8,5 +8,10 @@ namespace HDUA.Controllers
         {
             return View();
         }
+
+        public IActionResult FichaMuestra()
+        {
+            return View();
+        }
     }
 }
