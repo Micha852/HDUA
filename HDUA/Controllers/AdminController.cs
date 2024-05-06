@@ -1,15 +1,19 @@
 ﻿using HDUA.DATA;
+using HDUA.Models;
 using Microsoft.AspNetCore.Mvc;
 using MySql.Data.MySqlClient;
 using System.Diagnostics;
 using System.Text.Json;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace HDUA.Controllers
 {
+    [Authorize(Roles = "ADMINISTRADOR")]
     public class AdminController : Controller
     {
         Procesos procesos = new Procesos();
+        ConexionMongo cnm = new ConexionMongo();
         public IActionResult Principal()
         {
             return View();
@@ -28,6 +32,7 @@ namespace HDUA.Controllers
             ViewBag.ltfami = procesos.Listar("LISTARFAMILIA");
             ViewBag.ldep = procesos.Listar("LISTARDEPARTAMENTO");
             ViewBag.lmun = procesos.Listar("LISTARMUNICIPIO");
+            ViewBag.mostrarrecolector = procesos.ListarRecolector();
 
             return View();
         }
@@ -44,6 +49,41 @@ namespace HDUA.Controllers
             return Json(municipios);
         }
 
+        [HttpPost]
+        public ActionResult ObtenerTiposUbicacionPorMunicipio(string nombreMunicipio)
+        {
+            var tiposUbicacion = procesos.ObtenerTiposUbicacionPorMunicipio(nombreMunicipio);
+            return Json(tiposUbicacion);
+        }
+
+        [HttpPost]
+        public ActionResult ObtenerUbicacionesPorTipoYMunicipio(string nombreTipo, string nombreMunicipio)
+        {
+            var ubicaciones = procesos.ObtenerUbicacionesPorTipoYMunicipio(nombreTipo, nombreMunicipio);
+            return Json(ubicaciones);
+        }
+
+        [HttpPost]
+        public IActionResult CrearMuestra(MuestraModel a)
+        {
+            ImagenModel imagen = new ImagenModel();
+            imagen.Nombre = a.Cientifico;
+            string n = "";
+            byte[] bytes;
+            if (a.File!=null)
+            {
+                using(Stream fs = a.File.OpenReadStream())
+                {
+                    using (BinaryReader br = new BinaryReader(fs))
+                    {
+                        bytes = br.ReadBytes((int)fs.Length);
+                        imagen.Imagen = Convert.ToBase64String(bytes, 0, bytes.Length);
+                        n = cnm.UploadImage(imagen);
+                    }
+                }
+            }
+            return RedirectToAction("GestionMuestra","Admin");
+        }
 
     }
 }

@@ -86,8 +86,15 @@
                 </div>
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-outline-success" data-bs-dismiss="modal"><samp>←Volver</samp></button>
-                    <button type="button" class="btn btn-secondary" id="btnEditarHistoria">Editar</button>
-                    <button type="button" class="btn btn-primary" id="btnGuardarHistoria" style="display: none;">Guardar</button>
+
+                    @{
+                        if (User.IsInRole("ADMINISTRADOR"))
+                        {
+                            <button type="button" class="btn btn-secondary" id="btnEditarHistoria">Editar</button>
+                            <button type="button" class="btn btn-primary" id="btnGuardarHistoria" style="display: none;">Guardar</button>
+                        }
+                    }
+
                     <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#modalDatos"><samp>Datos→</samp></button>
                 </div>
             </div>

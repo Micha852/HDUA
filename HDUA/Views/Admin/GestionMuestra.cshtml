@@ -11,6 +11,9 @@
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.3/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+
 
     <title>HDUA</title>
     <style>
@@ -95,7 +98,7 @@
                 <div class="modal-body" style="background-color: #C2E6D6">
                     <div id="carouselExampleControls" class="carousel slide" data-bs-interval="false">
                         <div class="carousel-inner ">
-                            <form action="/" method="post">
+                            <form action="/" method="post" enctype="multipart/form-data">
                                 <!-- Parte 1 -->
                                 <div class="carousel-item active">
                                     <div class="container">
@@ -110,10 +113,12 @@
                                                 <div class="row mt-3">
                                                     <input type="text" class="form-control" placeholder="Nombre vulgar" oninput="this.value = this.value.toUpperCase()">
                                                 </div>
+                                                @* INSERTAR IMAGEN *@
                                                 <div class="row mt-3">
                                                     <label for="formFile" class="form-label"><samp>Seleccionar imágen de muestra</samp></label>
-                                                    <input class="form-control" type="file" id="formFile">
+                                                    <input class="form-control" type="file" accept="image/*" id="formFile">
                                                 </div>
+
                                                 <div class="row mt-3">
                                                     <label for="formFile" class="form-label"><samp>Fecha recolección</samp></label>
                                                     <input type="date" class="form-control" id="fecharecolecccion">
@@ -269,19 +274,19 @@
                                                 </div>
 
                                                 <div class="row mt-3">
-                                                    <select class="form-select">
+                                                    <select class="form-select" id="tipoUbicacionSelect">
                                                         <option selected>Tipo ubicación</option>
                                                     </select>
                                                 </div>
 
                                                 <div class="row mt-3">
-                                                    <select class="form-select">
+                                                    <select class="form-select" id="ubicacionSelect">
                                                         <option selected>Ubicación</option>
                                                     </select>
                                                 </div>
 
                                                 <div class="row mt-3">
-                                                    <input type="text" class="form-control" placeholder="Coordenadas..." oninput="this.value = this.value.toUpperCase()">
+                                                    <input type="text" class="form-control" id="coordenadasInput" placeholder="Coordenadas (Ejemplo: 51°30'N 0°7'W)">
                                                 </div>
 
                                             </div>
@@ -299,16 +304,17 @@
                                     
                                         <div class="row mt-3 ms-5 justify-content-end">
                                             <div class="col-auto">
-                                                <input type="text" class="form-control" id="buscar-recolector" placeholder="Buscar recolector">
+                                                <button type="button" class="btn btn-link btn-buscar" id="buscarbtn">
+                                                    <i class='bx bx-search-alt' style="font-size: 1.5rem;"></i>
+                                                </button>
+                                                
                                             </div>
                                             <div class="col-auto">
-                                                <i class='bx bx-search-alt' style="font-size: 1.5rem;"></i>
+                                                <input type="text" class="form-control" id="buscar-recolector" placeholder="Buscar recolector">
                                             </div>
                                         </div>
 
-
-
-                                        <table class="table table-striped table-hover mt-3">
+                                        <table id="tabla-recolectores" class="table table-striped table-hover mt-3">
                                             <thead>
                                                 <tr>
                                                     <th scope="col"><samp>Nombre</samp></th>
@@ -317,13 +323,16 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td>
-                                                        <input type="checkbox">
-                                                    </td>
-                                                </tr>
+                                                @foreach (RecolectorModel i in ViewBag.mostrarrecolector)
+                                                {
+                                                    <tr>
+                                                        <td>@i.Nombre</td>
+                                                        <td>@i.Cantidad</td>
+                                                        <td>
+                                                            <input type="checkbox">
+                                                        </td>
+                                                    </tr>
+                                                }
                                             </tbody>
                                         </table>
                                     </div>
@@ -368,6 +377,7 @@
                         data: { nombreDepartamento: departamentoSeleccionado },
                         success: function (data) {
                             $('#municipioSelect').empty();
+                            $('#municipioSelect').append('<option>' + "Seleccione municipio" + '</option>');
                             $.each(data, function (index, municipio) {
                                 $('#municipioSelect').append('<option>' + municipio + '</option>');
                             });
@@ -376,6 +386,67 @@
                 }
             });
         });
+
+        $(document).ready(function () {
+            $('#municipioSelect').change(function () {
+                var municipioSeleccionado = $(this).val();
+                if (municipioSeleccionado !== 'Seleccione') {
+                    $.ajax({
+                        url: "@Url.Action("ObtenerTiposUbicacionPorMunicipio", "Admin")",
+                        type: 'POST',
+                        data: { nombreMunicipio: municipioSeleccionado },
+                        success: function (data) {
+                            $('#tipoUbicacionSelect').empty();
+                            $('#tipoUbicacionSelect').append('<option>' + "Seleccione el tipo de ubicación" + '</option>');
+                            $.each(data, function (index, tipoUbicacion) {
+                                $('#tipoUbicacionSelect').append('<option>' + tipoUbicacion + '</option>');
+                            });
+                        }
+                    });
+                }
+            });
+        });
+
+        $(document).ready(function () {
+            $('#tipoUbicacionSelect').change(function () {
+                var tipoSeleccionado = $('#tipoUbicacionSelect').val();
+                var municipioSeleccionado = $('#municipioSelect').val();
+                $.ajax({
+                    url: "@Url.Action("ObtenerUbicacionesPorTipoYMunicipio", "Admin")",
+                    type: 'POST',
+                    data: { nombreTipo: tipoSeleccionado, nombreMunicipio: municipioSeleccionado },
+                    success: function (data) {
+                        $('#ubicacionSelect').empty();
+                        $('#ubicacionSelect').append('<option>' + "Seleccione ubicaciónn" + '</option>');
+                        $.each(data, function (index, ubicacion) {
+                            $('#ubicacionSelect').append('<option>' + ubicacion + '</option>');
+                        });
+                    }
+                });
+            });
+        });
+
+        const coordenadasInput = document.getElementById('coordenadasInput');
+
+        coordenadasInput.addEventListener('input', function () {
+            const coordenadas = this.value.trim();
+            const pattern = /^-?\d{1,2}°\d{1,2}'[NSEW]\s*-?\d{1,3}°\d{1,2}'[NSEW]$/;
+
+            if (!pattern.test(coordenadas)) {
+                this.setCustomValidity('El formato de coordenadas es incorrecto. Por favor, ingresa las coordenadas en el formato correcto, por ejemplo, 51°30\'N 0°7\'W');
+            } else {
+                this.setCustomValidity('');
+            }
+        });
+
+        $(document).ready(function () {
+            $('#buscarbtn').click(function () {
+                var inputText = $('#buscar-recolector').val().trim().toLowerCase();
+                $('#tabla-recolectores tbody tr').filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(inputText) > -1);
+                });
+            });
+        });x
 
     </script>
 

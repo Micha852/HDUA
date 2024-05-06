@@ -1,12 +1,13 @@
-﻿using MongoDB.Driver;
+﻿using HDUA.Models;
+using MongoDB.Driver;
 
 namespace HDUA.DATA{
     public class ConexionMongo{
 
-        private static ConexionMongo _instance;
-        private IMongoDatabase cnm;
+        public static ConexionMongo _instance;
+        public IMongoDatabase cnm;
 
-        private ConexionMongo(){
+        public ConexionMongo(){
             conectar();
         }
 
@@ -23,7 +24,7 @@ namespace HDUA.DATA{
             get { return cnm; }
         }
 
-        private void conectar(){
+        public void conectar(){
             try{
                 var client = new MongoClient("mongodb://localhost:27017");
                 cnm = client.GetDatabase("HDUA");
@@ -34,6 +35,14 @@ namespace HDUA.DATA{
 
         public void desconectar(){
             cnm = null;
+        }
+
+        public string UploadImage(ImagenModel img)
+        {
+            var imageCollection = cnm.GetCollection<ImagenModel>("Imagen");
+
+            imageCollection.InsertOne(img);
+            return img.Id;
         }
     }
 }

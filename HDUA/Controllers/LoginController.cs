@@ -3,6 +3,10 @@ using HDUA.Models;
 using Microsoft.AspNetCore.Mvc;
 using PROYECTO.SERVICIOS;
 
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
+using System.Security.Claims;
+
 namespace HDUA.Controllers
 {
     public class LoginController : Controller
@@ -12,6 +16,10 @@ namespace HDUA.Controllers
 
         public IActionResult Login()
         {
+            if (User.Identity.Name != null)
+            {
+                return RedirectToAction("Principal", "Principal");
+            }
             return View();
         }
 
@@ -27,7 +35,6 @@ namespace HDUA.Controllers
             ViewBag.ltu = procesos.Listar("LISTARTIPOUSUARIO");
             return View();
         }
-
 
         [HttpPost]
         public ActionResult Registrar()
@@ -73,6 +80,28 @@ namespace HDUA.Controllers
                 return View("Reestaurar");
             }
 
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Login(String NOMBRECORREO, String PWORD){
+            UsuarioModel usuario = procesos.ValidarUsuario(NOMBRECORREO, PWORD);
+            if(usuario.Nombre != null){
+                var claims = new List<Claim>{
+                    new Claim (ClaimTypes.Name, usuario.Nombre),
+                    new Claim (ClaimTypes.Role, usuario.Rol)
+                };
+                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
+
+                return RedirectToAction("Principal", "Principal");
+            }
+            return RedirectToAction("Login", "Login");
+        }
+
+        public async Task<IActionResult> Logout(){
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToAction("Login", "Login");
         }
     }
 }

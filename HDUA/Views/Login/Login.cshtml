@@ -38,19 +38,19 @@
                     </div>
 
                     <div class="card-body">
-                        <form>
+                        <form action="@Url.Action("login","Login")" method="post">
 
                             <div class="mb-3">
                                 <img src="~/img/usericon.png" alt="Ícono de usuario" width="40" height="40">
-                                <input type="text" class="form-control" id="usuario" placeholder="Correo...">
+                                <input type="text" class="form-control" id="usuario" placeholder="Correo..." name="NOMBRECORREO">
                             </div>
 
                             <div class="mb-3">
                                 <img src="~/img/candado.png" alt="Ícono de usuario" width="40" height="40">
-                                <input type="password" class="form-control" id="contrasena" placeholder="Contraseña...">
+                                <input type="password" class="form-control" id="contrasena" placeholder="Contraseña..." name="PWORD">
                             </div>
 
-                            <button type="submit" class="btn btn-outline-secondary" style="display: block; margin: 0 auto; color: black">Ingresar</button>
+                            <button type="submit" class="btn btn-outline-secondary" style="display: block; margin: 0 auto; color: black" >Ingresar</button>
 
                         </form>
                     </div>
