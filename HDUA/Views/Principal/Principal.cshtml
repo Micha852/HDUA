@@ -38,9 +38,20 @@
             </form>
 
         </div>
+
         <div class="row text-center mt-5">
             <a href="@Url.Action("Avanzada", "Principal")" class="fs-4"><samp>Búsqueda por parámetros</samp><i class='bx bx-search'></i></a>
         </div>
+
+        @{
+            if (User.IsInRole("ADMINISTRADOR"))
+            {
+                <div class="row text-center mt-5">
+                    <a href="@Url.Action("Principal", "Admin")" class="fs-4"><samp>Pánel de control</samp><i class='bx bx-search'></i></a>
+                </div>
+            }
+        }
+       
     </div>
 </body>
 </html>

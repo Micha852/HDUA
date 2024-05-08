@@ -124,8 +124,9 @@ namespace HDUA.DATA{
                 {
                     RecolectorModel user = new RecolectorModel()
                     {
-                        Nombre = dr[0] + "",
-                        Cantidad = Convert.ToInt32(dr[1] + "")
+                        Id = Convert.ToInt32(dr[0] + ""),
+                        Nombre = dr[1] + "",
+                        Cantidad = Convert.ToInt32(dr[2] + "")
                     };
                     lista.Add(user);
                 }
@@ -166,6 +167,43 @@ namespace HDUA.DATA{
                 desconectar();
             }
         }
+        public void CrearMuestra(MuestraModel muestra)
+        {
+            conectar();
+            try
+            {
+                MySqlCommand cmd = new MySqlCommand("CREARMUESTRA", cn);
+                cmd.Parameters.AddWithValue("CIENTIFICO", muestra.Cientifico);
+                cmd.Parameters.AddWithValue("VULGAR", muestra.Vulgar);
+                cmd.Parameters.AddWithValue("IMAGEN", muestra.Imagen);
+                cmd.Parameters.AddWithValue("COORDENADA", muestra.Coordenada);
+                cmd.Parameters.AddWithValue("NCLASE", muestra.Clase);
+                cmd.Parameters.AddWithValue("NORDEN", muestra.Orden);
+                cmd.Parameters.AddWithValue("NFAMILIA", muestra.Familia);
+                cmd.Parameters.AddWithValue("NGENERO", muestra.Genero);
+                cmd.Parameters.AddWithValue("NESPECIE", muestra.Especie);
+                cmd.Parameters.AddWithValue("NUBICACION", muestra.Ubicacion);
+                cmd.Parameters.AddWithValue("NPROCEDENCIA", muestra.Procedencia);
+                cmd.Parameters.AddWithValue("ALTURA", muestra.Altura);
+                cmd.Parameters.AddWithValue("NVENACION", muestra.Venacion);
+                cmd.Parameters.AddWithValue("NFORMA", muestra.Forma);
+                cmd.Parameters.AddWithValue("NMARGEN", muestra.Margen);
+                cmd.Parameters.AddWithValue("RECOLECTORES", muestra.Recolectores);
+                cmd.Parameters.AddWithValue("IDS", muestra.Ids);
+
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+            finally
+            {
+                desconectar();
+            }
+        }
+
 
         public Boolean BUSCARCOREO(String correo, String contra)
         {

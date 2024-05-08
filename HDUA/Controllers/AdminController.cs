@@ -64,7 +64,7 @@ namespace HDUA.Controllers
         }
 
         [HttpPost]
-        public IActionResult CrearMuestra(MuestraModel a)
+        public IActionResult InsertarImagen(MuestraModel a)
         {
             ImagenModel imagen = new ImagenModel();
             imagen.Nombre = a.Cientifico;
@@ -83,6 +83,57 @@ namespace HDUA.Controllers
                 }
             }
             return RedirectToAction("GestionMuestra","Admin");
+        }
+
+        [HttpPost]
+        public ActionResult CrearMuestra(MuestraModel a)
+        {
+            MuestraModel muestra = new MuestraModel();
+            muestra.Cientifico = Request.Form["cientifico"];
+            muestra.Vulgar = Request.Form["vulgar"];
+            muestra.Fecha = Request.Form["fecharecolecccion"];
+            muestra.Venacion = Request.Form["venacion"];
+            muestra.Forma = Request.Form["forma"];
+            muestra.Margen = Request.Form["margen"];
+            muestra.Procedencia = Request.Form["procedencia"];
+            muestra.Altura = Request.Form["altura"];
+            muestra.Clase = Request.Form["clase"];
+            muestra.Especie = Request.Form["especie"];
+            muestra.Genero = Request.Form["genero"];
+            muestra.Orden = Request.Form["orden"];
+            muestra.Familia = Request.Form["familia"];
+            muestra.Orden = Request.Form["orden"];
+            muestra.Ubicacion = Request.Form["ubicacionSelect"];
+            muestra.Coordenada = Request.Form["coordenadasInput"];
+            muestra.File = a.File;
+
+            ImagenModel imagen = new ImagenModel();
+            imagen.Nombre = muestra.Cientifico;
+            string n = "";
+            byte[] bytes;
+            if (a.File != null)
+            {
+                using (Stream fs = a.File.OpenReadStream())
+                {
+                    using (BinaryReader br = new BinaryReader(fs))
+                    {
+                        bytes = br.ReadBytes((int)fs.Length);
+                        imagen.Imagen = Convert.ToBase64String(bytes, 0, bytes.Length);
+                        n = cnm.UploadImage(imagen);
+                    }
+                }
+            }
+            muestra.Imagen = n;
+
+            List<int> usuariosSeleccionados = Request.Form["usuariosSeleccionados"].Select(int.Parse).ToList();
+            int cantidadRecolectores = usuariosSeleccionados.Count;
+            muestra.Recolectores = cantidadRecolectores;
+
+            muestra.Ids = string.Join(",", usuariosSeleccionados);
+
+            procesos.CrearMuestra(muestra);
+
+            return RedirectToAction("Principal", "Principal");
         }
 
     }

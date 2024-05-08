@@ -119,8 +119,16 @@
                 </div>
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#modalHistoria"><samp>←Historia</samp></button>
-                    <button type="button" class="btn btn-secondary" id="btnEditarDatos">Editar</button>
-                    <button type="button" class="btn btn-primary" id="btnGuardarDatos" style="display: none;">Guardar</button>
+
+                    @{
+                        if (User.IsInRole("ADMINISTRADOR"))
+                        {
+
+                            <button type="button" class="btn btn-secondary" id="btnEditarDatos">Editar</button>
+                            <button type="button" class="btn btn-primary" id="btnGuardarDatos" style="display: none;">Guardar</button>
+                        }
+                    }
+
                     <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#modalContactos"><samp>Contactos→</samp></button>
                 </div>
             </div>
@@ -145,8 +153,15 @@
                 </div>
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#modalDatos"><samp>←Datos</samp></button>
-                    <button type="button" class="btn btn-secondary" id="btnEditarContactos">Editar</button>
-                    <button type="button" class="btn btn-primary" id="btnGuardarContactos" style="display: none;">Guardar</button>
+
+                    @{
+                        if (User.IsInRole("ADMINISTRADOR"))
+                        {
+                                <button type="button" class="btn btn-secondary" id="btnEditarContactos">Editar</button>
+                                <button type="button" class="btn btn-primary" id="btnGuardarContactos" style="display: none;">Guardar</button>
+                        }
+                    }
+
                     <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#modalT&C"><samp>T&C→</samp></button>
                 </div>
             </div>
@@ -171,8 +186,15 @@
                 </div>
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#modalContactos"><samp>←Contactos</samp></button>
-                    <button type="button" class="btn btn-secondary" id="btnEditarTYC">Editar</button>
-                    <button type="button" class="btn btn-primary" id="btnGuardarTYC" style="display: none;">Guardar</button>
+
+                    @{
+                        if (User.IsInRole("ADMINISTRADOR"))
+                        {
+                            <button type="button" class="btn btn-secondary" id="btnEditarTYC">Editar</button>
+                            <button type="button" class="btn btn-primary" id="btnGuardarTYC" style="display: none;">Guardar</button>
+                        }
+                    }
+                    
                 </div>
             </div>
         </div>

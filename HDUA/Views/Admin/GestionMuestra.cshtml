@@ -98,7 +98,7 @@
                 <div class="modal-body" style="background-color: #C2E6D6">
                     <div id="carouselExampleControls" class="carousel slide" data-bs-interval="false">
                         <div class="carousel-inner ">
-                            <form action="/" method="post" enctype="multipart/form-data">
+                            <form action="@Url.Action("CrearMuestra","Admin")" method="post" id="formulario" enctype="multipart/form-data">
                                 <!-- Parte 1 -->
                                 <div class="carousel-item active">
                                     <div class="container">
@@ -108,27 +108,27 @@
 
                                             <div class="col me-5 ms-5">
                                                 <div class="row mt-3">
-                                                    <input type="text" class="form-control" placeholder="Nombre científico" oninput="this.value = this.value.toUpperCase()">
+                                                    <input type="text" class="form-control" placeholder="Nombre científico" oninput="this.value = this.value.toUpperCase()" id="cientifico" name="cientifico">
                                                 </div>
                                                 <div class="row mt-3">
-                                                    <input type="text" class="form-control" placeholder="Nombre vulgar" oninput="this.value = this.value.toUpperCase()">
+                                                    <input type="text" class="form-control" placeholder="Nombre vulgar" oninput="this.value = this.value.toUpperCase()" id="vulgar" name="vulgar">
                                                 </div>
                                                 @* INSERTAR IMAGEN *@
                                                 <div class="row mt-3">
                                                     <label for="formFile" class="form-label"><samp>Seleccionar imágen de muestra</samp></label>
-                                                    <input class="form-control" type="file" accept="image/*" id="formFile">
+                                                    <input class="form-control" type="file" accept="image/*" id="formFile" name="File">
                                                 </div>
 
                                                 <div class="row mt-3">
                                                     <label for="formFile" class="form-label"><samp>Fecha recolección</samp></label>
-                                                    <input type="date" class="form-control" id="fecharecolecccion">
+                                                    <input type="date" class="form-control" id="fecharecolecccion" name="fecharecolecccion">
                                                 </div>
                                             </div>
 
                                             <div class="col me-5 ms-5">
                                                 <div class="row mt-3">
-                                                    <select class="form-select">
-                                                        <option value="Seleccione" >Tipo venación</option>
+                                                    <select class="form-select" id="venacion" name="venacion">
+                                                        <option value="Seleccione">Tipo venación</option>
                                                         @foreach (String i in @ViewBag.ltv)
                                                         {
                                                             <option>
@@ -139,7 +139,7 @@
                                                 </div>
 
                                                 <div class="row mt-3">
-                                                    <select class="form-select">
+                                                    <select class="form-select" id="forma" name="forma">
                                                         <option value="Seleccione">Tipo forma</option>
                                                         @foreach (String i in @ViewBag.ltf)
                                                         {
@@ -151,7 +151,7 @@
                                                 </div>
                                             
                                                 <div class="row mt-3">
-                                                    <select class="form-select">
+                                                    <select class="form-select" id="margen" name="margen">
                                                         <option value="Seleccione">Tipo margen</option>
                                                         @foreach (String i in @ViewBag.ltm)
                                                         {
@@ -163,7 +163,7 @@
                                                 </div>
                                             
                                                 <div class="row mt-3">
-                                                    <select class="form-select">
+                                                    <select class="form-select" id="procedencia" name="procedencia">
                                                         <option value="Seleccione">Procedencia</option>
                                                         @foreach (String i in @ViewBag.ltp)
                                                         {
@@ -175,7 +175,7 @@
                                                 </div>
                                             
                                                 <div class="row mt-3">
-                                                    <input type="number" class="form-control" min="1" max="100" placeholder="Altura de la procedencia">
+                                                    <input type="number" class="form-control" min="1" max="100" placeholder="Altura de la procedencia" id="altura" name="altura">
                                                 </div>
 
                                             
@@ -193,7 +193,7 @@
                                         
                                             <div class="col me-5 ms-5">
                                                 <div class="row mt-3">
-                                                    <select class="form-select">
+                                                    <select class="form-select" id="clase" name="clase">
                                                         <option value="Seleccione">Clase</option>
                                                         @foreach (String i in @ViewBag.ltc)
                                                         {
@@ -205,7 +205,7 @@
                                                 </div>
 
                                                 <div class="row mt-3">
-                                                    <select class="form-select">
+                                                    <select class="form-select" id="especie" name="especie">
                                                         <option value="Seleccione">Especie</option>
                                                         @foreach (String i in @ViewBag.lte)
                                                         {
@@ -217,7 +217,7 @@
                                                 </div>
 
                                                 <div class="row mt-3">
-                                                    <select class="form-select">
+                                                    <select class="form-select" id="genero" name="genero">
                                                         <option value="Seleccione">Género</option>
                                                         @foreach (String i in @ViewBag.ltg)
                                                         {
@@ -229,7 +229,7 @@
                                                 </div>
 
                                                 <div class="row mt-3">
-                                                    <select id="departmentSelect" class="form-select">
+                                                    <select id="departmentSelect" class="form-select" name="departmentSelect">
                                                         <option value="Seleccione">Departamento</option>
                                                         @foreach (String i in @ViewBag.ldep)
                                                         {
@@ -241,7 +241,7 @@
                                                 </div>
 
                                                 <div class="row mt-3">
-                                                    <select id="municipioSelect" class="form-select">
+                                                    <select id="municipioSelect" class="form-select" name="municipioSelect">
                                                         <option selected>Municipio</option>
                                                     </select>
                                                 </div>
@@ -250,7 +250,7 @@
 
                                             <div class="col me-5 ms-5">
                                                 <div class="row mt-3">
-                                                    <select class="form-select">
+                                                    <select class="form-select" id="orden" name="orden">
                                                         <option value="Seleccione">Orden</option>
                                                         @foreach (String i in @ViewBag.lto)
                                                         {
@@ -262,7 +262,7 @@
                                                 </div>
 
                                                 <div class="row mt-3">
-                                                    <select class="form-select">
+                                                    <select class="form-select" id="familia" name="familia">
                                                         <option value="Seleccione">Familia</option>
                                                         @foreach (String i in @ViewBag.ltfami)
                                                         {
@@ -274,19 +274,19 @@
                                                 </div>
 
                                                 <div class="row mt-3">
-                                                    <select class="form-select" id="tipoUbicacionSelect">
+                                                    <select class="form-select" id="tipoUbicacionSelect" name="tipoUbicacionSelect">
                                                         <option selected>Tipo ubicación</option>
                                                     </select>
                                                 </div>
 
                                                 <div class="row mt-3">
-                                                    <select class="form-select" id="ubicacionSelect">
+                                                    <select class="form-select" id="ubicacionSelect" name="ubicacionSelect">
                                                         <option selected>Ubicación</option>
                                                     </select>
                                                 </div>
 
                                                 <div class="row mt-3">
-                                                    <input type="text" class="form-control" id="coordenadasInput" placeholder="Coordenadas (Ejemplo: 51°30'N 0°7'W)">
+                                                    <input type="text" class="form-control" id="coordenadasInput" name="coordenadasInput" placeholder="Coordenadas (Ejemplo: 51°30'N 0°7'W)">
                                                 </div>
 
                                             </div>
@@ -329,7 +329,7 @@
                                                         <td>@i.Nombre</td>
                                                         <td>@i.Cantidad</td>
                                                         <td>
-                                                            <input type="checkbox">
+                                                            <input type="checkbox" name="usuariosSeleccionados" value="@i.Id" />
                                                         </td>
                                                     </tr>
                                                 }
@@ -358,7 +358,7 @@
 
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-outline-success" data-bs-dismiss="modal"><samp>Cancelar</samp></button>
-                    <button type="button" class="btn btn-outline-success"><samp>Finalizar</samp></button>
+                    <button type="submit" class="btn btn-outline-success" form="formulario"><samp>Finalizar</samp></button>
                 </div>
 
             </div>
@@ -446,7 +446,21 @@
                     $(this).toggle($(this).text().toLowerCase().indexOf(inputText) > -1);
                 });
             });
-        });x
+        });
+
+        $(document).ready(function () {
+            $('#guardar-recolectores').click(function () {
+                var recolectoresSeleccionados = [];
+                $('.checkbox-recolector:checked').each(function () {
+                    var idRecolector = $(this).val();
+                    recolectoresSeleccionados.push(idRecolector);
+                });
+
+                // Imprime los IDs de recolectores seleccionados en la consola
+                console.log('Recolectores seleccionados:', recolectoresSeleccionados);
+            });
+        });
+
 
     </script>
 
