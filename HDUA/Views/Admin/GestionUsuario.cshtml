@@ -42,20 +42,22 @@
 
     <div class="row mt-3 ms-5 justify-content-center">
         <div class="col-auto">
-            <input type="text" class="form-control" id="buscar-recolector" placeholder="Buscar usuario">
+            <button type="button" class="btn btn-link btn-buscar" id="buscarbtn">
+                <i class='bx bx-search-alt' style="font-size: 1.5rem;"></i>
+            </button>
+
         </div>
         <div class="col-auto">
-            <i class='bx bx-search-alt' style="font-size: 1.5rem;"></i>
+            <input type="text" class="form-control" id="buscar-recolector" placeholder="Buscar recolector">
         </div>
     </div>
 
     <div class="row mt-3 justify-content-center">
-        <div class="col-md-8" style="max-height: 400px; overflow-y: auto;">
-            <table class="table table-striped table-hover mt-3">
+        <div class="col-md-8" style="max-height: 235px; overflow-y: auto;">
+            <table class="table table-striped table-hover mt-3" id="tablaUsuarios">
                 <thead>
                     <tr>
                         <th scope="col"><samp>Nombre completo</samp></th>
-                        <th scope="col"><samp>Edad</samp></th>
                         <th scope="col"><samp>¿Recolector?</samp></th>
                         <th scope="col"><samp>Rol</samp></th>
                         <th scope="col"><samp>Estado</samp></th>
@@ -63,19 +65,29 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>
-                            <button type="button" class="btn btn-link btn-editar">
-                                <i class='bx bxs-edit' style="font-size: 1.5rem;"></i>
-                            </button>
+                    @if (ViewBag.mostrarusuarios != null){
+                        foreach (UsuarioModel i in ViewBag.mostrarusuarios){
+                            <tr>
+                                
+                                <td>@i.Nombre</td>
+                                <td>@(i.Recolector)</td>
+                                <td>@(i.Rol == "2" ? "Colaborador" : "Visitante")</td>
+                                <td>@(i.Estado ? "Activo" : "Inactivo")</td>
+                                <td>
+                                    <button type="button" class="btn btn-link btn-editar" value="@i.Id" data-id="@i.Id" data-nombre="@i.Nombre" data-recolector="@i.Recolector" data-rol="@i.Rol" data-estado="@i.Estado">
+                                        <i class='bx bxs-edit' style="font-size: 1.5rem;"></i>
+                                    </button>
+                                </td>
 
-                        </td>
-                    </tr>
+                            </tr>
+                        }
+                    }
+                    else{
+                        <tr>
+                            <td colspan="5">No hay usuarios para mostrar</td>
+                        </tr>
+                    }
+
                 </tbody>
             </table>
         </div>
@@ -95,34 +107,58 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel"><samp>Editar Usuario</samp></h5>
+                    <h5 class="modal-title" id="TituloModal"><samp></samp></h5>
                     <button type="button" class="btn btn-outline-danger ms-auto" id="cerrarEditarUser" data-bs-dismiss="modal" aria-label="Close"><samp>X</samp></button>
                 </div>
                 <div class="modal-body">
-                    <form id="formEditarUsuario">
+                    <form id="formEditarUsuario" action="@Url.Action("EditarUser","Admin")" method="post">
                         <div class="row">
+
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="selectRol" class="form-label"><samp>Rol</samp></label>
-                                    <select class="form-select" id="selectRol" name="rol">
-                                        <option value="1"></option>
+                                    <select class="form-select" id="selectRol" name="selectRol">
+                                        <option id="opcionRol1"></option>
+                                        <option id="opcionRol2"></option>
+                                        <option id="opcionRol3">ADMINISTRADOR</option>
                                     </select>
                                 </div>
                             </div>
+
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="selectRecolector" class="form-label"><samp>Recolector</samp></label>
+                                    <select class="form-select" id="selectRecolector" name="selectRecolector">
+
+                                        <option id="opcionRecolector1"></option>
+                                        <option id="opcionRecolector2"></option>
+                                    </select>
+                                </div>
+                            </div>
+
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="selectEstado" class="form-label"><samp>Estado</samp></label>
-                                    <select class="form-select" id="selectEstado" name="estado">
-                                        <option value="activo"></option>
+                                    <select class="form-select" id="selectEstado" name="selectEstado">
+                                        <option id="opcionEstado1"></option>
+                                        <option id="opcionEstado2"></option>
                                     </select>
                                 </div>
                             </div>
+
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <input type="hidden" id="input-invisible" name="input-invisible">
+                                    <label for="selectEstado" class="form-label"><samp>(En caso de no desear cambiar algún aspecto del usuario seleccionado, deje el selector tal cual).</samp></label>
+                                </div>
+                            </div>
+
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><samp>Cancelar</samp></button>
-                    <button type="button" class="btn btn-primary" id="btnGuardarUsuario"><samp>Finalizar</samp></button>
+                    <button type="submit" class="btn btn-primary" id="btnGuardarUsuario" form="formEditarUsuario"><samp>Finalizar</samp></button>
                 </div>
             </div>
         </div>
@@ -133,13 +169,58 @@
     <script>
         $(document).ready(function () {
             $('.btn-editar').click(function () {
+                var nombreUsuario = $(this).data('nombre');
+                $('#TituloModal').text('Editar Usuario - ' + nombreUsuario);
+
+                var rolUsuario = $(this).data('rol');
+                if (rolUsuario == 2){
+                    rolUsuario = 'COLABORADOR';
+                    $('#opcionRol1').text(rolUsuario);
+                    $('#opcionRol2').text('VISITANTE');
+
+
+                }else{
+                    rolUsuario = 'VISITANTE';
+                    $('#opcionRol1').text(rolUsuario);
+                    $('#opcionRol2').text('COLABORADOR');
+                }
+
+                var recolectorUsuario = ($(this).data('recolector'))+"";
+                if (recolectorUsuario == 'True') {
+                    $('#opcionRecolector1').text('Si');
+                    $('#opcionRecolector2').text('No');
+                } else {
+                    $('#opcionRecolector1').text('No');
+                    $('#opcionRecolector2').text('Si');
+                }
+
+                var estadoUsuario = ($(this).data('estado')) + "";
+                if (estadoUsuario == 'True') {
+                    $('#opcionEstado1').text('Activo');
+                    $('#opcionEstado2').text('Inactivo');
+                } else {
+                    $('#opcionEstado1').text('Inactivo');
+                    $('#opcionEstado2').text('Activo');
+                }
+
+                var idUser = $(this).data('id');
+                document.getElementById("input-invisible").value = idUser;
+
+
                 $('#modalEditarUsuario').modal('show');
             });
-
-            // $('#btnGuardarUsuario').click(function () {
-            //     $('#modalEditarUsuario').modal('hide');
-            // });
         });
+
+        $(document).ready(function () {
+            $('#buscarbtn').click(function () {
+                var inputText = $('#buscar-recolector').val().trim().toLowerCase();
+                $('#tablaUsuarios tbody tr').filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(inputText) > -1);
+                });
+            });
+        });
+
+
     </script>
 
 </body>

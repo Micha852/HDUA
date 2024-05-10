@@ -142,6 +142,63 @@ namespace HDUA.DATA{
             return lista;
         }
 
+        public List<UsuarioModel> ListarUsuarios()
+        {
+            var lista = new List<UsuarioModel>();
+            conectar();
+            try
+            {
+                MySqlCommand cmd = new MySqlCommand("LISTARUSUARIOS", cn);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                MySqlDataReader dr = cmd.ExecuteReader();
+                while (dr.Read())
+                {
+                    UsuarioModel user = new UsuarioModel()
+                    {
+                        Id = Convert.ToInt32(dr[0] + ""),
+                        Nombre = dr[1] + "",
+                        Recolector = (((dr[2] + "") == "1") ? true : false),
+                        Rol = dr[3] + "",
+                        Estado = (((dr[4] + "") == "1") ? true : false)
+                };
+                    lista.Add(user);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+            finally
+            {
+                desconectar();
+            }
+            return lista;
+        }
+
+        public void EditarUser(int id, string rol, bool rec, bool est)
+        {
+            conectar();
+            try
+            {
+                MySqlCommand cmd = new MySqlCommand("EDITARUSUARIO", cn);
+                cmd.Parameters.AddWithValue("USER", id);
+                cmd.Parameters.AddWithValue("NROL", rol);
+                cmd.Parameters.AddWithValue("REC", rec);
+                cmd.Parameters.AddWithValue("EST", est);
+
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+            finally
+            {
+                desconectar();
+            }
+        }
+
         public void RegistrarUsuario(UsuarioModel usuario)
         {
             conectar();
@@ -203,7 +260,6 @@ namespace HDUA.DATA{
                 desconectar();
             }
         }
-
 
         public Boolean BUSCARCOREO(String correo, String contra)
         {

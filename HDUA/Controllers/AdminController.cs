@@ -37,11 +37,6 @@ namespace HDUA.Controllers
             return View();
         }
 
-        public IActionResult GestionUsuario()
-        {
-            return View();
-        }
-
         [HttpPost]
         public ActionResult ObtenerMunicipiosPorDepartamento(string nombreDepartamento)
         {
@@ -134,6 +129,34 @@ namespace HDUA.Controllers
             procesos.CrearMuestra(muestra);
 
             return RedirectToAction("Principal", "Principal");
+        }
+
+        public IActionResult GestionUsuario()
+        {
+            ViewBag.mostrarusuarios = procesos.ListarUsuarios();
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult EditarUser()
+        {
+            bool rec;
+            if (Request.Form["selectRecolector"] == "Si"){
+                rec = true;
+            }else{
+                rec = false;
+            }
+
+            bool est;
+            if (Request.Form["selectEstado"] == "Activo"){
+                est = true;
+            }else{
+                est = false;
+            }
+
+                procesos.EditarUser(Convert.ToInt32(Request.Form["input-invisible"] + ""), (Request.Form["selectRol"])+"", rec, est);
+
+            return RedirectToAction("GestionUsuario");
         }
 
     }
