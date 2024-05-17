@@ -1,4 +1,5 @@
-﻿@{
+﻿@model UsuarioModel
+@{
     Layout = "~/Views/Shared/layau2.cshtml";
 }
 
@@ -45,57 +46,91 @@
                 <div class="col-md-8" style="background-color:#C2E6D6">
                     <div class="card shadow-lg border border-black" style="background-color:#C2E6D6;">
                         <div class="card-body">
-                            <form id="datosForm">
+                            <form id="datosForm" action="@Url.Action("EditarMiPerfil","MiPerfil")" method="post">
                                 <!-- Fila 1 -->
                                 <div class="row mb-3">
+
                                     <label for="inputNombreUsuario" class="col-sm-2 col-form-label">Nombre de usuario</label>
                                     <div class="col-sm-4">
-                                        <input type="text" class="form-control" id="inputNombreUsuario" disabled>
+                                        <input type="text" class="form-control" id="inputNombreUsuario" name="inputNombreUsuario" value="@Model.Nombre" disabled>
                                     </div>
+
                                     <label for="selectTipoUsuario" class="col-sm-2 col-form-label">Tipo de usuario</label>
                                     <div class="col-sm-4">
-                                        <select class="form-select" id="selectTipoUsuario" disabled>
-                                            <!-- Opciones del select -->
+                                        <select class="form-select" id="selectTipoUsuario" name="selectTipoUsuario" disabled>
+                                            <option>@Model.Tipo</option>
+                                            @foreach (String i in @ViewBag.ltu)
+                                            {
+                                                @if (i != @Model.Tipo)
+                                                {
+                                                    <option>
+                                                        @i
+                                                    </option>
+                                                }
+                                                
+                                            }
                                         </select>
                                     </div>
+
                                 </div>
                                 <div class="row mb-3">
                                     <label for="selectInstitucion" class="col-sm-2 col-form-label">Institución</label>
                                     <div class="col-sm-4">
-                                        <select class="form-select" id="selectInstitucion" disabled>
-                                            <!-- Opciones del select -->
+                                        <select class="form-select" id="selectInstitucion" name="selectInstitucion" disabled>
+                                            <option>@Model.Institucion</option>
+                                            @foreach (String i in @ViewBag.li)
+                                            {
+                                                @if (i != @Model.Institucion)
+                                                {
+                                                    <option>
+                                                        @i
+                                                    </option>
+                                                }
+                                                
+                                            }
                                         </select>
                                     </div>
+
                                     <label for="selectGenero" class="col-sm-2 col-form-label">Género</label>
                                     <div class="col-sm-4">
-                                        <select class="form-select" id="selectGenero" disabled>
-                                            <!-- Opciones del select -->
+                                        <select class="form-select" id="selectGenero" name="selectGenero" disabled>
+                                             <option>@Model.Genero</option>
+                                            @foreach (String i in @ViewBag.lgu)
+                                            {
+                                                @if (i != @Model.Genero)
+                                                {
+                                                    <option>
+                                                        @i
+                                                    </option>
+                                                }
+                                            }
                                         </select>
                                     </div>
                                 </div>
                                 <!-- Fila 2 -->
-                                <div class="row mb-3">
+                                <div class="row mb-3 mt-5">
                                     <label for="inputCorreo" class="col-sm-2 col-form-label">Correo electrónico</label>
                                     <div class="col-sm-4">
-                                        <input type="email" class="form-control" id="inputCorreo" disabled>
-                                    </div>
-                                    <label for="inputContrasenia" class="col-sm-2 col-form-label">Contraseña</label>
-                                    <div class="col-sm-4">
-                                        <input type="password" class="form-control" id="inputContrasenia" disabled>
-                                    </div>
-                                </div>
-                                <!-- Fila 3 -->
-                                <div class="row mb-3">
-                                    <label for="iconoPerfil" class="col-sm-2 col-form-label">Ícono de perfil</label>
-                                    <div class="col-sm-10">
-                                        <!-- Inserta aquí el icono -->
-                                    </div>
-                                    <div class="col text-end">
-                                        <button type="button" class="btn btn-outline-secondary" id="btnEditar" style="display: block; margin: 0 auto; color: black">Editar datos</button>
+                                        <input type="email" class="form-control" id="inputCorreo" name="inputCorreo" value="@Model.Correo" disabled>
                                     </div>
 
+                                    <label for="inputContrasenia" class="col-sm-2 col-form-label">Contraseña</label>
+                                    <div class="col-sm-4">
+                                        <input type="password" class="form-control" id="inputContrasenia" name="inputContrasenia" value="@Model.Contrasenia" disabled>
+                                    </div>
                                 </div>
+                                <input type="hidden" id="input-invisible" name="input-invisible" value="@Model.Id">
+                                <!-- Fila 3 -->
+                                
                             </form>
+                            <div class="row mb-3 mt-5">
+
+                                <div class="col text-center">
+                                    <button type="button" class="btn btn-outline-secondary" id="btnEditar" style="color: black">Editar datos</button>
+                                    <button type="submit" class="btn btn-outline-secondary" id="btnGuardar" style="display: none; color: black" form="datosForm">Guardar</button>
+                                </div>
+
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -111,8 +146,8 @@
     </div>
 
     <div class="col d-flex justify-content-between align-items-center">
-        <a href="#" class="text-decoration-none ms-5" data-bs-toggle="modal" data-bs-target="#modalEliminarPerfil"><samp>Eliminar perfil</samp></a>
-        <a href="@Url.Action("Principal", "Principal")" class="text-decoration-none me-5"><samp>Volver a inicio</samp></a>
+        <a href="#" class="text-decoration-none ms-5" data-bs-toggle="modal" data-bs-target="#modalEliminarPerfil" style="background-color: rgba(128, 128, 128, 0.5);"><samp>Eliminar perfil</samp></a>
+        <a href="@Url.Action("Principal", "Principal")" class="text-decoration-none me-5" style="background-color: rgba(128, 128, 128, 0.5);"><samp>Volver a inicio</samp></a>
     </div>
 
 
@@ -143,30 +178,33 @@
         </div>
     </samp>
 
+    <!-- Modal para ingresar la contraseña -->
+    <samp>
+        <div class="modal fade mt-5" id="modalContrasenia" tabindex="-1" aria-labelledby="modalContraseniaLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalContraseniaLabel">Para continuar, ingrese su contraseña.</h5>
+                        <button type="button" class="btn btn-outline-danger ms-auto" id="cerrarConfirmarContrasenia" data-bs-dismiss="modal" aria-label="Close"><samp>X</samp></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="inputContraseniaModal" class="form-label">Contraseña:</label>
+                            <input type="password" class="form-control" id="inputContraseniaModal">
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-success" id="btnVerificarContrasenia">Verificar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </samp>
 
 
     <script>
-        $(document).ready(function () {
-            // Al hacer clic en el botón de editar
-            $("#btnEditar").click(function () {
-                // Alternar la propiedad de deshabilitado de los elementos del formulario
-                $("#datosForm :input").prop("disabled", function (i, val) {
-                    return !val;
-                    
-                });
-                $("#btnEditar").prop("disabled", false);
-
-
-                // Cambiar el texto del botón entre "Editar" y "Guardar"
-                var buttonText = $(this).text();
-                if (buttonText === "Editar datos") {
-                    $(this).text("Guardar");
-                } else {
-                    $(this).text("Editar datos");
-                }
-            });
-        });
-
+        // Función para habilitar o deshabilitar el botón de eliminar perfil
         function habilitarEliminar() {
             var checkbox = document.getElementById('confirmarEliminar');
             var btnEliminar = document.getElementById('btnEliminarPerfil');
@@ -177,11 +215,56 @@
                 btnEliminar.disabled = true;
             }
         }
+
+        var contraseniaVerificada = false;
+
+        $(document).ready(function () {
+            // Al hacer clic en el botón de editar
+            $("#btnEditar").click(function () {
+                // Si la contraseña no ha sido verificada, abrir el modal
+                if (!contraseniaVerificada) {
+                    $("#modalContrasenia").modal("show");
+                    return;
+                }
+
+                // Alternar la propiedad de deshabilitado de los elementos del formulario
+                $("#datosForm :input").prop("disabled", function (i, val) {
+                    return !val;
+                });
+
+                // Mostrar el botón de guardar y ocultar el botón de editar
+                $("#btnGuardar").show();
+                $("#btnEditar").hide();
+            });
+
+            // Al hacer clic en el botón "Verificar" del modal
+            $("#btnVerificarContrasenia").click(function () {
+                // Obtener la contraseña ingresada por el usuario
+                var contraseniaIngresada = $("#inputContraseniaModal").val();
+
+                // Verificar si la contraseña ingresada es correcta
+                if (contraseniaIngresada === "@Model.Contrasenia") {
+                    // Cambiar el estado de la variable a verdadero
+                    contraseniaVerificada = true;
+
+                    // Habilitar la edición de los datos
+                    $("#datosForm :input").prop("disabled", false);
+
+                    // Mostrar el botón de guardar y ocultar el botón de editar
+                    $("#btnGuardar").show();
+                    $("#btnEditar").hide();
+
+                    // Cerrar el modal
+                    $("#modalContrasenia").modal("hide");
+                } else {
+                    // Mostrar advertencia de contraseña incorrecta
+                    alert("Contraseña incorrecta. Por favor, inténtelo de nuevo.");
+                }
+            });
+        });
     </script>
 
-    
+
+
 </body>
-
-
-
 </html>

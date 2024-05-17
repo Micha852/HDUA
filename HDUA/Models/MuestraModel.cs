@@ -26,6 +26,7 @@ namespace HDUA.Models
         public ImagenModel? Imagen2 { get; set; }
         public List<int> IdsUsuariosSeleccionados { get; set; }
         public int Recolectores { get; set; }
+        public string ListaRecolectores { get; set; }
         public string Ids { get; set; }
     }
 }

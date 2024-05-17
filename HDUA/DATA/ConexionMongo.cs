@@ -1,4 +1,5 @@
 ﻿using HDUA.Models;
+using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace HDUA.DATA{
@@ -44,5 +45,26 @@ namespace HDUA.DATA{
             imageCollection.InsertOne(img);
             return img.Id;
         }
+
+        public ImagenModel GetImage(string id)
+        {
+            var imageCollection = cnm.GetCollection<ImagenModel>("Imagen");
+            return imageCollection.Find(new BsonDocument("_id", new ObjectId(id))).FirstOrDefault();
+        }
+
+        public void DeleteImage(string id)
+        {
+            var imageCollection = cnm.GetCollection<ImagenModel>("Imagen");
+            imageCollection.DeleteOne(new BsonDocument("_id", new ObjectId(id)));
+        }
+
+        public void UpdateImage(ImagenModel img, string id)
+        {
+            var imageCollection = cnm.GetCollection<ImagenModel>("Imagen");
+            var filtro = Builders<ImagenModel>.Filter.Eq("Id", id);
+            var update = Builders<ImagenModel>.Update.Set("Imagen", img.Imagen);
+            imageCollection.UpdateOne(filtro, update);
+        }
+
     }
 }

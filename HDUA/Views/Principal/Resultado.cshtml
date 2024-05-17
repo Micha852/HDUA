@@ -1,4 +1,5 @@
-﻿@{
+﻿@model List<MuestraModel>
+@{
     ViewData["Title"] = "Resultado";
     Layout = "~/Views/Shared/layau2.cshtml";
 }
@@ -42,29 +43,39 @@
     </div>
 
     <!--................................................................-->
-    <div id="carouselExampleDark" class="carousel carousel-dark slide" style="max-width: 800px; margin: 0 auto;">
-        <div class="carousel-inner">
-            <div class="carousel-item active" data-bs-interval="10000">
-                <svg class="bd-placeholder-img bd-placeholder-img-lg d-block w-100" width="800" height="400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: First slide" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#f5f5f5"></rect><text x="50%" y="50%" fill="#aaa" dy=".3em"></text></svg>
-                <div class="carousel-caption d-none d-md-block">
-                    <h5><samp>Resultado #</samp>1</h5>
-                    <p><samp>Puedes navegar hacia atrás o adelante para ver más resultados.</samp></p>
-                </div>
-            </div>
-        </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-        </button>
-        <div class="carousel-indicators">
-            <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="0" class="active" aria-label="Slide 1" aria-current="true"></button>
-        </div>
-    </div>
+    <samp>
+        <div class="row row-cols-auto " style="justify-content:center;">
 
+            @foreach (MuestraModel m in Model)
+            {
+                <div class="col mt-5">
+                    <div class="card" style="width: 20rem;">
+                        <div class="card-body text-center">
+                            @if (!string.IsNullOrEmpty(m.Cientifico))
+                            {
+                                <h5 class="card-title">@m.Cientifico</h5>
+                            }
+                            else if (!string.IsNullOrEmpty(m.Vulgar))
+                            {
+                                <h5 class="card-title">@m.Vulgar</h5>
+                            }
+                        </div>
+
+                        <img src="data:image/jpg; base64, @m.Imagen2.Imagen" class="card-img-top" style="height:15rem; object-fit: contain;">
+                        <div class="card-footer text-center">
+                            <form id="formFichaMuestra" method="post" action="@Url.Action("FichaMuestra", "Principal")">
+                                <input type="hidden" id="idMuestra" name="id" value="@m.Id" />
+                                <button type="submit" class="btn btn-outline-success btn-auto">Ver ficha técnica</button>
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+
+            }
+
+        </div>
+    </samp>
 
     <!--................................................................-->
     <div class="col d-flex justify-content-center align-items-center flex-column">
@@ -76,6 +87,14 @@
         </div>
     </div>
 
+    <script>
+        $(document).ready(function () {
+            $('#verFichaBtn').click(function (e) {
+                e.preventDefault(); // Evitar que se ejecute el comportamiento predeterminado del enlace
+                $('#formFichaMuestra').submit(); // Enviar el formulario
+            });
+        });
+    </script>
 
 
 </body>

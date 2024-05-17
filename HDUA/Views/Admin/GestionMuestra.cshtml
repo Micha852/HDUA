@@ -417,7 +417,7 @@
                     data: { nombreTipo: tipoSeleccionado, nombreMunicipio: municipioSeleccionado },
                     success: function (data) {
                         $('#ubicacionSelect').empty();
-                        $('#ubicacionSelect').append('<option>' + "Seleccione ubicaciónn" + '</option>');
+                        $('#ubicacionSelect').append('<option>' + "Seleccione ubicación" + '</option>');
                         $.each(data, function (index, ubicacion) {
                             $('#ubicacionSelect').append('<option>' + ubicacion + '</option>');
                         });

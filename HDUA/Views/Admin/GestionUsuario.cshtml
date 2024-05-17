@@ -70,7 +70,7 @@
                             <tr>
                                 
                                 <td>@i.Nombre</td>
-                                <td>@(i.Recolector)</td>
+                                <td>@(i.Recolector? "Si" : "No")</td>
                                 <td>@(i.Rol == "2" ? "Colaborador" : "Visitante")</td>
                                 <td>@(i.Estado ? "Activo" : "Inactivo")</td>
                                 <td>

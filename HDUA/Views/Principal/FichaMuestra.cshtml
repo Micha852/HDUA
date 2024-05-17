@@ -1,0 +1,158 @@
+﻿@model MuestraModel
+@{
+    Layout = "~/Views/Shared/layau2.cshtml";
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.3/js/bootstrap.min.js"></script>
+
+    <title>HDUA</title>
+    <style>
+        body {
+            background-image: url('https://mdbootstrap.com/img/Photos/Others/images/78.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 100vh;
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <div class="row mt-4">
+        <div class="col d-flex justify-content-end align-items-end">
+            <h3>___________________________</h3>
+        </div>
+
+        <div class="col d-flex justify-content-center align-items-center" style="background-color: rgba(128, 128, 128, 0.5);">
+            <h3 class="panel-heading"><samp>MUESTRA BOTÁNICA SELECCIONADA</samp></h3>
+        </div>
+
+        <div class="col d-flex justify-content-start align-items-start">
+            <h3>___________________________</h3>
+        </div>
+    </div>
+
+    <div class="row mt-5 d-flex justify-content-center align-items-center border border-black">
+        <div class="col-2">
+            <samp>
+                <div id="list-example" class="list-group">
+                    <a class="list-group-item list-group-item-action" href="#list-item-1">Aspectos generales</a>
+                    <a class="list-group-item list-group-item-action" href="#list-item-2">Aspectos específicos</a>
+                    <a class="list-group-item list-group-item-action" href="#list-item-3">Comentarios</a>
+                </div>
+            </samp>
+        </div>
+        <div class="col-8">
+            <div data-bs-spy="scroll" data-bs-target="#list-example" data-bs-smooth-scroll="true" class="scrollspy-example" tabindex="0" style="max-height: 400px; overflow-y: auto;">
+
+                <samp>
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-10">
+                                <div class="card border border-success border-5">
+                                    <div class="card-body" style="height: auto;">
+
+                                        <p>
+                                            <h3 id="list-item-1" class="text-center" style="font-style: italic;" >Aspectos generales</h3>
+                                            <div class="col align-content-center">
+                                                <div class="row justify-content: center align-items: center">
+                                                    <div class="col d-flex flex-column align-items-center">
+                                                        <img src="data:image/jpg;base64,@Model.Imagen2.Imagen" class="card-img-top" style="height: 25rem; object-fit: contain;">
+                                                        <button type="button" class="btn btn-outline-success mt-2" data-bs-toggle="modal" data-bs-target="#imagenModal">
+                                                            Ampliar Imagen
+                                                        </button>
+                                                    </div>
+
+                                                    <div class="col mt-2">
+                                                        <label for="nombreComun" class="mt-2"><u>Nombre común</u>: @Model.Vulgar</label>
+                                                            
+                                                        <label for="nombreCientifico" class="mt-2"><u>Nombre científico</u>: @Model.Cientifico</label>
+                                                            
+                                                        <label for="descripcion" class="mt-2"><u>Descripción</u>: @Model.Procedencia de @Model.Altura metros, de características @Model.Forma, @Model.Venacion y @Model.Margen</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </p>
+
+                                        <p>
+                                            <h3 id="list-item-2" class="mt-5 text-center" style="font-style: italic;">Aspectos específicos</h3>
+                                            <div class="col">
+                                                <div class="row">
+                                                    <div class="col mt-2">
+                                                        <img src="" alt="Imagen" class="img">
+                                                        <label for="coordenadas">Coordenadas</label>
+                                                    </div>
+                                                    <div class="col mt-2">
+                                                        <label for="clase"><u>Clase</u>: @Model.Clase</label><br>
+
+                                                        <label for="orden" class="mt-2"><u>Orden</u>: @Model.Orden</label><br>
+
+                                                        <label for="especie" class="mt-2"><u>Especie</u>: @Model.Orden</label><br>
+
+                                                        <label for="familia" class="mt-2"><u>Familia</u>: @Model.Familia</label><br>
+
+                                                        <label for="genero" class="mt-2"><u>Género</u>: @Model.Genero</label><br>
+
+                                                        <label for="ubicacion" class="mt-2"><u>Ubicación</u>: Departamento del @Model.Ubicacion</label>
+
+                                                        <label for="recolectores" class="mt-2"><u>Recolectores</u>: @Model.ListaRecolectores</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </p>
+
+                                        <p>
+                                            <h3 id="list-item-3" class="mt-5 text-center" style="font-style: italic;">Sección de comentarios</h3>
+                                            <div class="col">
+                                                <h5 class="text-center">acá irán los comentarios, klk</h5>
+                                            </div>
+                                        </p>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </samp>
+
+
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col d-flex justify-content-center align-items-center">
+            <h3>____________________________________________________________________________________________________________</h3>
+        </div>
+    </div>
+
+    <div class="col d-flex justify-content-end align-items-end">
+        <a href="@Url.Action("Principal", "Principal")" class="text-decoration-none me-5"><samp>Volver a buscar</samp></a>
+    </div>
+
+    <div class="modal fade" id="imagenModal" tabindex="-1" aria-labelledby="imagenModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl" style="margin-top: -0.5%;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="imagenModalLabel">Imagen Ampliada</h5>
+                    <button type="button" class="btn btn-outline-danger ms-auto" id="cerrarImagen" data-bs-dismiss="modal" aria-label="Close"><samp>X</samp></button>
+                </div>
+                <div class="modal-body">
+                    <img src="data:image/jpg;base64,@Model.Imagen2.Imagen" class="img-fluid">
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

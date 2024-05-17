@@ -6,9 +6,11 @@ using System.Data;
 using System.Globalization;
 using System.Text;
 using MongoDB.Driver.Core.Configuration;
+using Org.BouncyCastle.Ocsp;
 
 namespace HDUA.DATA{
     public class Procesos : ConexionMySQL{
+        ConexionMongo cnm = new ConexionMongo();
 
         public List<String> Listar(String x){
             var lista = new List<String>();
@@ -111,32 +113,24 @@ namespace HDUA.DATA{
             return listaUbicaciones;
         }
 
-        public List<RecolectorModel> ListarRecolector()
-        {
+        public List<RecolectorModel> ListarRecolector(){
             var lista = new List<RecolectorModel>();
             conectar();
-            try
-            {
+            try{
                 MySqlCommand cmd = new MySqlCommand("RECOLECTORES", cn);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 MySqlDataReader dr = cmd.ExecuteReader();
-                while (dr.Read())
-                {
-                    RecolectorModel user = new RecolectorModel()
-                    {
+                while (dr.Read()){
+                    RecolectorModel user = new RecolectorModel(){
                         Id = Convert.ToInt32(dr[0] + ""),
                         Nombre = dr[1] + "",
                         Cantidad = Convert.ToInt32(dr[2] + "")
                     };
                     lista.Add(user);
                 }
-            }
-            catch (Exception ex)
-            {
+            }catch (Exception ex){
                 Console.WriteLine(ex.ToString());
-            }
-            finally
-            {
+            }finally{
                 desconectar();
             }
             return lista;
@@ -175,11 +169,9 @@ namespace HDUA.DATA{
             return lista;
         }
 
-        public void EditarUser(int id, string rol, bool rec, bool est)
-        {
+        public void EditarUser(int id, string rol, bool rec, bool est){
             conectar();
-            try
-            {
+            try{
                 MySqlCommand cmd = new MySqlCommand("EDITARUSUARIO", cn);
                 cmd.Parameters.AddWithValue("USER", id);
                 cmd.Parameters.AddWithValue("NROL", rol);
@@ -188,13 +180,31 @@ namespace HDUA.DATA{
 
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 cmd.ExecuteNonQuery();
-            }
-            catch (Exception ex)
-            {
+            }catch (Exception ex){
                 Console.WriteLine(ex.ToString());
+            }finally{
+                desconectar();
             }
-            finally
-            {
+        }
+
+        public void EditarMiPerfil(int id, string name, string correo, string contra, string generou, string tipou, string instu){
+            conectar();
+            try{
+                MySqlCommand cmd = new MySqlCommand("EDITARMIPERFIL", cn);
+                cmd.Parameters.AddWithValue("USER", id);
+                cmd.Parameters.AddWithValue("NAME", name);
+                cmd.Parameters.AddWithValue("CORREO", correo);
+                cmd.Parameters.AddWithValue("CONTRA", contra);
+                cmd.Parameters.AddWithValue("GENEROU", generou);
+                cmd.Parameters.AddWithValue("TIPOU", tipou);
+                cmd.Parameters.AddWithValue("INSTU", instu);
+
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex){
+                Console.WriteLine(ex.ToString());
+            }finally{
                 desconectar();
             }
         }
@@ -318,6 +328,128 @@ namespace HDUA.DATA{
                     user.Rol = (rd[2] + "");
                 }
                 tabla.Load(rd);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+            finally
+            {
+                desconectar();
+            }
+            return user;
+        }
+
+        public List<MuestraModel> ResultadoCientifico(string nombre){
+            var lista = new List<MuestraModel>();
+            conectar();
+            try{
+                MySqlCommand cmd = new MySqlCommand("BUSCARPORCIENTIFICO", cn);
+                cmd.Parameters.AddWithValue("nombre", nombre);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                MySqlDataReader dr = cmd.ExecuteReader();
+                while (dr.Read()){
+                    MuestraModel muestra = new MuestraModel(){
+                        Id = Convert.ToInt32(dr[0] + ""),
+                        Imagen = dr[1]+"",
+                        Cientifico = dr[2]+""
+                    };
+                    muestra.Imagen2 = cnm.GetImage(muestra.Imagen);
+                    lista.Add(muestra);
+                }
+            }
+            catch(Exception ex){
+                Console.WriteLine(ex.ToString());
+            }finally{
+                desconectar();
+            }
+            return lista;
+        }
+
+        public List<MuestraModel> ResultadoVulgar(string nombre){
+            var lista = new List<MuestraModel>();
+            conectar();
+            try{
+                MySqlCommand cmd = new MySqlCommand("BUSCARPORVULGAR", cn);
+                cmd.Parameters.AddWithValue("NOMBRE", nombre);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                MySqlDataReader dr = cmd.ExecuteReader();
+                while (dr.Read()){
+                    MuestraModel muestra = new MuestraModel(){
+                        Id = Convert.ToInt32(dr[0] + ""),
+                        Imagen = dr[1] + "",
+                        Vulgar = dr[2] + ""
+                    };
+                    muestra.Imagen2 = cnm.GetImage(muestra.Imagen);
+                    lista.Add(muestra);
+                }
+            }catch (Exception ex){
+                Console.WriteLine(ex.ToString());
+            }finally{
+                desconectar();
+            }
+            return lista;
+        }
+
+        public MuestraModel FichaMuestra(int id){
+            conectar();
+            try{
+                MySqlCommand cmd = new MySqlCommand("FICHAMUESTRA", cn);
+                cmd.Parameters.AddWithValue("ID", id);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                MySqlDataReader rd = cmd.ExecuteReader();
+                while (rd.Read()){
+                    MuestraModel muestra = new MuestraModel(){
+                        Id = Convert.ToInt32(rd[0]),
+                        Cientifico = rd[1] + "",
+                        Vulgar = rd[2] + "",
+                        Imagen = rd[3] + "",
+                        Coordenada = rd[4] +"",
+                        Altura = rd[5] +"",
+                        Clase = rd[6] +"",
+                        Orden = rd[7] +"",
+                        Familia = rd[8] +"",
+                        Genero = rd[9] +"",
+                        Especie = rd[10] +"",
+                        Procedencia = rd[11] +"",
+                        Venacion = rd[12] +"",
+                        Forma = rd[13] +"",
+                        Margen = rd[14] +"",
+                        Ubicacion = rd[15] + "",
+                        ListaRecolectores = rd[16]+""
+
+                    };
+                    muestra.Imagen2 = cnm.GetImage(muestra.Imagen);
+                    return muestra;
+                }
+            }catch (Exception ex){
+                Console.WriteLine(ex.ToString());
+            }finally{
+                desconectar();
+            }
+            return null;
+        }
+
+        public UsuarioModel DatosMiPerfil(int id)
+        {
+            conectar();
+            UsuarioModel user = new UsuarioModel();
+            try
+            {
+                MySqlCommand cmd = new MySqlCommand("DATOSMIPERFIL", cn);
+                cmd.Parameters.AddWithValue("ID", id);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                MySqlDataReader rd = cmd.ExecuteReader();
+                while (rd.Read())
+                {
+                    user.Id = Convert.ToInt32(rd[0]);
+                    user.Nombre = rd[1] + "";
+                    user.Correo = rd[2] + "";
+                    user.Contrasenia = rd[3] + "";
+                    user.Genero = rd[4] + "";
+                    user.Institucion = rd[5] + "";
+                    user.Tipo = rd[6] + "";
+                }
             }
             catch (Exception ex)
             {

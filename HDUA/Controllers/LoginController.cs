@@ -88,6 +88,7 @@ namespace HDUA.Controllers
             if(usuario.Nombre != null){
                 var claims = new List<Claim>{
                     new Claim (ClaimTypes.Name, usuario.Nombre),
+                    new Claim ("id", usuario.Id+""),
                     new Claim (ClaimTypes.Role, usuario.Rol)
                 };
                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);

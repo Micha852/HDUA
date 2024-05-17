@@ -28,26 +28,26 @@
         <div class="row">
 
             <form action="/" method="post" id="cientifico" class="col input-group me-5">
-                <input type="text" class="form-control rounded-pill border border-dark" placeholder="Nombre científico" aria-label="Example text with button addon" aria-describedby="button-addon1">
-                <button class="btn-outline-dark" type="submit" id="button-addon1" formaction="@Url.Action("Resultado", "Resultado")"><samp>Buscar</samp></button>
+                <input type="text" class="form-control rounded-pill border border-dark" placeholder="Nombre científico" aria-label="Example text with button addon" aria-describedby="button-addon1" name="nombre">
+                <button class="btn-outline-dark" type="submit" id="button-addon1" formaction="@Url.Action("Resultado", "Principal")" name="btnCientifico"><samp>Buscar</samp></button>
             </form>
 
             <form action="/" method="post" id="vulgar" class="col input-group me-5">
-                <input type="text" class="form-control rounded-pill border border-dark" placeholder="Nombre vulgar" aria-label="Example text with button addon" aria-describedby="button-addon1">
-                <button class="btn-outline-dark" type="submit" id="button-addon1" formaction="@Url.Action("Resultado", "Resultado")"><samp>Buscar</samp></button>
+                <input type="text" class="form-control rounded-pill border border-dark" placeholder="Nombre vulgar" aria-label="Example text with button addon" aria-describedby="button-addon1" name="nombre">
+                <button class="btn-outline-dark" type="submit" id="button-addon1" formaction="@Url.Action("Resultado", "Principal")" name="btnVulgar"><samp>Buscar</samp></button>
             </form>
+
 
         </div>
 
         <div class="row text-center mt-5">
-            <a href="@Url.Action("Avanzada", "Principal")" class="fs-4"><samp>Búsqueda por parámetros</samp><i class='bx bx-search'></i></a>
+            <a href="@Url.Action("Avanzada", "Principal")" class="fs-4" style="background-color: rgba(128, 128, 128, 0.5);"><samp>Búsqueda por parámetros</samp><i class='bx bx-search'></i></a>
         </div>
-
         @{
             if (User.IsInRole("ADMINISTRADOR"))
             {
-                <div class="row text-center mt-5">
-                    <a href="@Url.Action("Principal", "Admin")" class="fs-4"><samp>Pánel de control</samp><i class='bx bx-search'></i></a>
+                <div class="row text-center mt-5" >
+                    <a href="@Url.Action("Principal", "Admin")" class="fs-4" style="background-color: rgba(128, 128, 128, 0.5);"><samp>Pánel de control</samp><i class='bx bx-search'></i></a>
                 </div>
             }
         }
