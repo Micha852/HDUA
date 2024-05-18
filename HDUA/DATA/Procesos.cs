@@ -7,29 +7,38 @@ using System.Globalization;
 using System.Text;
 using MongoDB.Driver.Core.Configuration;
 using Org.BouncyCastle.Ocsp;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace HDUA.DATA{
     public class Procesos : ConexionMySQL{
         ConexionMongo cnm = new ConexionMongo();
 
-        public List<String> Listar(String x){
-            var lista = new List<String>();
+        public List<string> Listar(string x)
+        {
+            var lista = new List<string>();
             conectar();
-            try{
+            try
+            {
                 MySqlCommand cmd = new MySqlCommand(x, cn);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
 
                 MySqlDataReader dr = cmd.ExecuteReader();
-                while (dr.Read()){
+                while (dr.Read())
+                {
                     lista.Add(dr[0] + "");
                 }
-            }catch (Exception ex){
+            }
+            catch (Exception ex)
+            {
                 Console.WriteLine(ex.ToString());
-            }finally{
+            }
+            finally
+            {
                 desconectar();
             }
             return lista;
         }
+
 
         public List<string> ObtenerMunicipiosPorDepartamento(string nombreDepartamento)
         {
@@ -234,6 +243,7 @@ namespace HDUA.DATA{
                 desconectar();
             }
         }
+
         public void CrearMuestra(MuestraModel muestra)
         {
             conectar();
@@ -271,10 +281,10 @@ namespace HDUA.DATA{
             }
         }
 
-        public Boolean BUSCARCOREO(String correo, String contra)
+        public System.Boolean BUSCARCOREO(System.String correo, System.String contra)
         {
             conectar();
-            Boolean aux1 = false;
+            System.Boolean aux1 = false;
             int aux = 0;
             try
             {
@@ -309,7 +319,7 @@ namespace HDUA.DATA{
 
             return aux1;
         }
-        public UsuarioModel ValidarUsuario(String NOMBRECORREO, String PWORD)
+        public UsuarioModel ValidarUsuario(System.String NOMBRECORREO, System.String PWORD)
         {
             conectar();
             DataTable tabla = new DataTable();
@@ -376,6 +386,38 @@ namespace HDUA.DATA{
                 MySqlDataReader dr = cmd.ExecuteReader();
                 while (dr.Read()){
                     MuestraModel muestra = new MuestraModel(){
+                        Id = Convert.ToInt32(dr[0] + ""),
+                        Imagen = dr[1] + "",
+                        Vulgar = dr[2] + ""
+                    };
+                    muestra.Imagen2 = cnm.GetImage(muestra.Imagen);
+                    lista.Add(muestra);
+                }
+            }catch (Exception ex){
+                Console.WriteLine(ex.ToString());
+            }finally{
+                desconectar();
+            }
+            return lista;
+        }
+
+        public List<MuestraModel> ResultadoEspecifico(string sorden, string sclase, string sespecie, string sfamilia, string sgenero, string sdepa){
+            var lista = new List<MuestraModel>();
+            conectar();
+            try{
+                MySqlCommand cmd = new MySqlCommand("BUSCARPARAMETROS", cn);
+                cmd.Parameters.AddWithValue("sorden", sorden);
+                cmd.Parameters.AddWithValue("sclase", sclase);
+                cmd.Parameters.AddWithValue("sespecie", sespecie);
+                cmd.Parameters.AddWithValue("sfamilia", sfamilia);
+                cmd.Parameters.AddWithValue("sgenero", sgenero);
+                cmd.Parameters.AddWithValue("sdepa", sdepa);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                MySqlDataReader dr = cmd.ExecuteReader();
+                while (dr.Read())
+                {
+                    MuestraModel muestra = new MuestraModel()
+                    {
                         Id = Convert.ToInt32(dr[0] + ""),
                         Imagen = dr[1] + "",
                         Vulgar = dr[2] + ""
