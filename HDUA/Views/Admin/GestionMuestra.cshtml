@@ -49,7 +49,7 @@
             <div class="col-md-6 border border-black">
                 <div class="col d-flex justify-content-center align-items-center flex-column">
                     <form>
-                        <div class="row-md-auto mt-3 text-center">
+                        <div class="row-md-auto mt-5 text-center">
                             <input type="text" class="form-control rounded-pill border border-dark" placeholder="Nombre científico" aria-label="Example text with button addon" aria-describedby="button-addon1">
                         </div>
 
@@ -71,19 +71,32 @@
                         <img src="~/img/añadir.png" alt="Ícono" width="100" height="100">
                     </div>
                     <div class="row-md-auto text-center">
-                        <a href="@Url.Action("", "")" class="btn btn-outline-light" style="display: block; margin: 0 auto; color: lightgray" data-bs-toggle="modal" data-bs-target="#modalAñadirMuestra"><samp>Añadir muestra</samp></a>
+                        <a href="@Url.Action("", "")" class="btn btn-outline-light" style="display: block; margin: 0 auto; color: lightgray" data-bs-toggle="modal" data-bs-target="#modalAñadirMuestra">
+                            <samp>Añadir muestra</samp>
+                        </a>
                     </div>
                 </div>
 
-                <div class="col mt-5 d-flex justify-content-center align-items-center flex-column">
-                    <div class="row-md-auto text-center">
+                <div class="col mt-5 d-flex justify-content-center align-items-center flex-row">
+                    <div class="col-md-auto text-center mx-5">
                         <img src="~/img/flechatras2.png" alt="Ícono" width="100" height="100">
+                        <a href="@Url.Action("Principal", "Admin")" class="btn btn-outline-light" style="display: block; margin: 0 auto; color: lightgray">
+                            <samp>Volver</samp>
+                        </a>
                     </div>
-                    <div class="row-md-auto text-center">
-                        <a href="@Url.Action("Principal", "Admin")" class="btn btn-outline-light" style="display: block; margin: 0 auto; color: lightgray"><samp>Volver</samp></a>
+
+                    <div class="col-md-auto text-center mx-5">
+                        <img src="~/img/añadirc.png" alt="Ícono" width="100" height="100">
+                        <a href="#" class="btn btn-outline-light" style="display: block; margin: 0 auto; color: lightgray" data-bs-toggle="modal" data-bs-target="#modalAñadirParametros">
+                            <samp>Agregar parámetros</samp>
+                        </a>
                     </div>
+
                 </div>
+
             </div>
+
+
         </div>
     </div>
 
@@ -357,13 +370,99 @@
                 </div>
 
                 <div class="modal-footer justify-content-between">
-                    <button type="button" class="btn btn-outline-success" data-bs-dismiss="modal"><samp>Cancelar</samp></button>
+                    <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal"><samp>Cancelar</samp></button>
                     <button type="submit" class="btn btn-outline-success" form="formulario"><samp>Finalizar</samp></button>
                 </div>
 
             </div>
         </div>
     </div>
+
+    <div class="modal fade mt-5" id="modalAñadirParametros" tabindex="-1" aria-labelledby="modalAñadirParametrosLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalAñadirParametrosLabel">Añadir parámetros</h5>
+                <button type="button" class="btn btn-outline-danger ms-auto" id="cerrarAP" data-bs-dismiss="modal" aria-label="Close"><samp>X</samp></button>
+            </div>
+            <div class="modal-body" style="background-color: #C2E6D6">
+                <div class="row">
+                    <!-- Formulario Características -->
+                    <div class="col-md-6 d-flex align-items-center justify-content-center">
+                        <form id="formCaracteristicas" action="@Url.Action("CrearParameros","Admin")" method="post">
+                            <h5 class="text-center">Características</h5>
+                            <div class="mb-3">
+                                <label for="selectCaracteristica" class="form-label">Seleccione una característica</label>
+                                <select class="form-select" id="selectCaracteristica" name="selectCaracteristica">
+                                    <option selected>Seleccionar opción</option>
+                                    <option>Clase</option>
+                                    <option>Orden</option>
+                                    <option>Familia</option>
+                                    <option>Genero</option>
+                                    <option>Especie</option>
+                                    <option>Tipo de ubicación</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="inputCaracteristica" class="form-label">Nombre</label>
+                                <input type="text" class="form-control" id="inputCaracteristica" name="inputCaracteristica" placeholder="Ingrese el nombre...">
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-success">Guardar</button>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- Formulario Ubicación -->
+                        <div class="col-md-6 d-flex align-items-center justify-content-center">
+                        <form id="formUbicacion" action="@Url.Action("CrearUbicacion","Admin")" method="post">
+                            <h5 class="text-center">Ubicación</h5>
+                            <div class="mb-3">
+                                <label for="selectDepartamento" class="form-label">Departamento</label>
+                                <select id="departmentSelect2" class="form-select" name="departmentSelect2">
+                                    <option value="Seleccione">Seleccionar departamento</option>
+                                    @foreach (String i in @ViewBag.ldep)
+                                    {
+                                        <option>
+                                            @i
+                                        </option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="selectMunicipio" class="form-label">Municipio</label>
+                                <select id="municipioSelect2" class="form-select" name="municipioSelect2">
+                                    <option selected>-</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="selectTipoUbicacion" class="form-label">Tipo de Ubicación</label>
+                                <select class="form-select" id="selectTipoUbicacion" name="selectTipoUbicacion">
+                                    <option value="Seleccione">Seleccionar tipo</option>
+                                    @foreach (String i in @ViewBag.ltipoubi2)
+                                    {
+                                        <option>
+                                            @i
+                                        </option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="inputUbicacion" class="form-label">Nombre</label>
+                                <input type="text" class="form-control" id="inputUbicacion" name="inputUbicacion" placeholder="Ingrese el nombre...">
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-success">Guardar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal"><samp>Cancelar</samp></button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
     <script>
@@ -461,7 +560,25 @@
             });
         });
 
-
+        $(document).ready(function () {
+            $('#departmentSelect2').change(function () {
+                var departamentoSeleccionado = $(this).val();
+                if (departamentoSeleccionado !== 'Seleccione') {
+                    $.ajax({
+                        url: "@Url.Action("ObtenerMunicipiosPorDepartamento", "Admin")",
+                        type: 'POST',
+                        data: { nombreDepartamento: departamentoSeleccionado },
+                        success: function (data) {
+                            $('#municipioSelect2').empty();
+                            $('#municipioSelect2').append('<option>' + "Seleccione municipio" + '</option>');
+                            $.each(data, function (index, municipio) {
+                                $('#municipioSelect2').append('<option>' + municipio + '</option>');
+                            });
+                        }
+                    });
+                }
+            });
+        });
     </script>
 
 </body>

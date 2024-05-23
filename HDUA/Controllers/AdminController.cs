@@ -32,6 +32,8 @@ namespace HDUA.Controllers
             ViewBag.ltfami = procesos.Listar("LISTARFAMILIA");
             ViewBag.ldep = procesos.Listar("LISTARDEPARTAMENTO");
             ViewBag.lmun = procesos.Listar("LISTARMUNICIPIO");
+            ViewBag.ltipoubi = procesos.Listar("LISTARTIPOUBICACION");
+            ViewBag.ltipoubi2 = procesos.Listar("LISTARTIPOUBI2");
             ViewBag.mostrarrecolector = procesos.ListarRecolector();
 
             return View();
@@ -128,6 +130,22 @@ namespace HDUA.Controllers
 
             procesos.CrearMuestra(muestra);
 
+            return RedirectToAction("Principal", "Principal");
+        }
+
+        [HttpPost]
+        public ActionResult CrearUbicacion(){
+            UbicacionModel ubi = new UbicacionModel();
+            ubi.Nombre = Request.Form["inputUbicacion"];
+            ubi.Tipoubi = Request.Form["selectTipoUbicacion"];
+            ubi.Municipio = Request.Form["municipioSelect2"];
+            procesos.CrearUbicacion(ubi);
+            return RedirectToAction("Principal", "Principal");
+        }
+
+        [HttpPost]
+        public ActionResult CrearParameros(){
+            procesos.CrearParametros(Request.Form["selectCaracteristica"], Request.Form["inputCaracteristica"]);
             return RedirectToAction("Principal", "Principal");
         }
 
