@@ -2,6 +2,10 @@
 @{
     Layout = "~/Views/Shared/layau2.cshtml";
 }
+@{
+    var fullName = User.Identity.Name;
+    var firstName = fullName.Split(' ')[0];
+}
 
 <!DOCTYPE html>
 <html lang="es">
@@ -82,6 +86,7 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            <h3>_________________________________________________</h3>
                                         </p>
 
                                         <p>
@@ -109,12 +114,38 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            <h3>_________________________________________________</h3>
                                         </p>
 
                                         <p>
-                                            <h3 id="list-item-3" class="mt-5 text-center" style="font-style: italic;">Sección de comentarios</h3>
-                                            <div class="col">
-                                                <h5 class="text-center">acá irán los comentarios, klk</h5>
+                                            <h3 id="list-item-3" class="text-center mt-5" style="font-style: italic;">Sección de comentarios</h3>
+                                            <div class="d-flex justify-content-center">
+                                                <div class="me-2">
+                                                    <i class='bx bx-user-pin' style="font-size: 30px;"></i>
+                                                </div>
+                                                <div class="me-2">
+                                                    <label for="commentInput" class="form-label mb-0">@firstName</label>
+                                                </div>
+                                                <div class="flex-grow-1 me-2">
+                                                    <input type="text" class="form-control" id="commentInput" name="commentInput" placeholder="Escriba su comentario aquí...">
+                                                </div>
+                                                <div>
+                                                    <button type="submit" class="btn btn-primary" id="submitBtn" disabled onclick="aux()">Publicar</button>
+                                                </div>
+                                                <input type="hidden" id="hiddenInputMuestra" name="hiddenInputMuestra" value="@Model.Id">
+                                            </div>
+
+                                            <div class="col mt-3">
+                                                <div class="row text-center" id="comentariosDiv">
+                                                    @foreach (ComentarioModel i in Model.comentarios)
+                                                    {
+                                                        <div class="card mb-3">
+                                                            <div class="card-body text-start">
+                                                                <p class="card-text"><strong>@i.Usuario:</strong> @i.Texto</p>
+                                                            </div>
+                                                        </div>
+                                                    }
+                                                </div>
                                             </div>
                                         </p>
                                     </div>
@@ -154,5 +185,57 @@
         </div>
     </div>
 
+
+    <script>
+        var inpuText = document.getElementById('commentInput');
+        var inputId = document.getElementById('hiddenInputMuestra');
+        var comentarios = document.getElementById('comentariosDiv');
+
+        function aux(){
+            CrearComentario(inpuText.value, inputId.value);
+            inpuText.value = '';
+            submitBtn.disabled = true;
+        }
+
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const commentInput = document.getElementById('commentInput');
+            const submitBtn = document.getElementById('submitBtn');
+
+            commentInput.addEventListener('input', function () {
+                if (commentInput.value.trim().length > 0) {
+                    submitBtn.disabled = false;
+                } else {
+                    submitBtn.disabled = true;
+                }
+            });
+        });
+
+        function CrearComentario(commentInput, hiddenInputMuestra) {
+            $.ajax({
+                url: "@Url.Action("CrearComentario", "Principal")",
+                type: "POST",
+                traditional: true,
+                data: { commentInput: commentInput, hiddenInputMuestra: hiddenInputMuestra },
+                success: function (result) {
+                    var nuevoComentarioHTML = `
+                        <div class="card mb-3">
+                            <div class="card-body text-start">
+                                <p class="card-text"><strong>${result[result.length - 1].usuario}:</strong> ${result[result.length - 1].texto}</p>
+                            </div>
+                        </div>
+                    `;
+
+                    // Agregar el nuevo comentario al contenedor de comentarios
+                    var comentariosDiv = document.getElementById('comentariosDiv');
+                    comentariosDiv.innerHTML += nuevoComentarioHTML;
+                },
+                error: function (xhr, status, error) {
+                    console.log("error");
+                    console.error(error);
+                }
+            });
+        }
+
+    </script>
 </body>
 </html>

@@ -1,6 +1,8 @@
 ﻿using HDUA.DATA;
 using HDUA.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HDUA.Controllers
 {
@@ -53,8 +55,45 @@ namespace HDUA.Controllers
             int muestraId = id;
 
             MuestraModel muestra = procesos.FichaMuestra(muestraId);
-
+            List<ComentarioModel> comentarios = new List<ComentarioModel>();
+            comentarios = procesos.ComentariosMuestra(muestraId);
+            muestra.comentarios = comentarios;
             return View(muestra);
         }
+
+        [HttpPost]
+        public ActionResult CrearComentario(string commentInput, int hiddenInputMuestra)
+        {
+            if (string.IsNullOrWhiteSpace(commentInput) || hiddenInputMuestra <= 0)
+            {
+                return RedirectToAction("Principal", "Principal");
+            }
+
+            ComentarioModel com = new ComentarioModel();
+            com.Texto = commentInput;
+            com.Muestra = hiddenInputMuestra+"";
+
+            var claimsPrincipal = HttpContext.User.Identity as ClaimsIdentity;
+            if (claimsPrincipal != null)
+            {
+                var userIdClaim = claimsPrincipal.Claims.FirstOrDefault(c => c.Type == "id");
+                if (userIdClaim != null && int.TryParse(userIdClaim.Value, out int userId))
+                {
+                    com.Usuario = userId+"";
+                }
+                else
+                {
+                    return RedirectToAction("Principal", "Principal");
+                }
+            }
+            else
+            {
+                return RedirectToAction("Principal", "Principal");
+            }
+
+            List<ComentarioModel> lista = procesos.CrearComentario(com);
+            return Json(lista);
+        }
+
     }
 }

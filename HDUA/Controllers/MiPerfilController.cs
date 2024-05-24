@@ -8,7 +8,7 @@ namespace HDUA.Controllers
     public class MiPerfilController : Controller
     {
         Procesos procesos = new Procesos();
-        public IActionResult MiPerfil()
+        public IActionResult MiPerfil() 
         {
             ViewBag.lgu = procesos.Listar("LISTARGENEROUSUARIO");
             ViewBag.li = procesos.Listar("LISTARINSTITUCION");

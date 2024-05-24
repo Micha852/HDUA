@@ -8,6 +8,7 @@ using System.Text;
 using MongoDB.Driver.Core.Configuration;
 using Org.BouncyCastle.Ocsp;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using System;
 
 namespace HDUA.DATA
 {
@@ -553,11 +554,9 @@ namespace HDUA.DATA
             return user;
         }
 
-        public void CrearUbicacion(UbicacionModel ubi)
-        {
+        public void CrearUbicacion(UbicacionModel ubi){
             conectar();
-            try
-            {
+            try{
                 MySqlCommand cmd = new MySqlCommand("INSERTARUBICACION", cn);
                 cmd.Parameters.AddWithValue("MUNI", ubi.Municipio);
                 cmd.Parameters.AddWithValue("TIPOUBI", ubi.Tipoubi);
@@ -565,13 +564,9 @@ namespace HDUA.DATA
 
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 cmd.ExecuteNonQuery();
-            }
-            catch (Exception ex)
-            {
+            }catch (Exception ex){
                 Console.WriteLine(ex.ToString());
-            }
-            finally
-            {
+            }finally{
                 desconectar();
             }
         }
@@ -589,6 +584,64 @@ namespace HDUA.DATA
             }finally{
                 desconectar();
             }
+        }
+
+        public List<ComentarioModel> CrearComentario(ComentarioModel com){
+            conectar();
+            var lista = new List<ComentarioModel>();
+            try
+            {
+                MySqlCommand cmd = new MySqlCommand("CREARCOMENTARIO", cn);
+                cmd.Parameters.AddWithValue("TEXTO", com.Texto);
+                cmd.Parameters.AddWithValue("IDMUESTRA", com.Muestra);
+                cmd.Parameters.AddWithValue("IDUSUARIO", com.Usuario);
+
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                MySqlDataReader dr = cmd.ExecuteReader();
+                while (dr.Read())
+                {
+                    ComentarioModel comentario = new ComentarioModel()
+                    {
+                        Id = Convert.ToInt32(dr[0] + ""),
+                        Usuario = dr[1] + "",
+                        Texto = dr[2] + ""
+                    };
+                    lista.Add(comentario);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }finally{
+                desconectar();
+            }
+            return lista;
+        }
+
+        public List<ComentarioModel> ComentariosMuestra(int id){
+            var lista = new List<ComentarioModel>();
+            conectar();
+            try{
+                MySqlCommand cmd = new MySqlCommand("LISTARCOMENTARIOS", cn);
+                cmd.Parameters.AddWithValue("IDMUESTRA", id);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                MySqlDataReader dr = cmd.ExecuteReader();
+                while (dr.Read()){
+                    ComentarioModel comentario = new ComentarioModel()
+                    {
+                        Id = Convert.ToInt32(dr[0] + ""),
+                        Usuario = dr[1]+"",
+                        Texto = dr[2]+""
+                    };
+                    lista.Add(comentario);
+                }
+            }catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }finally{
+                desconectar();
+            }
+            return lista;
         }
     }
 }
