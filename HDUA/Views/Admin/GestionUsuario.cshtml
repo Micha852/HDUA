@@ -49,12 +49,12 @@
 
         </div>
         <div class="col-auto">
-            <input type="text" class="form-control" id="buscar-recolector" placeholder="Buscar recolector">
+            <input type="text" class="form-control" id="buscar-usuario" placeholder="Buscar usuario">
         </div>
     </div>
 
     <div class="row mt-3 justify-content-center">
-        <div class="col-md-8" style="max-height: 235px; overflow-y: auto;">
+        <div class="col-md-8" style="max-height: 275px; overflow-y: auto;">
             <table class="table table-striped table-hover mt-3" id="tablaUsuarios">
                 <thead>
                     <tr>
@@ -94,7 +94,7 @@
         </div>
     </div>
 
-    <div class="col mt-5 d-flex justify-content-center align-items-center flex-column">
+    <div class="col mt-3 d-flex justify-content-center align-items-center flex-column">
         <div class="row-md-auto text-center">
             <img src="~/img/flechatras2.png" alt="Ícono" width="100" height="100">
         </div>
@@ -214,7 +214,7 @@
 
         $(document).ready(function () {
             $('#buscarbtn').click(function () {
-                var inputText = $('#buscar-recolector').val().trim().toLowerCase();
+                var inputText = $('#buscar-usuario').val().trim().toLowerCase();
                 $('#tablaUsuarios tbody tr').filter(function () {
                     $(this).toggle($(this).text().toLowerCase().indexOf(inputText) > -1);
                 });

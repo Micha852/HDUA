@@ -6,6 +6,7 @@ using DinkToPdf;
 using DinkToPdf.Contracts;
 using Microsoft.AspNetCore.Http.Extensions;
 using ClosedXML.Excel;
+using DocumentFormat.OpenXml.Spreadsheet;
 
 
 namespace HDUA.Controllers
@@ -261,5 +262,6 @@ namespace HDUA.Controllers
                 }
             }
         }
+
     }
 }

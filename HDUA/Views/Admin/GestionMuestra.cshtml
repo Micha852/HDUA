@@ -18,11 +18,7 @@
     <title>HDUA</title>
     <style>
         body {
-            background-image: url('https://mdbootstrap.com/img/Photos/Others/images/78.jpg');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            height: 100vh;
+            background-color: lightgray;
         }
 
     </style>
@@ -47,55 +43,53 @@
     <div class="container mt-5">
         <div class="row">
             <div class="col-md-6 border border-black">
-                <div class="col d-flex justify-content-center align-items-center flex-column">
-                    <form>
-                        <div class="row-md-auto mt-5 text-center">
-                            <input type="text" class="form-control rounded-pill border border-dark" placeholder="Nombre científico" aria-label="Example text with button addon" aria-describedby="button-addon1">
-                        </div>
 
-                        <div class="row-md-auto mt-3 text-center">
-                            <a href="@Url.Action("", "")" class="btn btn-outline-light btn-sm" style="color: lightgray;"><samp>Buscar</samp></a>
-                        </div>
-
-                        <div class="row-md-auto mt-5 text-center">
-                            <img src="~/img/muestra.jpg" class="img-thumbnail" alt="" style="width: 120px; height: 150px;">
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-
-            <div class="col-md-6 border border-black">
                 <div class="col mt-5 d-flex justify-content-center align-items-center flex-column">
                     <div class="row-md-auto text-center">
                         <img src="~/img/añadir.png" alt="Ícono" width="100" height="100">
                     </div>
                     <div class="row-md-auto text-center">
-                        <a href="@Url.Action("", "")" class="btn btn-outline-light" style="display: block; margin: 0 auto; color: lightgray" data-bs-toggle="modal" data-bs-target="#modalAñadirMuestra">
+                        <a href="@Url.Action("", "")" class="btn btn-success mt-3" style="display: block; margin: 0 auto; color: lightgray" data-bs-toggle="modal" data-bs-target="#modalAñadirMuestra">
                             <samp>Añadir muestra</samp>
                         </a>
                     </div>
                 </div>
 
-                <div class="col mt-5 d-flex justify-content-center align-items-center flex-row">
-                    <div class="col-md-auto text-center mx-5">
+                <div class="col d-flex justify-content-center align-items-center flex-column">
+                    <form action="@Url.Action("Resultado", "Principal")" method="post">
+                        <div class="row-md-auto mt-5 text-center">
+                            <input type="text" name="nombre" class="form-control rounded-pill border border-dark" placeholder="Nombre científico" aria-describedby="button-addon1">
+                        </div>
+                        <div class="row-md-auto mt-3 text-center">
+                            <button type="submit" name="btnCientifico" class="btn btn-success" style="color: lightgray;"><samp>Buscar</samp></button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+
+
+            <div class="col-md-6 border border-black">
+
+                <div class="col mt-5 d-flex justify-content-center align-items-center flex-column">
+                    <img src="~/img/añadirc.png" alt="Ícono" width="100" height="100">
+                    <a href="#" class="btn btn-success mt-3" style="display: block; margin: 0 auto; color: lightgray" data-bs-toggle="modal" data-bs-target="#modalAñadirParametros">
+                        <samp>Agregar parámetros</samp>
+                    </a>
+                </div>
+
+                <div class="row-md-auto text-center">
+                    <div class="row-md-auto mt-5 text-center">
                         <img src="~/img/flechatras2.png" alt="Ícono" width="100" height="100">
-                        <a href="@Url.Action("Principal", "Admin")" class="btn btn-outline-light" style="display: block; margin: 0 auto; color: lightgray">
+                    </div>
+                    <div class="row-md-auto mt-3 text-center">
+                        <a href="@Url.Action("Principal", "Admin")" class="btn btn-success" style="color: lightgray">
                             <samp>Volver</samp>
                         </a>
                     </div>
-
-                    <div class="col-md-auto text-center mx-5">
-                        <img src="~/img/añadirc.png" alt="Ícono" width="100" height="100">
-                        <a href="#" class="btn btn-outline-light" style="display: block; margin: 0 auto; color: lightgray" data-bs-toggle="modal" data-bs-target="#modalAñadirParametros">
-                            <samp>Agregar parámetros</samp>
-                        </a>
-                    </div>
-
                 </div>
 
             </div>
-
 
         </div>
     </div>

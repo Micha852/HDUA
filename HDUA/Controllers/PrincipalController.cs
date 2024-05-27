@@ -31,6 +31,21 @@ namespace HDUA.Controllers
         [HttpPost]
         public IActionResult Resultado(string nombre, string sorden, string sclase, string sespecie, string sfamilia, string sgenero, string sdepa)
         {
+            ViewBag.ltv = procesos.Listar("LISTARTIPOVENACION");
+            ViewBag.ltf = procesos.Listar("LISTARTIPOFORMA");
+            ViewBag.ltM = procesos.Listar("LISTARTIPOMARGEN");
+            ViewBag.ltp = procesos.Listar("LISTARPROCEDENCIA");
+            ViewBag.ltc = procesos.Listar("LISTARCLASE");
+            ViewBag.lte = procesos.Listar("LISTARESPECIE");
+            ViewBag.ltg = procesos.Listar("LISTARGENERO");
+            ViewBag.lto = procesos.Listar("LISTARORDEN");
+            ViewBag.ltfami = procesos.Listar("LISTARFAMILIA");
+            ViewBag.ldep = procesos.Listar("LISTARDEPARTAMENTO");
+            ViewBag.lmun = procesos.Listar("LISTARMUNICIPIO");
+            ViewBag.ltipoubi = procesos.Listar("LISTARTIPOUBICACION");
+            ViewBag.ltipoubi2 = procesos.Listar("LISTARTIPOUBI2");
+            ViewBag.mostrarrecolector = procesos.ListarRecolector();
+
             List<MuestraModel> listamuestra = new List<MuestraModel>();
             if (Request.Form["btnCientifico"].Count > 0)
             {
@@ -39,12 +54,14 @@ namespace HDUA.Controllers
             else if (Request.Form["btnVulgar"].Count > 0)
             {
                 listamuestra = procesos.ResultadoVulgar(nombre);
-            }else if (Request.Form["btnParametros"].Count > 0)
+            }
+            else if (Request.Form["btnParametros"].Count > 0)
             {
                 listamuestra = procesos.ResultadoEspecifico(sorden, sclase, sespecie, sfamilia, sgenero, sdepa);
             }
             return View(listamuestra);
         }
+
 
 
         public IActionResult FichaMuestra() {

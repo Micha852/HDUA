@@ -48,7 +48,7 @@
 
             @foreach (MuestraModel m in Model)
             {
-                <div class="col mt-5">
+                <div class="col mt-3">
                     <div class="card" style="width: 20rem;">
                         <div class="card-body text-center">
                             @if (!string.IsNullOrEmpty(m.Cientifico))
@@ -67,6 +67,14 @@
                                 <input type="hidden" id="idMuestra" name="id" value="@m.Id" />
                                 <button type="submit" class="btn btn-outline-success btn-auto">Ver ficha técnica</button>
                             </form>
+                            @{
+                                if (User.IsInRole("ADMINISTRADOR"))
+                                {
+                                    <button type="submit" class="btn btn-outline-success btn-auto mt-2" data-nombrecientifico="@m.Cientifico" data-nombrevulgar="@m.Vulgar" data-id="@m.Id" data-bs-toggle="modal" data-bs-target="#modalEditarMuestra">
+                                        Editar muestra
+                                    </button>
+                                }
+                            }
                         </div>
 
                     </div>
@@ -87,6 +95,284 @@
         </div>
     </div>
 
+    <div class="modal fade mt-5" id="modalEditarMuestra" tabindex="-1" aria-labelledby="modalEditarMuestraLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalEditarMuestraLabel"><samp>Editar Muestra - </samp><span id="modalNombreCientifico"></span></h5>
+                    <button type="button" class="btn btn-outline-danger ms-auto" id="cerrarHistoria" data-bs-dismiss="modal" aria-label="Close"><samp>X</samp></button>
+                </div>
+
+                <div class="modal-body" style="background-color: #C2E6D6">
+                    <div id="carouselExampleControls" class="carousel slide" data-bs-interval="false">
+                        <div class="carousel-inner ">
+                            <form action="@Url.Action("CrearMuestra","Admin")" method="post" id="formulario" enctype="multipart/form-data">
+                                <!-- Parte 1 -->
+                                <div class="carousel-item active">
+                                    <div class="container">
+                                        <div class="row">
+
+                                            <h3 class="d-flex justify-content-center align-items-center"><samp>Generalidades</samp></h3>
+
+                                            <div class="col me-5 ms-5">
+                                                <div class="row mt-3">
+                                                    <input type="text" class="form-control" placeholder="Nombre científico" oninput="this.value = this.value.toUpperCase()" id="cientifico" name="cientifico">
+                                                </div>
+                                                <div class="row mt-3">
+                                                    <input type="text" class="form-control" placeholder="Nombre vulgar" oninput="this.value = this.value.toUpperCase()" id="vulgar" name="vulgar">
+                                                </div>
+                                                @* INSERTAR IMAGEN *@
+                                                <div class="row mt-3">
+                                                    <label for="formFile" class="form-label"><samp>Seleccionar imágen de muestra</samp></label>
+                                                    <input class="form-control" type="file" accept="image/*" id="formFile" name="File">
+                                                </div>
+
+                                                <div class="row mt-3">
+                                                    <label for="formFile" class="form-label"><samp>Fecha recolección</samp></label>
+                                                    <input type="date" class="form-control" id="fecharecolecccion" name="fecharecolecccion">
+                                                </div>
+                                            </div>
+
+                                            <div class="col me-5 ms-5">
+                                                <div class="row mt-3">
+                                                    <select class="form-select" id="venacion" name="venacion">
+                                                        <option value="Seleccione">Tipo venación</option>
+                                                        @foreach (String i in @ViewBag.ltv)
+                                                        {
+                                                            <option>
+                                                                @i
+                                                            </option>
+                                                        }
+                                                    </select>
+                                                </div>
+
+                                                <div class="row mt-3">
+                                                    <select class="form-select" id="forma" name="forma">
+                                                        <option value="Seleccione">Tipo forma</option>
+                                                        @foreach (String i in @ViewBag.ltf)
+                                                        {
+                                                            <option>
+                                                                @i
+                                                            </option>
+                                                        }
+                                                    </select>
+                                                </div>
+
+                                                <div class="row mt-3">
+                                                    <select class="form-select" id="margen" name="margen">
+                                                        <option value="Seleccione">Tipo margen</option>
+                                                        @foreach (String i in @ViewBag.ltm)
+                                                        {
+                                                            <option>
+                                                                @i
+                                                            </option>
+                                                        }
+                                                    </select>
+                                                </div>
+
+                                                <div class="row mt-3">
+                                                    <select class="form-select" id="procedencia" name="procedencia">
+                                                        <option value="Seleccione">Procedencia</option>
+                                                        @foreach (String i in @ViewBag.ltp)
+                                                        {
+                                                            <option>
+                                                                @i
+                                                            </option>
+                                                        }
+                                                    </select>
+                                                </div>
+
+                                                <div class="row mt-3">
+                                                    <input type="number" class="form-control" min="1" max="100" placeholder="Altura de la procedencia" id="altura" name="altura">
+                                                </div>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Parte 2 -->
+                                <div class="carousel-item">
+                                    <div class="container">
+                                        <div class="row">
+
+                                            <h3 class="d-flex justify-content-center align-items-center"><samp>Especificaciones</samp></h3>
+
+                                            <div class="col me-5 ms-5">
+                                                <div class="row mt-3">
+                                                    <select class="form-select" id="clase" name="clase">
+                                                        <option value="Seleccione">Clase</option>
+                                                        @foreach (String i in @ViewBag.ltc)
+                                                        {
+                                                            <option>
+                                                                @i
+                                                            </option>
+                                                        }
+                                                    </select>
+                                                </div>
+
+                                                <div class="row mt-3">
+                                                    <select class="form-select" id="especie" name="especie">
+                                                        <option value="Seleccione">Especie</option>
+                                                        @foreach (String i in @ViewBag.lte)
+                                                        {
+                                                            <option>
+                                                                @i
+                                                            </option>
+                                                        }
+                                                    </select>
+                                                </div>
+
+                                                <div class="row mt-3">
+                                                    <select class="form-select" id="genero" name="genero">
+                                                        <option value="Seleccione">Género</option>
+                                                        @foreach (String i in @ViewBag.ltg)
+                                                        {
+                                                            <option>
+                                                                @i
+                                                            </option>
+                                                        }
+                                                    </select>
+                                                </div>
+
+                                                <div class="row mt-3">
+                                                    <select id="departmentSelect" class="form-select" name="departmentSelect">
+                                                        <option value="Seleccione">Departamento</option>
+                                                        @foreach (String i in @ViewBag.ldep)
+                                                        {
+                                                            <option>
+                                                                @i
+                                                            </option>
+                                                        }
+                                                    </select>
+                                                </div>
+
+                                                <div class="row mt-3">
+                                                    <select id="municipioSelect" class="form-select" name="municipioSelect">
+                                                        <option selected>Municipio</option>
+                                                    </select>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="col me-5 ms-5">
+                                                <div class="row mt-3">
+                                                    <select class="form-select" id="orden" name="orden">
+                                                        <option value="Seleccione">Orden</option>
+                                                        @foreach (String i in @ViewBag.lto)
+                                                        {
+                                                            <option>
+                                                                @i
+                                                            </option>
+                                                        }
+                                                    </select>
+                                                </div>
+
+                                                <div class="row mt-3">
+                                                    <select class="form-select" id="familia" name="familia">
+                                                        <option value="Seleccione">Familia</option>
+                                                        @foreach (String i in @ViewBag.ltfami)
+                                                        {
+                                                            <option>
+                                                                @i
+                                                            </option>
+                                                        }
+                                                    </select>
+                                                </div>
+
+                                                <div class="row mt-3">
+                                                    <select class="form-select" id="tipoUbicacionSelect" name="tipoUbicacionSelect">
+                                                        <option selected>Tipo ubicación</option>
+                                                    </select>
+                                                </div>
+
+                                                <div class="row mt-3">
+                                                    <select class="form-select" id="ubicacionSelect" name="ubicacionSelect">
+                                                        <option selected>Ubicación</option>
+                                                    </select>
+                                                </div>
+
+                                                <div class="row mt-3">
+                                                    <input type="text" class="form-control" id="coordenadasInput" name="coordenadasInput" placeholder="Coordenadas (Ejemplo: 51°30'N 0°7'W)">
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Parte 3 -->
+                                <div class="carousel-item">
+                                    <div class="container">
+
+                                        <h3 class="d-flex justify-content-center align-items-center"><samp>Recolectores asociados</samp></h3>
+
+
+                                        <div class="row mt-3 ms-5 justify-content-end">
+                                            <div class="col-auto">
+                                                <button type="button" class="btn btn-link btn-buscar" id="buscarbtn">
+                                                    <i class='bx bx-search-alt' style="font-size: 1.5rem;"></i>
+                                                </button>
+
+                                            </div>
+                                            <div class="col-auto">
+                                                <input type="text" class="form-control" id="buscar-recolector" placeholder="Buscar recolector">
+                                            </div>
+                                        </div>
+
+                                        <table id="tabla-recolectores" class="table table-striped table-hover mt-3">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col"><samp>Nombre</samp></th>
+                                                    <th scope="col"><samp>Muestras ligadas</samp></th>
+                                                    <th scope="col"><samp>Seleccionar</samp></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (RecolectorModel i in ViewBag.mostrarrecolector)
+                                                {
+                                                    <tr>
+                                                        <td>@i.Nombre</td>
+                                                        <td>@i.Cantidad</td>
+                                                        <td>
+                                                            <input type="checkbox" name="usuariosSeleccionados" value="@i.Id" />
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- Controles del carrusel -->
+                        <button class="carousel-control-prev btn btn-outline-success me-5" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+
+                        <button class="carousel-control-next btn btn-outline-success ms-5" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+
+
+
+                    </div>
+                </div>
+
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal"><samp>Cancelar</samp></button>
+                    <button type="submit" class="btn btn-outline-success" form="formulario"><samp>Finalizar</samp></button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
     <script>
         $(document).ready(function () {
             $('#verFichaBtn').click(function (e) {
@@ -94,6 +380,38 @@
                 $('#formFichaMuestra').submit(); // Enviar el formulario
             });
         });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var modalEditarMuestra = document.getElementById('modalEditarMuestra');
+            modalEditarMuestra.addEventListener('show.bs.modal', function (event) {
+                var button = event.relatedTarget; // Botón que activó el modal
+                var nombreCientifico = button.getAttribute('data-nombrecientifico');
+                var nombreVulgar = button.getAttribute('data-nombrevulgar');
+                var idMuestra = button.getAttribute('data-id');
+
+                // Actualizar el contenido del modal
+                var modalTitle = modalEditarMuestra.querySelector('#modalNombreCientifico');
+                modalTitle.textContent = nombreCientifico;
+
+                // Actualizar los campos del formulario del modal
+                var inputCientifico = modalEditarMuestra.querySelector('#cientifico');
+                var inputVulgar = modalEditarMuestra.querySelector('#vulgar');
+
+                // Si los campos están dentro de un div con la clase "row" dentro del modal, entonces deberías seleccionarlos así:
+                var divCientifico = modalEditarMuestra.querySelector('.modal-body #cientifico');
+                var divVulgar = modalEditarMuestra.querySelector('.modal-body #vulgar');
+
+                // Asignar los valores a los campos
+                if (inputCientifico && inputVulgar) {
+                    inputCientifico.value = nombreCientifico;
+                    inputVulgar.value = nombreVulgar;
+                } else if (divCientifico && divVulgar) {
+                    divCientifico.value = nombreCientifico;
+                    divVulgar.value = nombreVulgar;
+                }
+            });
+        });
+
     </script>
 
 

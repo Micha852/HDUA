@@ -68,10 +68,10 @@
 
                                         <p>
                                             <h3 id="list-item-1" class="text-center" style="font-style: italic; font-size: 3rem;" >Aspectos generales</h3>
-                                            <div class="col align-content-center">
-                                                <div class="row justify-content: center align-items: center">
+                                            <div class="col mt-3 align-content-center">
+                                                <div class="row mt-3 justify-content: center align-items: center">
                                                     <div class="col d-flex flex-column align-items-center">
-                                                        <img src="data:image/jpg;base64,@Model.Imagen2.Imagen" class="card-img-top" style="height: 25rem; object-fit: contain;">
+                                                        <img src="data:image/jpg;base64,@Model.Imagen2.Imagen" class="card-img-top" style="height: 30rem; object-fit: contain;">
                                                         <button type="button" class="btn btn-outline-success mt-2" data-bs-toggle="modal" data-bs-target="#imagenModal">
                                                             Ampliar Imagen
                                                         </button>
@@ -91,8 +91,8 @@
 
                                         <p>
                                             <h3 id="list-item-2" class="mt-5 text-center" style="font-style: italic; font-size: 3rem;">Aspectos específicos</h3>
-                                            <div class="col">
-                                                <div class="row">
+                                            <div class="col mt-3">
+                                                <div class="row mt-3">
                                                     <div class="col mt-2">
                                                         <img src="" alt="Imagen" class="img">
                                                         <label for="coordenadas">Coordenadas</label>
@@ -119,7 +119,7 @@
 
                                         <p>
                                             <h3 id="list-item-3" class="text-center mt-5" style="font-style: italic; font-size: 3rem;">Sección de comentarios</h3>
-                                            <div class="d-flex justify-content-center">
+                                            <div class="d-flex mt-3 justify-content-center">
                                                 <div class="me-2">
                                                     <i class='bx bx-user-pin' style="font-size: 35px;"></i>
                                                 </div>
@@ -161,7 +161,7 @@
         </div>
     </div>
     <div class="col d-flex justify-content-end align-items-end">
-        <a href="@Url.Action("Principal", "Principal")" class="text-decoration-none me-5"><samp>Volver a buscar</samp></a>
+        <a href="@Url.Action("Principal", "Principal")" class="text-decoration-none me-5" style="font-size: 1.4rem;"><samp>Volver a buscar</samp></a>
     </div>
 
     <div class="modal fade" id="imagenModal" tabindex="-1" aria-labelledby="imagenModalLabel" aria-hidden="true">
