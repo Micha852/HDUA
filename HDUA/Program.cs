@@ -14,9 +14,9 @@ builder.Services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(opcion =>
     {
-        opcion.LoginPath = "/Principal/Principal";
-        opcion.ExpireTimeSpan = TimeSpan.FromMinutes(45);
-        opcion.AccessDeniedPath = "/Login/Login";
+        opcion.LoginPath = "/Login/Login";
+        opcion.ExpireTimeSpan = TimeSpan.FromMinutes(1);
+        opcion.AccessDeniedPath = "/Principal/Principal";
     });
 
 var app = builder.Build();

@@ -1,10 +1,12 @@
 ﻿using HDUA.DATA;
 using HDUA.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
 namespace HDUA.Controllers
 {
+    [Authorize]
     public class MiPerfilController : Controller
     {
         Procesos procesos = new Procesos();

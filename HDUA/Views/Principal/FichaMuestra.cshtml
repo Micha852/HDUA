@@ -46,7 +46,7 @@
         </div>
     </div>
 
-    <div class="row mt-5 d-flex justify-content-center align-items-center border border-black">
+    <div class="row mt-2 d-flex justify-content-center align-items-center border border-black">
         <div class="col-2">
             <samp>
                 <div id="list-example" class="list-group">
@@ -56,18 +56,18 @@
                 </div>
             </samp>
         </div>
-        <div class="col-8">
-            <div data-bs-spy="scroll" data-bs-target="#list-example" data-bs-smooth-scroll="true" class="scrollspy-example" tabindex="0" style="max-height: 400px; overflow-y: auto;">
+        <div class="col-10">
+            <div data-bs-spy="scroll" data-bs-target="#list-example" data-bs-smooth-scroll="true" class="scrollspy-example" tabindex="0" style="max-height: 500px; overflow-y: auto;">
 
                 <samp>
                     <div class="container">
                         <div class="row justify-content-center">
-                            <div class="col-10">
+                            <div class="col-12">
                                 <div class="card border border-success border-5">
                                     <div class="card-body" style="height: auto;">
 
                                         <p>
-                                            <h3 id="list-item-1" class="text-center" style="font-style: italic;" >Aspectos generales</h3>
+                                            <h3 id="list-item-1" class="text-center" style="font-style: italic; font-size: 3rem;" >Aspectos generales</h3>
                                             <div class="col align-content-center">
                                                 <div class="row justify-content: center align-items: center">
                                                     <div class="col d-flex flex-column align-items-center">
@@ -77,7 +77,7 @@
                                                         </button>
                                                     </div>
 
-                                                    <div class="col mt-2">
+                                                    <div class="col mt-2" style="font-size: 1.5rem;">
                                                         <label for="nombreComun" class="mt-2"><u>Nombre común</u>: @Model.Vulgar</label>
                                                             
                                                         <label for="nombreCientifico" class="mt-2"><u>Nombre científico</u>: @Model.Cientifico</label>
@@ -86,18 +86,18 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <h3>_________________________________________________</h3>
+                                            <h3>____________________________________________________________________________</h3>
                                         </p>
 
                                         <p>
-                                            <h3 id="list-item-2" class="mt-5 text-center" style="font-style: italic;">Aspectos específicos</h3>
+                                            <h3 id="list-item-2" class="mt-5 text-center" style="font-style: italic; font-size: 3rem;">Aspectos específicos</h3>
                                             <div class="col">
                                                 <div class="row">
                                                     <div class="col mt-2">
                                                         <img src="" alt="Imagen" class="img">
                                                         <label for="coordenadas">Coordenadas</label>
                                                     </div>
-                                                    <div class="col mt-2">
+                                                    <div class="col mt-2" style="font-size: 1.5rem;">
                                                         <label for="clase"><u>Clase</u>: @Model.Clase</label><br>
 
                                                         <label for="orden" class="mt-2"><u>Orden</u>: @Model.Orden</label><br>
@@ -114,14 +114,14 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <h3>_________________________________________________</h3>
+                                            <h3>____________________________________________________________________________</h3>
                                         </p>
 
                                         <p>
-                                            <h3 id="list-item-3" class="text-center mt-5" style="font-style: italic;">Sección de comentarios</h3>
+                                            <h3 id="list-item-3" class="text-center mt-5" style="font-style: italic; font-size: 3rem;">Sección de comentarios</h3>
                                             <div class="d-flex justify-content-center">
                                                 <div class="me-2">
-                                                    <i class='bx bx-user-pin' style="font-size: 30px;"></i>
+                                                    <i class='bx bx-user-pin' style="font-size: 35px;"></i>
                                                 </div>
                                                 <div class="me-2">
                                                     <label for="commentInput" class="form-label mb-0">@firstName</label>
@@ -160,13 +160,6 @@
             </div>
         </div>
     </div>
-
-    <div class="row">
-        <div class="col d-flex justify-content-center align-items-center">
-            <h3>____________________________________________________________________________________________________________</h3>
-        </div>
-    </div>
-
     <div class="col d-flex justify-content-end align-items-end">
         <a href="@Url.Action("Principal", "Principal")" class="text-decoration-none me-5"><samp>Volver a buscar</samp></a>
     </div>
@@ -227,7 +220,7 @@
 
                     // Agregar el nuevo comentario al contenedor de comentarios
                     var comentariosDiv = document.getElementById('comentariosDiv');
-                    comentariosDiv.innerHTML += nuevoComentarioHTML;
+                    comentariosDiv.innerHTML = nuevoComentarioHTML + comentariosDiv.innerHTML;
                 },
                 error: function (xhr, status, error) {
                     console.log("error");

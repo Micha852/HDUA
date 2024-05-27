@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace HDUA.Controllers
 {
+    [Authorize]
+
     public class PrincipalController : Controller{
         Procesos procesos = new Procesos();
         public IActionResult Principal()

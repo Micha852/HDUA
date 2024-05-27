@@ -3,9 +3,11 @@ using MongoDB.Driver;
 using HDUA.DATA; // Asegúrate de importar el espacio de nombres adecuado
 using HDUA.Models;
 using System.Globalization;
+using Microsoft.AspNetCore.Authorization;
 
 public class InformacionController : Controller
 {
+    [Authorize]
     public IActionResult CargarInformacion(){
         var conexion = ConexionMongo.Instance;
         var collection = conexion.Database.GetCollection<InformacionModel>("Informacion");
