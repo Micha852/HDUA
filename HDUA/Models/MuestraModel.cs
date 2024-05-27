@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using System.Collections.Generic;
-
-namespace HDUA.Models
+﻿namespace HDUA.Models
 {
     public class MuestraModel
     {

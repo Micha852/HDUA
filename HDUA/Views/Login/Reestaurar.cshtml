@@ -22,31 +22,26 @@
             height: 100vh;
         }
     </style>
-
 </head>
 
 <body>
-
     <div class="container mt-5">
         <div class="row justify-content-center mt-5">
             <div class="col-md-4 mt-5" style="background-color:#C2E6D6">
-
                 <div class="card shadow-lg border border-black" style="background-color:#C2E6D6">
-
                     <div style="margin: 0 auto; text-align: center;">
                         <h3 class="card-title text-black fs-3"><samp>Reestablecer contraseña</samp></h3>
                     </div>
-
                     <div class="card-body">
-                        <form action="@Url.Action("RecuperarPword","Login")" method="post">
-
+                        <form id="recuperarPwordForm">
                             <div class="mb-3">
                                 <img src="~/img/email.png" alt="Ícono de usuario" width="40" height="40">
-                                <input type="text" class="form-control" id="usuario" placeholder="Correo..." name="correo">
+                                <input type="text" class="form-control" id="correo" placeholder="Correo..." name="correo">
                             </div>
-
                             <button type="submit" class="btn btn-outline-secondary" style="display: block; margin: 0 auto; color: black">Generar nueva contraseña</button>
-
+                            <div class="col text-start">
+                                <a href="@Url.Action("Login", "Login")"><samp>Volver al login</samp></a>
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -54,8 +49,28 @@
         </div>
     </div>
 
-
-
-
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#recuperarPwordForm').on('submit', function (e) {
+                e.preventDefault();
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("RecuperarPword", "Login")',
+                    data: {
+                        correo: $('#correo').val()
+                    },
+                    success: function (response) {
+                        alert(response.message);
+                        if (response.success) {
+                            window.location.href = '@Url.Action("Login", "Login")';
+                        }
+                    },
+                    error: function () {
+                        alert('Ocurrió un error al procesar la solicitud.');
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>

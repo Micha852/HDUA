@@ -9,6 +9,8 @@ using MongoDB.Driver.Core.Configuration;
 using Org.BouncyCastle.Ocsp;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using System;
+using DocumentFormat.OpenXml.Office2010.Excel;
+using System.Runtime.Intrinsics.X86;
 
 namespace HDUA.DATA
 {
@@ -643,5 +645,60 @@ namespace HDUA.DATA
             }
             return lista;
         }
+
+        public List<MuestraPorRecolector> InformeMuestrasRecolector1(){
+            var informe = new List<MuestraPorRecolector>();
+            conectar();
+            try
+            {
+                MySqlCommand cmd = new MySqlCommand("RECOLECTORES", cn);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                MySqlDataReader dr = cmd.ExecuteReader();
+                while (dr.Read())
+                {
+                    MuestraPorRecolector aux = new MuestraPorRecolector()
+                    {
+                        nombre = dr[1] + "",
+                        datos = InformeMuestrasRecolector2(dr[0] + "")
+                    };
+                    informe.Add(aux);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+            finally
+            {
+                desconectar();
+            }
+            return informe;
+        }
+        public List<(string, string)> InformeMuestrasRecolector2(string id){
+            List<(string, string)> datos = new List<(string, string)> ();
+            conectar();
+            try{
+                MySqlCommand cmd = new MySqlCommand("MUESTRASRECOLECTOR", cn);
+                cmd.Parameters.AddWithValue("ID", id);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                MySqlDataReader dr = cmd.ExecuteReader();
+                while (dr.Read())
+                {
+                    datos.Add((dr[0]+"", dr[1]+""));
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+            finally
+            {
+                desconectar();
+            }
+            return datos;
+        }
+
+
     }
 }

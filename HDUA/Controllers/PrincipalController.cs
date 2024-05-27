@@ -64,33 +64,20 @@ namespace HDUA.Controllers
         [HttpPost]
         public ActionResult CrearComentario(string commentInput, int hiddenInputMuestra)
         {
-            if (string.IsNullOrWhiteSpace(commentInput) || hiddenInputMuestra <= 0)
-            {
-                return RedirectToAction("Principal", "Principal");
-            }
-
             ComentarioModel com = new ComentarioModel();
             com.Texto = commentInput;
             com.Muestra = hiddenInputMuestra+"";
 
             var claimsPrincipal = HttpContext.User.Identity as ClaimsIdentity;
-            if (claimsPrincipal != null)
+            var userIdClaim = claimsPrincipal.Claims.FirstOrDefault(c => c.Type == "id");
+            if (userIdClaim != null && int.TryParse(userIdClaim.Value, out int userId))
             {
-                var userIdClaim = claimsPrincipal.Claims.FirstOrDefault(c => c.Type == "id");
-                if (userIdClaim != null && int.TryParse(userIdClaim.Value, out int userId))
-                {
-                    com.Usuario = userId+"";
-                }
-                else
-                {
-                    return RedirectToAction("Principal", "Principal");
-                }
+                com.Usuario = userId+"";
             }
             else
             {
                 return RedirectToAction("Principal", "Principal");
             }
-
             List<ComentarioModel> lista = procesos.CrearComentario(com);
             return Json(lista);
         }

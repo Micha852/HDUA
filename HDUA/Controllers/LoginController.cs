@@ -46,8 +46,9 @@ namespace HDUA.Controllers
             usuario.Genero = Request.Form["genero"];
             usuario.Correo = Request.Form["correo"];
             usuario.Contrasenia = Request.Form["contrasenia"];
-
+         
             procesos.RegistrarUsuario(usuario);
+            Login(usuario.Correo, usuario.Contrasenia);
 
             return RedirectToAction("Principal", "Principal");
         }
@@ -65,22 +66,22 @@ namespace HDUA.Controllers
         }
 
         [HttpPost]
-        public ActionResult RecuperarPword(String correo)
+        public JsonResult RecuperarPword(string correo)
         {
-            String contra = GenerateRandomSequence();
-            Boolean aux = procesos.BUSCARCOREO(correo, contra);
+            string contra = GenerateRandomSequence();
+            bool aux = procesos.BUSCARCOREO(correo, contra);
             if (aux)
             {
                 ServicioGmail enviar = new ServicioGmail();
                 enviar.SendEmailGmail(correo, "Recuperación de contraseña", "Esta es su nueva contraseña: " + contra);
-                return RedirectToAction("Login", "Login");
+                return Json(new { success = true, message = "Se envió la nueva contraseña al correo " + correo });
             }
             else
             {
-                return View("Reestaurar");
+                return Json(new { success = false, message = "No se encontró el correo proporcionado." });
             }
-
         }
+
 
         [HttpPost]
         public async Task<IActionResult> Login(String NOMBRECORREO, String PWORD){

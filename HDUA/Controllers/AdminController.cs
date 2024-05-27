@@ -1,24 +1,32 @@
 ﻿using HDUA.DATA;
 using HDUA.Models;
 using Microsoft.AspNetCore.Mvc;
-using MySql.Data.MySqlClient;
-using System.Diagnostics;
-using System.Text.Json;
 using Microsoft.AspNetCore.Authorization;
+using DinkToPdf;
+using DinkToPdf.Contracts;
+using Microsoft.AspNetCore.Http.Extensions;
+using ClosedXML.Excel;
 
 
 namespace HDUA.Controllers
 {
-    [Authorize(Roles = "ADMINISTRADOR")]
     public class AdminController : Controller
     {
+        private readonly IConverter _converter;
+
+        public AdminController(IConverter converter)
+        {
+            _converter = converter;
+        }
         Procesos procesos = new Procesos();
         ConexionMongo cnm = new ConexionMongo();
+        [Authorize(Roles = "ADMINISTRADOR")]
         public IActionResult Principal()
         {
             return View();
         }
 
+        [Authorize(Roles = "ADMINISTRADOR")]
         public IActionResult GestionMuestra()
         {
             ViewBag.ltv = procesos.Listar("LISTARTIPOVENACION");
@@ -67,9 +75,9 @@ namespace HDUA.Controllers
             imagen.Nombre = a.Cientifico;
             string n = "";
             byte[] bytes;
-            if (a.File!=null)
+            if (a.File != null)
             {
-                using(Stream fs = a.File.OpenReadStream())
+                using (Stream fs = a.File.OpenReadStream())
                 {
                     using (BinaryReader br = new BinaryReader(fs))
                     {
@@ -79,7 +87,7 @@ namespace HDUA.Controllers
                     }
                 }
             }
-            return RedirectToAction("GestionMuestra","Admin");
+            return RedirectToAction("GestionMuestra", "Admin");
         }
 
         [HttpPost]
@@ -134,7 +142,7 @@ namespace HDUA.Controllers
         }
 
         [HttpPost]
-        public ActionResult CrearUbicacion(){
+        public ActionResult CrearUbicacion() {
             UbicacionModel ubi = new UbicacionModel();
             ubi.Nombre = Request.Form["inputUbicacion"];
             ubi.Tipoubi = Request.Form["selectTipoUbicacion"];
@@ -144,7 +152,7 @@ namespace HDUA.Controllers
         }
 
         [HttpPost]
-        public ActionResult CrearParameros(){
+        public ActionResult CrearParameros() {
             procesos.CrearParametros(Request.Form["selectCaracteristica"], Request.Form["inputCaracteristica"]);
             return RedirectToAction("Principal", "Principal");
         }
@@ -159,23 +167,98 @@ namespace HDUA.Controllers
         public ActionResult EditarUser()
         {
             bool rec;
-            if (Request.Form["selectRecolector"] == "Si"){
+            if (Request.Form["selectRecolector"] == "Si") {
                 rec = true;
-            }else{
+            } else {
                 rec = false;
             }
 
             bool est;
-            if (Request.Form["selectEstado"] == "Activo"){
+            if (Request.Form["selectEstado"] == "Activo") {
                 est = true;
-            }else{
+            } else {
                 est = false;
             }
 
-                procesos.EditarUser(Convert.ToInt32(Request.Form["input-invisible"] + ""), (Request.Form["selectRol"])+"", rec, est);
+            procesos.EditarUser(Convert.ToInt32(Request.Form["input-invisible"] + ""), (Request.Form["selectRol"]) + "", rec, est);
 
             return RedirectToAction("GestionUsuario");
         }
 
+        [Authorize(Roles = "ADMINISTRADOR")]
+        public IActionResult GenerarInformes()
+        {
+            return View();
+        }
+
+        public IActionResult VistaParaPDF1()
+        {
+            ViewBag.informe = procesos.InformeMuestrasRecolector1();
+            return View();
+        }
+
+        public IActionResult DescargarPDF1()
+        {
+            string pagina_actual = HttpContext.Request.Path;
+            string url_pagina = HttpContext.Request.GetEncodedUrl();
+            url_pagina = url_pagina.Replace(pagina_actual, "");
+            url_pagina = $"{url_pagina}/Admin/VistaParaPDF1";
+
+            var pdf = new HtmlToPdfDocument()
+            {
+                GlobalSettings = new GlobalSettings()
+                {
+                    PaperSize = PaperKind.A4,
+                    Orientation = Orientation.Portrait
+                },
+                Objects =
+                {
+                    new ObjectSettings()
+                    {
+                        Page=url_pagina
+                    }
+                }
+            };
+            var archivoPDF = _converter.Convert(pdf);
+
+            MemoryStream pdfStream = new MemoryStream(archivoPDF);
+            pdfStream.Position = 0;
+
+            string nombrePDF = "reporte_" + DateTime.Now.ToString("ddMMyyyyHHmmss") + ".pdf";
+
+
+            return File(archivoPDF, "application/pdf", nombrePDF);
+        }
+
+        public IActionResult DescargarEXCEL1(){
+            List<MuestraPorRecolector> informe1 = procesos.InformeMuestrasRecolector1();
+
+            using (var workbook = new XLWorkbook())
+            {
+                foreach (var recolector in informe1)
+                {
+                    var worksheet = workbook.Worksheets.Add(recolector.nombre);
+
+                    worksheet.Cell(1, 1).Value = "Recolector";
+                    worksheet.Cell(1, 2).Value = recolector.nombre;
+
+                    worksheet.Cell(2, 1).Value = "Nombre de las muestras";
+                    worksheet.Cell(2, 2).Value = "Fecha de asignación";
+
+                    for (int i = 0; i < recolector.datos.Count; i++)
+                    {
+                        worksheet.Cell(i + 3, 1).Value = recolector.datos[i].Item1;
+                        worksheet.Cell(i + 3, 2).Value = recolector.datos[i].Item2;
+                    }
+                }
+
+                using (var stream = new MemoryStream())
+                {
+                    workbook.SaveAs(stream);
+                    var content = stream.ToArray();
+                    return File(content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "InformeMuestrasRecolector.xlsx");
+                }
+            }
+        }
     }
 }
