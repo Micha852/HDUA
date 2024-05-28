@@ -24,7 +24,7 @@
     </style>
 
 </head>
-    
+
 <body>
 
     <div class="container mt-5">
@@ -38,6 +38,14 @@
                     </div>
 
                     <div class="card-body">
+
+                        @if (TempData["ErrorMessage"] != null)
+                        {
+                            <div class="alert alert-danger" role="alert">
+                                @TempData["ErrorMessage"]
+                            </div>
+                        }
+
                         <form action="@Url.Action("login","Login")" method="post">
 
                             <div class="mb-3">
@@ -50,7 +58,7 @@
                                 <input type="password" class="form-control" id="contrasena" placeholder="Contraseña..." name="PWORD">
                             </div>
 
-                            <button type="submit" class="btn btn-outline-secondary" style="display: block; margin: 0 auto; color: black" >Ingresar</button>
+                            <button type="submit" class="btn btn-outline-secondary" style="display: block; margin: 0 auto; color: black">Ingresar</button>
 
                         </form>
                     </div>

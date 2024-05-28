@@ -26,5 +26,6 @@
         public string ListaRecolectores { get; set; }
         public string Ids { get; set; }
         public List<ComentarioModel>? comentarios { get; set; }
+        public bool Estado { get; set; }
     }
 }

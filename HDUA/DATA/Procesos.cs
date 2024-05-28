@@ -214,11 +214,9 @@ namespace HDUA.DATA
             }
         }
 
-        public void EditarMiPerfil(int id, string name, string correo, string contra, string generou, string tipou, string instu)
-        {
+        public void EditarMiPerfil(int id, string name, string correo, string contra, string generou, string tipou, string instu){
             conectar();
-            try
-            {
+            try{
                 MySqlCommand cmd = new MySqlCommand("EDITARMIPERFIL", cn);
                 cmd.Parameters.AddWithValue("USER", id);
                 cmd.Parameters.AddWithValue("NAME", name);
@@ -230,13 +228,42 @@ namespace HDUA.DATA
 
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 cmd.ExecuteNonQuery();
-            }
-            catch (Exception ex)
-            {
+            }catch (Exception ex){
                 Console.WriteLine(ex.ToString());
+            }finally{
+                desconectar();
             }
-            finally
-            {
+        }
+
+        public void EditarMuestra(int id, string cientifico, string vulgar, string imagen, string coordenada,
+            string fecha, string altura, string clase, string orden, string familia, string genero, string especie,
+            string ubicacion, string procedencia, string venacion, string forma, string margen, int estado){
+            conectar();
+            try{
+                MySqlCommand cmd = new MySqlCommand("EDITARMUESTRA", cn);
+                cmd.Parameters.AddWithValue("ID", id);
+                cmd.Parameters.AddWithValue("CIENTIFICO", cientifico);
+                cmd.Parameters.AddWithValue("VULGAR", vulgar);
+                cmd.Parameters.AddWithValue("IMAGEN", imagen);
+                cmd.Parameters.AddWithValue("COORDENADA", coordenada);
+                cmd.Parameters.AddWithValue("FECHA", fecha);
+                cmd.Parameters.AddWithValue("ALTURA", altura);
+                cmd.Parameters.AddWithValue("NCLASE", clase);
+                cmd.Parameters.AddWithValue("NORDEN", orden);
+                cmd.Parameters.AddWithValue("NFAMILIA", familia);
+                cmd.Parameters.AddWithValue("NGENERO", genero);
+                cmd.Parameters.AddWithValue("NESPECIE", especie);
+                cmd.Parameters.AddWithValue("NUBICACION", ubicacion);
+                cmd.Parameters.AddWithValue("NPROCEDENCIA", procedencia);
+                cmd.Parameters.AddWithValue("NVENACION", venacion);
+                cmd.Parameters.AddWithValue("NFORMA", forma);
+                cmd.Parameters.AddWithValue("NMARGEN", margen);
+                cmd.Parameters.AddWithValue("ESTADO", estado);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.ExecuteNonQuery();
+            }catch (Exception ex){
+                Console.WriteLine(ex.ToString());
+            }finally{
                 desconectar();
             }
         }
@@ -277,6 +304,7 @@ namespace HDUA.DATA
                 cmd.Parameters.AddWithValue("VULGAR", muestra.Vulgar);
                 cmd.Parameters.AddWithValue("IMAGEN", muestra.Imagen);
                 cmd.Parameters.AddWithValue("COORDENADA", muestra.Coordenada);
+                cmd.Parameters.AddWithValue("FECHA", muestra.Fecha);
                 cmd.Parameters.AddWithValue("NCLASE", muestra.Clase);
                 cmd.Parameters.AddWithValue("NORDEN", muestra.Orden);
                 cmd.Parameters.AddWithValue("NFAMILIA", muestra.Familia);
@@ -359,6 +387,7 @@ namespace HDUA.DATA
                     user.Id = Convert.ToInt32(rd[0] + "");
                     user.Nombre = (rd[1] + "");
                     user.Rol = (rd[2] + "");
+                    user.Estado = Convert.ToBoolean(rd[3]) ? true : false;
                 }
                 tabla.Load(rd);
             }
@@ -389,7 +418,22 @@ namespace HDUA.DATA
                     {
                         Id = Convert.ToInt32(dr[0] + ""),
                         Imagen = dr[1] + "",
-                        Cientifico = dr[2] + ""
+                        Cientifico = dr[2] + "",
+                        Vulgar = dr[3]+"",
+                        Coordenada = dr[4] +"",
+                        Altura = dr[5] +"",
+                        Clase = dr[6] +"",
+                        Orden = dr[7] +"",
+                        Familia = dr[8] +"",
+                        Genero = dr[9] +"",
+                        Especie = dr[10] +"",
+                        Procedencia = dr[11] +"",
+                        Venacion = dr[12] +"",
+                        Forma = dr[13] +"",
+                        Margen = dr[14] +"",
+                        Ubicacion = dr[16] +"",
+                        Fecha = dr[17] +"",
+                        Estado = Convert.ToBoolean(dr[18]) ? true : false
                     };
                     muestra.Imagen2 = cnm.GetImage(muestra.Imagen);
                     lista.Add(muestra);
@@ -422,7 +466,22 @@ namespace HDUA.DATA
                     {
                         Id = Convert.ToInt32(dr[0] + ""),
                         Imagen = dr[1] + "",
-                        Vulgar = dr[2] + ""
+                        Vulgar = dr[2] + "",
+                        Cientifico = dr[3] + "",
+                        Coordenada = dr[4] + "",
+                        Altura = dr[5] + "",
+                        Clase = dr[6] + "",
+                        Orden = dr[7] + "",
+                        Familia = dr[8] + "",
+                        Genero = dr[9] + "",
+                        Especie = dr[10] + "",
+                        Procedencia = dr[11] + "",
+                        Venacion = dr[12] + "",
+                        Forma = dr[13] + "",
+                        Margen = dr[14] + "",
+                        Ubicacion = dr[16] + "",
+                        Fecha = dr[17] + "",
+                        Estado = Convert.ToBoolean(dr[18]) ? true : false
                     };
                     muestra.Imagen2 = cnm.GetImage(muestra.Imagen);
                     lista.Add(muestra);
@@ -460,7 +519,22 @@ namespace HDUA.DATA
                     {
                         Id = Convert.ToInt32(dr[0] + ""),
                         Imagen = dr[1] + "",
-                        Vulgar = dr[2] + ""
+                        Vulgar = dr[2] + "",
+                        Cientifico = dr[3] + "",
+                        Coordenada = dr[4] + "",
+                        Altura = dr[5] + "",
+                        Clase = dr[6] + "",
+                        Orden = dr[7] + "",
+                        Familia = dr[8] + "",
+                        Genero = dr[9] + "",
+                        Especie = dr[10] + "",
+                        Procedencia = dr[11] + "",
+                        Venacion = dr[12] + "",
+                        Forma = dr[13] + "",
+                        Margen = dr[14] + "",
+                        Ubicacion = dr[16] + "",
+                        Fecha = dr[17] + "",
+                        Estado = Convert.ToBoolean(dr[18]) ? true : false
                     };
                     muestra.Imagen2 = cnm.GetImage(muestra.Imagen);
                     lista.Add(muestra);
@@ -674,6 +748,7 @@ namespace HDUA.DATA
             }
             return informe;
         }
+
         public List<(string, string)> InformeMuestrasRecolector2(string id){
             List<(string, string)> datos = new List<(string, string)> ();
             conectar();

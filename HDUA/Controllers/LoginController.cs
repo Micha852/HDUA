@@ -84,22 +84,30 @@ namespace HDUA.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> Login(String NOMBRECORREO, String PWORD){
+        public async Task<IActionResult> Login(string NOMBRECORREO, string PWORD){
             UsuarioModel usuario = procesos.ValidarUsuario(NOMBRECORREO, PWORD);
-            if(usuario.Nombre != null){
-                var claims = new List<Claim>{
-                    new Claim (ClaimTypes.Name, usuario.Nombre),
-                    new Claim ("id", usuario.Id+""),
-                    new Claim (ClaimTypes.Role, usuario.Rol)
-                };
-                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            if (usuario.Nombre != null){
+                if (usuario.Estado != false){
+                    var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, usuario.Nombre),
+                new Claim("id", usuario.Id.ToString()),
+                new Claim(ClaimTypes.Role, usuario.Rol)
+            };
+                    var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
-                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
+                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
 
-                return RedirectToAction("Principal", "Principal");
+                    return RedirectToAction("Principal", "Principal");
+                }else{
+                    TempData["ErrorMessage"] = "El usuario está inhabilitado.";
+                }
+            }else{
+                TempData["ErrorMessage"] = "El usuario no existe.";
             }
             return RedirectToAction("Login", "Login");
         }
+
 
         public async Task<IActionResult> Logout(){
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);

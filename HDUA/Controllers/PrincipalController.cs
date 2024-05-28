@@ -29,7 +29,7 @@ namespace HDUA.Controllers
         }
 
         [HttpPost]
-        public IActionResult Resultado(string nombre, string sorden, string sclase, string sespecie, string sfamilia, string sgenero, string sdepa)
+        public IActionResult Resultado(string nombre, string sorden, string sclase, string sespecie, string sfamilia, string sgenero, string sdepa, int page = 1, int pageSize = 4)
         {
             ViewBag.ltv = procesos.Listar("LISTARTIPOVENACION");
             ViewBag.ltf = procesos.Listar("LISTARTIPOFORMA");
@@ -59,9 +59,16 @@ namespace HDUA.Controllers
             {
                 listamuestra = procesos.ResultadoEspecifico(sorden, sclase, sespecie, sfamilia, sgenero, sdepa);
             }
-            return View(listamuestra);
-        }
 
+            int totalItems = listamuestra.Count;
+            var muestraPaginada = listamuestra.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+
+            ViewBag.CurrentPage = page;
+            ViewBag.PageSize = pageSize;
+            ViewBag.TotalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
+
+            return View(muestraPaginada);
+        }
 
 
         public IActionResult FichaMuestra() {
@@ -99,6 +106,30 @@ namespace HDUA.Controllers
             }
             List<ComentarioModel> lista = procesos.CrearComentario(com);
             return Json(lista);
+        }
+
+        [HttpPost]
+        public ActionResult EditarMuestra() {
+            int id = Convert.ToInt32(Request.Form["idMuestra1"] + "");
+            string cientifico = Request.Form["cientifico"] + "";
+            string vulgar = Request.Form["vulgar"] + "";
+            string imagen = Request.Form["imagen"] + "";
+            string coordenada = Request.Form["coordenada"] + "";
+            string fecha = Request.Form["fecharecoleccion"] + "";
+            string altura = Request.Form["altura"] + "";    
+            string clase = Request.Form["clase"] + "";
+            string orden = Request.Form["orden"] + "";
+            string familia = Request.Form["familia"] + "";
+            string genero = Request.Form["genero"] + "";
+            string especie = Request.Form["especie"] + "";
+            string ubicacion = Request.Form["ubicacionSelect"] + "";
+            string procedencia = Request.Form["procedencia"] + "";
+            string venacion = Request.Form["venacion"] + "";
+            string forma = Request.Form["forma"] + "";
+            string margen = Request.Form["margen"] + "";
+            int estado = Request.Form.ContainsKey("estadoCheckbox") ? 1 : 0;
+            procesos.EditarMuestra(id, cientifico, vulgar, imagen, coordenada, fecha, altura, clase, orden, familia, genero, especie, ubicacion, procedencia, venacion, forma, margen, estado);
+            return RedirectToAction("Principal", "Principal");
         }
 
     }
