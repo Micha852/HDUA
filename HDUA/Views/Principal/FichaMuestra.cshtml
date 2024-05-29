@@ -16,6 +16,9 @@
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.3/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+
 
     <title>HDUA</title>
     <style>
@@ -93,10 +96,13 @@
                                             <h3 id="list-item-2" class="mt-5 text-center" style="font-style: italic; font-size: 3rem;">Aspectos específicos</h3>
                                             <div class="col mt-3">
                                                 <div class="row mt-3">
+
                                                     <div class="col mt-2">
-                                                        <img src="" alt="Imagen" class="img">
-                                                        <label for="coordenadas">Coordenadas</label>
+                                                        <div id="map" style="height: 400px;"></div> <!-- Contenedor para el mapa -->
+                                                        <label for="coordenadas" class="mt-2"><u>Coordenadas</u>: @Model.Coordenada</label>
                                                     </div>
+
+
                                                     <div class="col mt-2" style="font-size: 1.5rem;">
                                                         <label for="clase"><u>Clase</u>: @Model.Clase</label><br>
 
@@ -111,6 +117,8 @@
                                                         <label for="ubicacion" class="mt-2"><u>Ubicación</u>: Departamento del @Model.Ubicacion</label>
 
                                                         <label for="recolectores" class="mt-2"><u>Recolectores</u>: @Model.ListaRecolectores</label>
+
+                                                        <label for="fecharecoleccion" class="mt-2"><u>Fecha de recolección</u>: @Model.Fecha</label>
                                                     </div>
                                                 </div>
                                             </div>
@@ -228,6 +236,56 @@
                 }
             });
         }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // Convertir DMS a decimal
+            function dmsToDecimal(dms) {
+                const parts = dms.match(/(\d+)[°](\d+)['](\d+\.?\d*)["]?([NSEW])/);
+                let degrees = parseFloat(parts[1]);
+                let minutes = parseFloat(parts[2]);
+                let seconds = parseFloat(parts[3]);
+                let direction = parts[4];
+
+                let decimal = degrees + minutes / 60 + seconds / 3600;
+
+                if (direction === "S" || direction === "W") {
+                    decimal *= -1;
+                }
+
+                return decimal;
+            }
+
+            function decodeHtml(html) {
+                var txt = document.createElement("textarea");
+                txt.innerHTML = html;
+                return txt.value;
+            }
+
+            // Coordenadas DMS de @Model.Coordenada
+            let coordenadas = decodeHtml("@Model.Coordenada");
+            console.log(coordenadas);
+
+            let coordArray = coordenadas.split(" ");
+            let dmsLat = coordArray[0];
+            let dmsLng = coordArray[1];
+            console.log(dmsLat);
+            console.log(dmsLng);
+
+            // Convertir a decimal
+            let lat = dmsToDecimal(dmsLat);
+            let lng = dmsToDecimal(dmsLng);
+
+            // Inicializar el mapa
+            var map = L.map('map').setView([lat, lng], 13);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+
+            L.marker([lat, lng]).addTo(map)
+                .bindPopup('Ubicación según coordenadas.')
+                .openPopup();
+        });
 
     </script>
 </body>

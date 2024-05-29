@@ -11,6 +11,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 using System;
 using DocumentFormat.OpenXml.Office2010.Excel;
 using System.Runtime.Intrinsics.X86;
+using DocumentFormat.OpenXml.Wordprocessing;
 
 namespace HDUA.DATA
 {
@@ -231,6 +232,22 @@ namespace HDUA.DATA
             }catch (Exception ex){
                 Console.WriteLine(ex.ToString());
             }finally{
+                desconectar();
+            }
+        }
+
+        public void DesactivarPerfil(int id){
+            conectar();
+            try{
+                MySqlCommand cmd = new MySqlCommand("DesactivarPerfil", cn);
+                cmd.Parameters.AddWithValue("id", id);
+
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.ExecuteNonQuery();
+            }catch (Exception ex){
+                Console.WriteLine(ex.ToString());
+            }
+            finally{
                 desconectar();
             }
         }
@@ -580,7 +597,8 @@ namespace HDUA.DATA
                         Forma = rd[13] + "",
                         Margen = rd[14] + "",
                         Ubicacion = rd[15] + "",
-                        ListaRecolectores = rd[16] + ""
+                        ListaRecolectores = rd[16] + "",
+                        Fecha = rd[17]+""
 
                     };
                     muestra.Imagen2 = cnm.GetImage(muestra.Imagen);

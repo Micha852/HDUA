@@ -146,32 +146,40 @@
     </div>
 
     <div class="col d-flex justify-content-between align-items-center">
-        <a href="#" class="text-decoration-none ms-5" data-bs-toggle="modal" data-bs-target="#modalEliminarPerfil" style="background-color: rgba(255, 255, 255, 0.7);"><samp>Eliminar perfil</samp></a>
-        <a href="@Url.Action("Principal", "Principal")" class="text-decoration-none me-5" style="background-color: rgba(255, 255, 255, 0.7);"><samp>Volver a inicio</samp></a>
+        @if (User.IsInRole("VISITANTE"))
+        {
+            <button type="button ms-5" class="btn btn-danger btn-auto"
+                    data-id="@Model.Id"
+                    data-bs-toggle="modal" data-bs-target="#modalDesactivarPerfil">
+                Desactivar perfil
+            </button>
+        }
+        <a href="@Url.Action("Principal", "Principal")" class="text-decoration-none me-5" style="background-color: rgba(255, 255, 255, 0.7); font-size: 1.2rem;"><samp>Volver a inicio</samp></a>
     </div>
 
 
-    <!-- Modal Confirmación de Eliminación de Perfil -->
+
+    <!-- Modal Confirmación de Desactivaciónón de Perfil -->
     <samp>
-        <div class="modal fade mt-5" id="modalEliminarPerfil" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade mt-5" id="modalDesactivarPerfil" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">¿Seguro que desea eliminar su perfil?</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">¿Seguro que desea Desactivar su perfil?</h5>
                         <button type="button" class="btn btn-outline-danger ms-auto" id="cerrarEditarUser" data-bs-dismiss="modal" aria-label="Close"><samp>X</samp></button>
                     </div>
                     <div class="modal-body justify-content-center">
                         <p>Recuerda que no podrás recuperarlo.</p>
                         <div class="form-check mb-3">
-                            <input class="form-check-input" type="checkbox" value="" id="confirmarEliminar" onchange="habilitarEliminar()">
-                            <label class="form-check-label" for="confirmarEliminar">
-                                Confirmar eliminación
+                            <input class="form-check-input" type="checkbox" value="" id="confirmarDesactivar" onchange="habilitarDesactivar()">
+                            <label class="form-check-label" for="confirmarDesactivar">
+                                Confirmar Desactivaciónón
                             </label>
                         </div>
                     </div>
                     <div class="modal-footer justify-content-between">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Volver</button>
-                        <button type="button" class="btn btn-danger" id="btnEliminarPerfil" disabled>Eliminar</button>
+                        <button type="button" class="btn btn-danger" id="btnDesactivarPerfil" disabled>Desactivar</button>
                     </div>
                 </div>
             </div>
@@ -204,17 +212,38 @@
 
 
     <script>
-        // Función para habilitar o deshabilitar el botón de eliminar perfil
-        function habilitarEliminar() {
-            var checkbox = document.getElementById('confirmarEliminar');
-            var btnEliminar = document.getElementById('btnEliminarPerfil');
+        // Función para habilitar o deshabilitar el botón de Desactivar perfil
+        function habilitarDesactivar() {
+            var checkbox = document.getElementById('confirmarDesactivar');
+            var btnDesactivar = document.getElementById('btnDesactivarPerfil');
 
             if (checkbox.checked) {
-                btnEliminar.disabled = false;
+                btnDesactivar.disabled = false;
             } else {
-                btnEliminar.disabled = true;
+                btnDesactivar.disabled = true;
             }
         }
+
+        document.getElementById("btnDesactivarPerfil").addEventListener("click", function () {
+            var id = "@Model.Id"; // Asegúrate de que @Model.Id tiene el valor correcto del usuario actual
+
+            $.ajax({
+                url: '@Url.Action("DesactivarPerfil", "MiPerfil")',
+                type: 'POST',
+                data: { id: id },
+                success: function (response) {
+                    if (response.success) {
+                        alert(response.message);
+                        window.location.href = '@Url.Action("Login", "Login")'; // Redirigir al usuario a la página de inicio de sesión
+                    } else {
+                        alert("Error: " + response.message);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    alert("Ocurrió un error: " + error);
+                }
+            });
+        });
 
         var contraseniaVerificada = false;
 

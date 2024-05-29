@@ -1,5 +1,7 @@
 ﻿using HDUA.DATA;
 using HDUA.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -38,6 +40,24 @@ namespace HDUA.Controllers
             return RedirectToAction("MiPerfil");
 
         }
+
+        [HttpPost]
+        public IActionResult DesactivarPerfil(int id)
+        {
+            try
+            {
+                procesos.DesactivarPerfil(id);
+                // Cerrar sesión después de desactivar el perfil
+                HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+                return Json(new { success = true, message = "Perfil desactivado correctamente." });
+            }
+            catch (Exception ex)
+            {
+                // Manejo de errores
+                return Json(new { success = false, message = ex.Message });
+            }
+        }
+
 
     }
 }

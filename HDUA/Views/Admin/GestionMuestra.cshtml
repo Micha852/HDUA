@@ -293,7 +293,7 @@
                                                 </div>
 
                                                 <div class="row mt-3">
-                                                    <input type="text" class="form-control" id="coordenadasInput" name="coordenadasInput" placeholder="Coordenadas (Ejemplo: 51°30'N 0°7'W)">
+                                                    <input type="text" class="form-control" id="coordenadasInput" name="coordenadasInput" placeholder="Coordenadas en Grados Decimales">
                                                 </div>
 
                                             </div>
@@ -523,14 +523,15 @@
 
         coordenadasInput.addEventListener('input', function () {
             const coordenadas = this.value.trim();
-            const pattern = /^-?\d{1,2}°\d{1,2}'[NSEW]\s*-?\d{1,3}°\d{1,2}'[NSEW]$/;
+            const pattern = /^\d{1,2}°\d{1,2}'\d{1,2}\.\d{1}["][NSEW]\s*\d{1,3}°\d{1,2}'\d{1,2}\.\d{1}["][NSEW]$/;
 
             if (!pattern.test(coordenadas)) {
-                this.setCustomValidity('El formato de coordenadas es incorrecto. Por favor, ingresa las coordenadas en el formato correcto, por ejemplo, 51°30\'N 0°7\'W');
+                this.setCustomValidity('El formato de coordenadas es incorrecto. Por favor, ingresa las coordenadas en Grados Decimales, por ejemplo, 1°05\'02.4"N 76°37\'57.6"W');
             } else {
                 this.setCustomValidity('');
             }
         });
+
 
         $(document).ready(function () {
             $('#buscarbtn').click(function () {
