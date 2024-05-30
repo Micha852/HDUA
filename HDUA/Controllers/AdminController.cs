@@ -150,13 +150,13 @@ namespace HDUA.Controllers
             ubi.Tipoubi = Request.Form["selectTipoUbicacion"];
             ubi.Municipio = Request.Form["municipioSelect2"];
             procesos.CrearUbicacion(ubi);
-            return RedirectToAction("Principal", "Principal");
+            return RedirectToAction("GestionMuestra", "Admin");
         }
 
         [HttpPost]
         public ActionResult CrearParameros() {
             procesos.CrearParametros(Request.Form["selectCaracteristica"], Request.Form["inputCaracteristica"]);
-            return RedirectToAction("Principal", "Principal");
+            return RedirectToAction("GestionMuestra", "Admin");
         }
 
         public IActionResult GestionUsuario()

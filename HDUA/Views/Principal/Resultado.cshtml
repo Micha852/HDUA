@@ -16,11 +16,7 @@
     <title>HDUA</title>
     <style>
         body {
-            background-image: url('https://mdbootstrap.com/img/Photos/Others/images/78.jpg');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            height: 100vh;
+            background-color: lightgray;
         }
 
     </style>
@@ -45,72 +41,83 @@
     <!--................................................................-->
     <samp>
         <div class="row row-cols-auto" style="justify-content:center;">
-            @foreach (MuestraModel m in Model)
+            @if (Model != null && Model.Any(m => User.IsInRole("ADMINISTRADOR") || m.Estado))
             {
-                bool isAdmin = User.IsInRole("ADMINISTRADOR");
-                bool isVisitor = User.IsInRole("VISITANTE");
-
-                // Mostrar la muestra solo si el usuario es administrador o si la muestra está habilitada
-                if (isAdmin || m.Estado)
+                @foreach (MuestraModel m in Model)
                 {
-                    <div class="col mt-3">
-                        <div class="card" style="width: 20rem;">
-                            <div class="card-body text-center">
-                                @if (!string.IsNullOrEmpty(m.Cientifico))
-                                {
-                                    <h5 class="card-title">@m.Cientifico</h5>
-                                }
-                                else if (!string.IsNullOrEmpty(m.Vulgar))
-                                {
-                                    <h5 class="card-title">@m.Vulgar</h5>
-                                }
-                            </div>
+                    bool isAdmin = User.IsInRole("ADMINISTRADOR");
+                    bool isVisitor = User.IsInRole("VISITANTE");
 
-                            <img src="data:image/jpg;base64,@m.Imagen2.Imagen" class="card-img-top" style="height:15rem; object-fit: contain;">
-                            <div class="card-footer text-center">
-                                <form id="formFichaMuestra" method="post" action="@Url.Action("FichaMuestra", "Principal")">
-                                    <input type="hidden" id="idMuestra" name="id" value="@m.Id" />
-                                    @if (m.Estado)
+                    // Mostrar la muestra solo si el usuario es administrador o si la muestra está habilitada
+                    if (isAdmin || m.Estado)
+                    {
+                        <div class="col mt-3">
+                            <div class="card" style="width: 20rem;">
+                                <div class="card-body text-center">
+                                    @if (!string.IsNullOrEmpty(m.Cientifico))
                                     {
-                                        <button type="submit" class="btn btn-outline-success btn-auto">Ver ficha técnica</button>
+                                        <h5 class="card-title">@m.Cientifico</h5>
                                     }
-                                    else
+                                    else if (!string.IsNullOrEmpty(m.Vulgar))
                                     {
-                                        <button type="button" class="btn btn-outline-danger btn-auto" disabled>Muestra inhabilitada</button>
+                                        <h5 class="card-title">@m.Vulgar</h5>
                                     }
-                                </form>
-                                @{
-                                    if (isAdmin)
-                                    {
-                                        <button type="button" class="btn btn-outline-success btn-auto mt-2"
-                                                data-id="@m.Id"
-                                                data-nombrecientifico="@m.Cientifico"
-                                                data-nombrevulgar="@m.Vulgar"
-                                                data-venacion="@m.Venacion"
-                                                data-forma="@m.Forma"
-                                                data-margen="@m.Margen"
-                                                data-procedencia="@m.Procedencia"
-                                                data-altura="@m.Altura"
-                                                data-clase="@m.Clase"
-                                                data-especie="@m.Especie"
-                                                data-genero="@m.Genero"
-                                                data-orden="@m.Orden"
-                                                data-familia="@m.Familia"
-                                                data-coordenada="@m.Coordenada"
-                                                data-fecha="@m.Fecha"
-                                                data-ubicacion="@m.Ubicacion"
-                                                data-estado="@m.Estado"
-                                                data-bs-toggle="modal" data-bs-target="#modalEditarMuestra">
-                                            Editar muestra
-                                        </button>
+                                </div>
+
+                                <img src="data:image/jpg;base64,@m.Imagen2.Imagen" class="card-img-top" style="height:15rem; object-fit: contain;">
+                                <div class="card-footer text-center">
+                                    <form id="formFichaMuestra" method="post" action="@Url.Action("FichaMuestra", "Principal")">
+                                        <input type="hidden" id="idMuestra" name="id" value="@m.Id" />
+                                        @if (m.Estado)
+                                        {
+                                            <button type="submit" class="btn btn-outline-success btn-auto">Ver ficha técnica</button>
+                                        }
+                                        else
+                                        {
+                                            <button type="button" class="btn btn-outline-danger btn-auto" disabled>Muestra inhabilitada</button>
+                                        }
+                                    </form>
+                                    @{
+                                        if (isAdmin)
+                                        {
+                                            <button type="button" class="btn btn-outline-success btn-auto mt-2"
+                                                    data-id="@m.Id"
+                                                    data-nombrecientifico="@m.Cientifico"
+                                                    data-nombrevulgar="@m.Vulgar"
+                                                    data-venacion="@m.Venacion"
+                                                    data-forma="@m.Forma"
+                                                    data-margen="@m.Margen"
+                                                    data-procedencia="@m.Procedencia"
+                                                    data-altura="@m.Altura"
+                                                    data-clase="@m.Clase"
+                                                    data-especie="@m.Especie"
+                                                    data-genero="@m.Genero"
+                                                    data-orden="@m.Orden"
+                                                    data-familia="@m.Familia"
+                                                    data-coordenada="@m.Coordenada"
+                                                    data-fecha="@m.Fecha"
+                                                    data-ubicacion="@m.Ubicacion"
+                                                    data-estado="@m.Estado"
+                                                    data-imagen="@m.Imagen"
+                                                    data-bs-toggle="modal" data-bs-target="#modalEditarMuestra">
+                                                Editar muestra
+                                            </button>
+                                        }
                                     }
-                                }
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    }
                 }
             }
+            else
+            {
+                <div class="col-12 text-center">
+                    <h2>No hay muestras disponibles :(</h2>
+                </div>
+            }
         </div>
+
 
         <div class="d-flex justify-content-center mt-2">
             <nav aria-label="Page navigation example">
@@ -146,7 +153,7 @@
     <!--................................................................-->
     <div class="col d-flex justify-content-center align-items-center flex-column">
         <div class="row-md-auto text-center">
-            <a href="@Url.Action("Principal", "Principal")" class="btn btn-outline-light" style="display: block; margin: 0 auto; color: lightgray">Volver a buscar</a>
+            <a href="@Url.Action("Principal", "Principal")" class="btn btn-success" style="display: block; margin: 0 auto; color: lightgray">Volver a buscar</a>
         </div>
     </div>
 
@@ -163,6 +170,7 @@
                         <div class="carousel-inner ">
                             <form action="@Url.Action("EditarMuestra","Principal")" method="post" id="formulario" enctype="multipart/form-data">
                                 <input type="hidden" id="idMuestra1" name="idMuestra1"/>
+                                <input type="hidden" id="ParaImagen" name="ParaImagen" />
                                 <!-- Parte 1 -->
                                 <div class="carousel-item active">
                                     <div class="container">
@@ -182,7 +190,7 @@
                                                 @* INSERTAR IMAGEN *@
                                                 <div class="row mt-1">
                                                     <label for="formFile" class="form-label"><samp>Seleccionar imágen de muestra</samp></label>
-                                                    <input class="form-control" type="file" accept="image/*" id="formFile" name="File">
+                                                    <input class="form-control" type="file" accept="image/*" id="File" name="File">
                                                 </div>
 
                                                 <div class="row mt-1">
@@ -362,48 +370,7 @@
                                     </div>
                                 </div>
 
-                                <!-- Parte 3 -->
-                                <div class="carousel-item">
-                                    <div class="container">
-
-                                        <h3 class="d-flex justify-content-center align-items-center"><samp>Recolectores asociados</samp></h3>
-
-
-                                        <div class="row mt-3 ms-5 justify-content-end">
-                                            <div class="col-auto">
-                                                <button type="button" class="btn btn-link btn-buscar" id="buscarbtn">
-                                                    <i class='bx bx-search-alt' style="font-size: 1.5rem;"></i>
-                                                </button>
-
-                                            </div>
-                                            <div class="col-auto">
-                                                <input type="text" class="form-control" id="buscar-recolector" placeholder="Buscar recolector">
-                                            </div>
-                                        </div>
-
-                                        <table id="tabla-recolectores" class="table table-striped table-hover mt-3">
-                                            <thead>
-                                                <tr>
-                                                    <th scope="col"><samp>Nombre</samp></th>
-                                                    <th scope="col"><samp>Muestras ligadas</samp></th>
-                                                    <th scope="col"><samp>Seleccionar</samp></th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach (RecolectorModel i in ViewBag.mostrarrecolector)
-                                                {
-                                                    <tr>
-                                                        <td>@i.Nombre</td>
-                                                        <td>@i.Cantidad</td>
-                                                        <td>
-                                                            <input type="checkbox" name="usuariosSeleccionados" value="@i.Id" />
-                                                        </td>
-                                                    </tr>
-                                                }
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
+                                
                             </form>
                         </div>
 
@@ -431,6 +398,16 @@
     </div>
 
     <script>
+
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const formulario = document.getElementById('formulario');
+
+            formulario.addEventListener('submit', function (event) {
+                // Mostrar la alerta
+                alert("La muestra ha sido editada");
+            });
+        });
+
         $(document).ready(function () {
             $('#verFichaBtn').click(function (e) {
                 e.preventDefault(); // Evitar que se ejecute el comportamiento predeterminado del enlace
@@ -462,6 +439,7 @@
                 var fecha = button.getAttribute('data-fecha');
                 var ubicacion = button.getAttribute('data-ubicacion'); // nuevo
                 var estado = button.getAttribute('data-estado') === 'True';
+                var imagen = button.getAttribute('data-imagen');
 
 
                 // Actualizar el contenido del modal
@@ -486,7 +464,7 @@
                 var inputFecha = modalEditarMuestra.querySelector('#fecharecoleccion');
                 var selectUbicacion = modalEditarMuestra.querySelector('#ubicacionSelect'); // nuevo
                 var estadoCheckbox = document.getElementById('estadoCheckbox');
-
+                var inputImagen = modalEditarMuestra.querySelector('#ParaImagen');
 
                 inputCientifico.value = nombreCientifico;
                 inputVulgar.value = nombreVulgar;
@@ -494,6 +472,7 @@
                 inputCoordenada.value = coordenada;
                 inputFecha.value = fecha;
                 estadoCheckbox.checked = estado;
+                inputImagen.value = imagen;
 
                 // Guardar el estado inicial
                 initialState = {

@@ -712,6 +712,35 @@ namespace HDUA.DATA
             return lista;
         }
 
+        public void EliminarComentario(int id){
+            conectar();
+            try{
+                MySqlCommand cmd = new MySqlCommand("ELIMINARCOMENTARIO", cn);
+                cmd.Parameters.AddWithValue("ID", id);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.ExecuteNonQuery();
+            }catch (Exception ex){
+                Console.WriteLine(ex.ToString());
+            }finally{
+                desconectar();
+            }
+        }
+
+        public void EditarComentario(int id, string newcomentario){
+            conectar();
+            try{
+                MySqlCommand cmd = new MySqlCommand("EDITARCOMENTARIO", cn);
+                cmd.Parameters.AddWithValue("ID", id);
+                cmd.Parameters.AddWithValue("NEWCOMENTARIO", newcomentario);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.ExecuteNonQuery();
+            }catch (Exception ex){
+                Console.WriteLine(ex.ToString());
+            }finally{
+                desconectar();
+            }
+        }
+
         public List<ComentarioModel> ComentariosMuestra(int id){
             var lista = new List<ComentarioModel>();
             conectar();
@@ -725,7 +754,8 @@ namespace HDUA.DATA
                     {
                         Id = Convert.ToInt32(dr[0] + ""),
                         Usuario = dr[1]+"",
-                        Texto = dr[2]+""
+                        Texto = dr[2]+"",
+                        idUser = Convert.ToInt32(dr[3]+"")
                     };
                     lista.Add(comentario);
                 }

@@ -15,11 +15,7 @@
     <title>HDUA</title>
     <style>
         body {
-            background-image: url('https://mdbootstrap.com/img/Photos/Others/images/78.jpg');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            height: 100vh;
+            background-color: lightgray;
         }
 
     </style>
@@ -173,7 +169,7 @@
                         <div class="form-check mb-3">
                             <input class="form-check-input" type="checkbox" value="" id="confirmarDesactivar" onchange="habilitarDesactivar()">
                             <label class="form-check-label" for="confirmarDesactivar">
-                                Confirmar Desactivaciónón
+                                Confirmar Desactivación
                             </label>
                         </div>
                     </div>
@@ -212,6 +208,16 @@
 
 
     <script>
+
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const formulario = document.getElementById('datosForm');
+
+            formulario.addEventListener('submit', function (event) {
+                // Mostrar la alerta
+                alert("El usuario ha sido editado");
+            });
+        });
+
         // Función para habilitar o deshabilitar el botón de Desactivar perfil
         function habilitarDesactivar() {
             var checkbox = document.getElementById('confirmarDesactivar');

@@ -15,11 +15,7 @@
 
     <style>
         body {
-            background-image: url('https://mdbootstrap.com/img/Photos/Others/images/78.jpg');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            height: 100vh;
+            background-color: lightgray;
         }
     </style>
 
@@ -35,33 +31,29 @@
                         <h3 class="card-title text-black fs-3"><samp>Formulario creación de cuenta</samp></h3>
                     </div>
                     <div class="card-body">
-                        <form action="@Url.Action("Registrar","Login")" method="post">
+                        <form action="@Url.Action("Registrar", "Login")" method="post" onsubmit="return validarFormulario()">
                             <div class="row">
                                 <div class="col-md-4 mb-3">
                                     <label for="nombre" class="form-label"><samp>Nombre completo:</samp></label>
-                                    <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Ingresar nombre...">
+                                    <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Ingresar nombre..." required>
                                 </div>
                                 <div class="col-md-4 mb-3">
                                     <label for="tipoUsuario" class="form-label"><samp>Tipo de usuario:</samp></label>
-                                    <select class="form-select" id="tipoUsuario" name="tipoUsuario">
-                                        <option value="Seleccione">Seleccione</option>
+                                    <select class="form-select" id="tipoUsuario" name="tipoUsuario" required>
+                                        <option value="">Seleccione</option>
                                         @foreach (String i in @ViewBag.ltu)
                                         {
-                                            <option>
-                                                @i
-                                            </option>
+                                            <option>@i</option>
                                         }
                                     </select>
                                 </div>
                                 <div class="col-md-4 mb-3">
                                     <label for="institucion" class="form-label"><samp>Institución:</samp></label>
-                                    <select class="form-select" id="institucion" name="institucion">
-                                        <option value="Seleccione">Seleccione</option>
+                                    <select class="form-select" id="institucion" name="institucion" required>
+                                        <option value="">Seleccione</option>
                                         @foreach (String i in @ViewBag.li)
                                         {
-                                            <option>
-                                                @i
-                                            </option>
+                                            <option>@i</option>
                                         }
                                     </select>
                                 </div>
@@ -70,30 +62,28 @@
                             <div class="row">
                                 <div class="col-md-4 mb-3">
                                     <label for="genero" class="form-label"><samp>Género:</samp></label>
-                                    <select class="form-select" id="genero" name="genero">
-                                        <option value="Seleccione">Seleccione</option>
+                                    <select class="form-select" id="genero" name="genero" required>
+                                        <option value="">Seleccione</option>
                                         @foreach (String i in @ViewBag.lgu)
                                         {
-                                            <option>
-                                                @i
-                                            </option>
+                                            <option>@i</option>
                                         }
                                     </select>
                                 </div>
                                 <div class="col-md-4 mb-3">
                                     <label for="correo" class="form-label"><samp>Correo electrónico:</samp></label>
-                                    <input type="text" class="form-control" id="correo" name="correo" placeholder="Ingresar correo...">
+                                    <input type="email" class="form-control" id="correo" name="correo" placeholder="Ingresar correo..." required>
                                 </div>
                                 <div class="col-md-4 mb-3">
                                     <label for="contrasenia" class="form-label"><samp>Contraseña:</samp></label>
-                                    <input type="password" class="form-control" id="contrasenia" name="contrasenia">
+                                    <input type="password" class="form-control" id="contrasenia" name="contrasenia" required>
                                 </div>
                             </div>
 
                             <div class="row text-center justify-content-center">
                                 <div class="col-md-4 mb-3">
                                     <label for="contrasenia2" class="form-label"><samp>Confirmar contraseña:</samp></label>
-                                    <input type="password" class="form-control" id="contrasenia2" name="contrasenia2">
+                                    <input type="password" class="form-control" id="contrasenia2" name="contrasenia2" required>
                                 </div>
                             </div>
 
@@ -112,7 +102,21 @@
         </div>
     </div>
 
+    <script>
+        function validarFormulario() {
+            const contrasenia = document.getElementById('contrasenia').value;
+            const contrasenia2 = document.getElementById('contrasenia2').value;
 
+            if (contrasenia !== contrasenia2) {
+                alert("Las contraseñas no coinciden. Por favor, verifique.");
+                return false;
+            }
+
+            // Si todo está bien, muestra el mensaje de registro
+            alert("El usuario ha sido registrado");
+            return true;
+        }
+    </script>
 
 </body>
 </html>

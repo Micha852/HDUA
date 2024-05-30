@@ -3,6 +3,7 @@ using HDUA.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using DocumentFormat.OpenXml.Office2016.Drawing.Command;
 
 namespace HDUA.Controllers
 {
@@ -10,6 +11,7 @@ namespace HDUA.Controllers
 
     public class PrincipalController : Controller{
         Procesos procesos = new Procesos();
+        ConexionMongo cnm = new ConexionMongo();
         public IActionResult Principal()
         {
             return View();
@@ -109,11 +111,39 @@ namespace HDUA.Controllers
         }
 
         [HttpPost]
-        public ActionResult EditarMuestra() {
+        public IActionResult EliminarComentario(int id)
+        {
+            try
+            {
+                procesos.EliminarComentario(id);
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, error = ex.Message });
+            }
+        }
+
+        [HttpPost]
+        public IActionResult EditarComentario(int id, string newComentario)
+        {
+            try
+            {
+                procesos.EditarComentario(id, newComentario);
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, error = ex.Message });
+            }
+        }
+
+        [HttpPost]
+        public ActionResult EditarMuestra(MuestraModel a) {
             int id = Convert.ToInt32(Request.Form["idMuestra1"] + "");
             string cientifico = Request.Form["cientifico"] + "";
             string vulgar = Request.Form["vulgar"] + "";
-            string imagen = Request.Form["imagen"] + "";
+            string imagen = Request.Form["ParaImagen"] + "";
             string coordenada = Request.Form["coordenada"] + "";
             string fecha = Request.Form["fecharecoleccion"] + "";
             string altura = Request.Form["altura"] + "";    
@@ -128,6 +158,21 @@ namespace HDUA.Controllers
             string forma = Request.Form["forma"] + "";
             string margen = Request.Form["margen"] + "";
             int estado = Request.Form.ContainsKey("estadoCheckbox") ? 1 : 0;
+            if(a.File != null)
+            {
+                ImagenModel fotico = new ImagenModel();
+                fotico.Nombre = cientifico;
+                byte[] bytes;
+                using(Stream ps = a.File.OpenReadStream())
+                {
+                    using(BinaryReader br = new(ps))
+                    {
+                        bytes = br.ReadBytes((int)ps.Length);
+                        fotico.Imagen = Convert.ToBase64String(bytes, 0, bytes.Length);
+                        cnm.UpdateImage(fotico, imagen);
+                    }
+                } 
+            }
             procesos.EditarMuestra(id, cientifico, vulgar, imagen, coordenada, fecha, altura, clase, orden, familia, genero, especie, ubicacion, procedencia, venacion, forma, margen, estado);
             return RedirectToAction("Principal", "Principal");
         }

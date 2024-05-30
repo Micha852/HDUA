@@ -4,6 +4,8 @@
 }
 @{
     var fullName = User.Identity.Name;
+    var claimsPrincipal = User;
+    var idLogin = Convert.ToInt32(claimsPrincipal.Claims.FirstOrDefault(c => c.Type == "id").Value);
     var firstName = fullName.Split(' ')[0];
 }
 
@@ -23,11 +25,7 @@
     <title>HDUA</title>
     <style>
         body {
-            background-image: url('https://mdbootstrap.com/img/Photos/Others/images/78.jpg');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            height: 100vh;
+            background-color: lightgray;
         }
 
     </style>
@@ -138,7 +136,7 @@
                                                     <input type="text" class="form-control" id="commentInput" name="commentInput" placeholder="Escriba su comentario aquí...">
                                                 </div>
                                                 <div>
-                                                    <button type="submit" class="btn btn-primary" id="submitBtn" disabled onclick="aux()">Publicar</button>
+                                                    <button type="submit" class="btn btn-success" id="submitBtn" disabled onclick="aux()">Publicar</button>
                                                 </div>
                                                 <input type="hidden" id="hiddenInputMuestra" name="hiddenInputMuestra" value="@Model.Id">
                                             </div>
@@ -150,11 +148,29 @@
                                                         <div class="card mb-3">
                                                             <div class="card-body text-start">
                                                                 <p class="card-text"><strong>@i.Usuario:</strong> @i.Texto</p>
+                                                                @if (@idLogin == @i.idUser)
+                                                                {
+                                                                    <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editarComentarioModal" data-id="@i.Id" data-comentario="@i.Texto" data-user="@i.Usuario">
+                                                                        Editar
+                                                                    </button>
+                                                                    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmarEliminarModal" data-id="@i.Id">
+                                                                        Eliminar
+                                                                    </button>
+                                                                }
+                                                                else if ((User.IsInRole("ADMINISTRADOR")))
+                                                                {
+                                                                    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmarEliminarModal" data-id="@i.Id">
+                                                                        Eliminar
+                                                                    </button>
+                                                                }
                                                             </div>
+
                                                         </div>
                                                     }
                                                 </div>
                                             </div>
+
+
                                         </p>
                                     </div>
                                 </div>
@@ -181,6 +197,45 @@
                 </div>
                 <div class="modal-body">
                     <img src="data:image/jpg;base64,@Model.Imagen2.Imagen" class="img-fluid">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Editar Comentario -->
+    <div class="modal fade mt-5" id="editarComentarioModal" tabindex="-1" aria-labelledby="editarComentarioLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editarComentarioLabel">Editar Comentario</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="text" class="form-control" id="editarComentarioInput">
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-warning" id="btnGuardarComentario">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Modal de eliminacion (comentario) -->
+    <div class="modal fade mt-5" id="confirmarEliminarModal" tabindex="-1" aria-labelledby="confirmarEliminarLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmarEliminarLabel">Confirmar eliminación</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    ¿Seguro que desea eliminar el comentario?
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-danger" id="btnEliminarComentario">Eliminar</button>
                 </div>
             </div>
         </div>
@@ -218,10 +273,17 @@
                 traditional: true,
                 data: { commentInput: commentInput, hiddenInputMuestra: hiddenInputMuestra },
                 success: function (result) {
+                    // Crear el HTML para el nuevo comentario con las opciones de editar y eliminar
                     var nuevoComentarioHTML = `
                         <div class="card mb-3">
                             <div class="card-body text-start">
                                 <p class="card-text"><strong>${result[result.length - 1].usuario}:</strong> ${result[result.length - 1].texto}</p>
+                                <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editarComentarioModal" data-id="${result[result.length - 1].id}" data-comentario="${result[result.length - 1].texto}" data-user="${result[result.length - 1].usuario}">
+                                    Editar
+                                </button>
+                                <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmarEliminarModal" data-id="${result[result.length - 1].id}">
+                                    Eliminar
+                                </button>
                             </div>
                         </div>
                     `;
@@ -229,6 +291,146 @@
                     // Agregar el nuevo comentario al contenedor de comentarios
                     var comentariosDiv = document.getElementById('comentariosDiv');
                     comentariosDiv.innerHTML = nuevoComentarioHTML + comentariosDiv.innerHTML;
+
+                    // Asignar eventos a los botones de editar y eliminar del nuevo comentario
+                    var nuevoComentario = comentariosDiv.firstChild;
+                    var editarBtn = nuevoComentario.querySelector('.editar-btn');
+                    var eliminarBtn = nuevoComentario.querySelector('.eliminar-btn');
+
+                    // Aquí puedes agregar los eventos onclick para los botones editar y eliminar
+                    editarBtn.onclick = function () {
+                        // Agregar la lógica para editar el comentario
+                        console.log("Editar comentario");
+                    };
+
+                    eliminarBtn.onclick = function () {
+                        // Agregar la lógica para eliminar el comentario
+                        console.log("Eliminar comentario");
+                    };
+                },
+                error: function (xhr, status, error) {
+                    console.log("error");
+                    console.error(error);
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', (event) => {
+            // Variable para almacenar el ID del comentario a eliminar
+            let comentarioIdParaEliminar = null;
+            let comentarioIdParaEditar = null;
+            let usuarioParaEditar = null;
+
+            // Manejar el evento de clic en el botón "Eliminar" dentro del modal
+            document.getElementById('btnEliminarComentario').addEventListener('click', function () {
+                eliminarComentario(comentarioIdParaEliminar);
+            });
+
+            // Manejar el evento de clic en el botón "Guardar" dentro del modal
+            document.getElementById('btnGuardarComentario').addEventListener('click', function () {
+                const nuevoComentario = document.getElementById('editarComentarioInput').value;
+                editarComentario(comentarioIdParaEditar, nuevoComentario, usuarioParaEditar);
+            });
+
+            // Evento delegado para botones de eliminar
+            document.getElementById('comentariosDiv').addEventListener('click', function (event) {
+                if (event.target.matches('button[data-bs-target="#confirmarEliminarModal"]')) {
+                    comentarioIdParaEliminar = event.target.getAttribute('data-id');
+                }
+            });
+
+            // Evento delegado para botones de editar
+            document.getElementById('comentariosDiv').addEventListener('click', function (event) {
+                if (event.target.matches('button[data-bs-target="#editarComentarioModal"]')) {
+                    comentarioIdParaEditar = event.target.getAttribute('data-id');
+                    const comentarioActual = event.target.getAttribute('data-comentario');
+                    usuarioParaEditar = event.target.getAttribute('data-user');
+
+                    // Establecer el valor del input en el modal
+                    document.getElementById('editarComentarioInput').value = comentarioActual;
+                }
+            });
+        });
+
+        // Función para eliminar el comentario
+        function eliminarComentario(idComentario) {
+            $.ajax({
+                url: '@Url.Action("EliminarComentario", "Principal")',
+                type: 'POST',
+                data: { id: idComentario },
+                success: function (result) {
+                    if (result.success) {
+                        // Eliminar el comentario de la interfaz de usuario
+                        document.querySelector(`button[data-id="${idComentario}"]`).closest('.card').remove();
+                        // Cerrar el modal
+                        var modal = bootstrap.Modal.getInstance(document.getElementById('confirmarEliminarModal'));
+                        modal.hide();
+
+                        // Mostrar alerta de éxito
+                        alert("El comentario ha sido eliminado.");
+                    } else {
+                        console.error(result.error);
+                        alert('Hubo un error al eliminar el comentario.');
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.log("error");
+                    console.error(error);
+                    alert('Hubo un error al eliminar el comentario.');
+                }
+            });
+        }
+        
+        document.addEventListener('DOMContentLoaded', (event) => {
+            let comentarioIdParaEditar = null;
+            let usuarioParaEditar = null;
+
+            // Obtener todos los botones de editar
+            const editButtons = document.querySelectorAll('button[data-bs-target="#editarComentarioModal"]');
+
+            // Asignar evento click a cada botón de editar
+            editButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    // Guardar el ID del comentario, el texto actual y el usuario
+                    comentarioIdParaEditar = this.getAttribute('data-id');
+                    const comentarioActual = this.getAttribute('data-comentario');
+                    usuarioParaEditar = this.getAttribute('data-user');
+
+                    // Establecer el valor del input en el modal
+                    document.getElementById('editarComentarioInput').value = comentarioActual;
+                });
+            });
+
+            // Manejar el evento de clic en el botón "Guardar" dentro del modal
+            document.getElementById('btnGuardarComentario').addEventListener('click', function () {
+                const nuevoComentario = document.getElementById('editarComentarioInput').value;
+                editarComentario(comentarioIdParaEditar, nuevoComentario, usuarioParaEditar);
+            });
+        });
+
+        // Función para editar el comentario
+        function editarComentario(idComentario, nuevoComentario, usuario) {
+            $.ajax({
+                url: '@Url.Action("EditarComentario", "Principal")',
+                type: 'POST',
+                data: { id: idComentario, newComentario: nuevoComentario },
+                success: function (result) {
+                    if (result.success) {
+                        // Actualizar el comentario en la interfaz de usuario
+                        const comentarioCard = document.querySelector(`button[data-id='${idComentario}']`).closest('.card');
+                        const comentarioElemento = comentarioCard.querySelector('.card-text');
+                        comentarioElemento.innerHTML = `<strong>${usuario}:</strong> ${nuevoComentario}`;
+
+                        // Actualizar el valor de data-comentario en el botón de editar
+                        const editButton = comentarioCard.querySelector('button[data-bs-target="#editarComentarioModal"]');
+                        editButton.setAttribute('data-comentario', nuevoComentario);
+
+                        // Cerrar el modal
+                        var modal = bootstrap.Modal.getInstance(document.getElementById('editarComentarioModal'));
+                        modal.hide();
+                    } else {
+                        console.error(result.error);
+                    }
                 },
                 error: function (xhr, status, error) {
                     console.log("error");
@@ -263,13 +465,10 @@
 
             // Coordenadas DMS de @Model.Coordenada
             let coordenadas = decodeHtml("@Model.Coordenada");
-            console.log(coordenadas);
 
             let coordArray = coordenadas.split(" ");
             let dmsLat = coordArray[0];
             let dmsLng = coordArray[1];
-            console.log(dmsLat);
-            console.log(dmsLng);
 
             // Convertir a decimal
             let lat = dmsToDecimal(dmsLat);
