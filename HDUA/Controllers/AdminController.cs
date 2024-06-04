@@ -159,6 +159,7 @@ namespace HDUA.Controllers
             return RedirectToAction("GestionMuestra", "Admin");
         }
 
+        [Authorize(Roles = "ADMINISTRADOR")]
         public IActionResult GestionUsuario()
         {
             ViewBag.mostrarusuarios = procesos.ListarUsuarios();

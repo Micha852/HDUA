@@ -31,7 +31,7 @@ namespace HDUA.Controllers
         }
 
         [HttpPost]
-        public IActionResult Resultado(string nombre, string sorden, string sclase, string sespecie, string sfamilia, string sgenero, string sdepa, int page = 1, int pageSize = 4)
+        public IActionResult Resultado(string nombre, string sorden, string sclase, string sespecie, string sfamilia, string sgenero, string sdepa)
         {
             ViewBag.ltv = procesos.Listar("LISTARTIPOVENACION");
             ViewBag.ltf = procesos.Listar("LISTARTIPOFORMA");
@@ -61,15 +61,7 @@ namespace HDUA.Controllers
             {
                 listamuestra = procesos.ResultadoEspecifico(sorden, sclase, sespecie, sfamilia, sgenero, sdepa);
             }
-
-            int totalItems = listamuestra.Count;
-            var muestraPaginada = listamuestra.Skip((page - 1) * pageSize).Take(pageSize).ToList();
-
-            ViewBag.CurrentPage = page;
-            ViewBag.PageSize = pageSize;
-            ViewBag.TotalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
-
-            return View(muestraPaginada);
+            return View(listamuestra);
         }
 
 
@@ -173,7 +165,13 @@ namespace HDUA.Controllers
                     }
                 } 
             }
-            procesos.EditarMuestra(id, cientifico, vulgar, imagen, coordenada, fecha, altura, clase, orden, familia, genero, especie, ubicacion, procedencia, venacion, forma, margen, estado);
+
+            List<int> usuariosSeleccionados = Request.Form["usuariosSeleccionados"].Select(int.Parse).ToList();
+            int cantidadRecolectores = usuariosSeleccionados.Count;
+
+            string Ids = string.Join(",", usuariosSeleccionados);
+
+            procesos.EditarMuestra(id, cientifico, vulgar, imagen, coordenada, fecha, altura, clase, orden, familia, genero, especie, ubicacion, procedencia, venacion, forma, margen, estado, cantidadRecolectores, Ids);
             return RedirectToAction("Principal", "Principal");
         }
 

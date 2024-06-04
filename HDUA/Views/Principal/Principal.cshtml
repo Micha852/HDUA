@@ -16,13 +16,28 @@
         body {
             background-color: lightgray;
         }
+
+        .content-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .form-row {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
 
-    <div class="position-absolute top-50 start-50 translate-middle">
-        <div class="row">
+    <div class="position-absolute top-50 start-50 translate-middle content-wrapper">
+        <div class="row justify-content-center align-items-center mb-4">
+            <img src="~/img/logoher.png" alt="Logo" width="175" height="175">
+        </div>
 
+        <div class="form-row">
             <form action="/" method="post" id="cientifico" class="col input-group me-5">
                 <input type="text" class="form-control rounded-pill border border-dark" placeholder="Nombre científico" aria-label="Example text with button addon" aria-describedby="button-addon1" name="nombre" data-bs-toggle="popover" data-bs-html="true" data-bs-content='Ejemplos de nombres científicos: <a href="https://www.unavarra.es/herbario/htm/especies_ncien.htm" target="_blank">https://www.unavarra.es/herbario/htm/especies_ncien.htm</a>'>
                 <button class="btn btn-success" type="submit" id="button-addon1" formaction="@Url.Action("Resultado", "Principal")" name="btnCientifico"><samp>Buscar</samp></button>
@@ -32,8 +47,6 @@
                 <input type="text" class="form-control rounded-pill border border-dark" placeholder="Nombre vulgar" aria-label="Example text with button addon" aria-describedby="button-addon1" name="nombre" data-bs-toggle="popover" data-bs-html="true" data-bs-content='Ejemplos de nombres vulgares: <a href="https://www.unavarra.es/herbario/htm/especies_ncien.htm" target="_blank">https://www.unavarra.es/herbario/htm/especies_ncien.htm</a>'>
                 <button class="btn btn-success" type="submit" id="button-addon1" formaction="@Url.Action("Resultado", "Principal")" name="btnVulgar"><samp>Buscar</samp></button>
             </form>
-
-
         </div>
 
         <div class="col text-center mt-5">
@@ -42,12 +55,11 @@
         @{
             if (User.IsInRole("ADMINISTRADOR"))
             {
-                <div class="col text-center mt-5" >
+                <div class="col text-center mt-5">
                     <a href="@Url.Action("Principal", "Admin")" class="fs-4" style="background-color: rgba(255, 255, 255, 0.6);"><samp>Pánel de control</samp><i class='bx bx-search'></i></a>
                 </div>
             }
         }
-       
     </div>
 
     <script>

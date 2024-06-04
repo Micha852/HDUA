@@ -19,8 +19,20 @@
             background-color: lightgray;
         }
 
+        .content-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .form-row {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
     </style>
 </head>
+
 
 <body>
 
@@ -99,6 +111,7 @@
                                                     data-ubicacion="@m.Ubicacion"
                                                     data-estado="@m.Estado"
                                                     data-imagen="@m.Imagen"
+                                                    data-ids="@m.ListaRecolectores"
                                                     data-bs-toggle="modal" data-bs-target="#modalEditarMuestra">
                                                 Editar muestra
                                             </button>
@@ -117,43 +130,21 @@
                 </div>
             }
         </div>
-
-
-        <div class="d-flex justify-content-center mt-2">
-            <nav aria-label="Page navigation example">
-                <ul class="pagination">
-                    @if (ViewBag.CurrentPage > 1)
-                    {
-                        <li class="page-item">
-                            <a class="page-link" href="@Url.Action("Resultado", new { page = ViewBag.CurrentPage - 1 })" aria-label="Previous">
-                                <span aria-hidden="true">&laquo;</span>
-                            </a>
-                        </li>
-                    }
-                    @for (int i = 1; i <= ViewBag.TotalPages; i++)
-                    {
-                        <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
-                            <a class="page-link" href="@Url.Action("Resultado", new { page = i })">@i</a>
-                        </li>
-                    }
-                    @if (ViewBag.CurrentPage < ViewBag.TotalPages)
-                    {
-                        <li class="page-item">
-                            <a class="page-link" href="@Url.Action("Resultado", new { page = ViewBag.CurrentPage + 1 })" aria-label="Next">
-                                <span aria-hidden="true">&raquo;</span>
-                            </a>
-                        </li>
-                    }
-                </ul>
-            </nav>
-        </div>
+        
 
     </samp>
 
     <!--................................................................-->
-    <div class="col d-flex justify-content-center align-items-center flex-column">
+    <div class="col mt-3 d-flex justify-content-center align-items-center flex-column">
         <div class="row-md-auto text-center">
             <a href="@Url.Action("Principal", "Principal")" class="btn btn-success" style="display: block; margin: 0 auto; color: lightgray">Volver a buscar</a>
+        </div>
+    </div>
+
+    <div class="mt-lg-5">
+        <div class="row mt-lg-5">
+            <div class="col mt-lg-5">
+            </div>
         </div>
     </div>
 
@@ -371,6 +362,48 @@
                                 </div>
 
                                 
+                                <!-- Parte 3 -->
+                                <div class="carousel-item">
+                                    <div class="container">
+
+                                        <h3 class="d-flex justify-content-center align-items-center"><samp>Asociar recolectores</samp></h3>
+
+
+                                        <div class="row mt-3 ms-5 justify-content-end">
+                                            <div class="col-auto">
+                                                <button type="button" class="btn btn-link btn-buscar" id="buscarbtn">
+                                                    <i class='bx bx-search-alt' style="font-size: 1.5rem;"></i>
+                                                </button>
+
+                                            </div>
+                                            <div class="col-auto">
+                                                <input type="text" class="form-control" id="buscar-recolector" placeholder="Buscar recolector">
+                                            </div>
+                                        </div>
+
+                                        <table id="tabla-recolectores" class="table table-striped table-hover mt-3">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col"><samp>Nombre</samp></th>
+                                                    <th scope="col"><samp>Muestras ligadas</samp></th>
+                                                    <th scope="col"><samp>Seleccionar</samp></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (RecolectorModel i in ViewBag.mostrarrecolector)
+                                                {
+                                                    <tr>
+                                                        <td>@i.Nombre</td>
+                                                        <td>@i.Cantidad</td>
+                                                        <td>
+                                                            <input type="checkbox" name="usuariosSeleccionados" value="@i.Id" />
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
                             </form>
                         </div>
 
@@ -440,7 +473,7 @@
                 var ubicacion = button.getAttribute('data-ubicacion'); // nuevo
                 var estado = button.getAttribute('data-estado') === 'True';
                 var imagen = button.getAttribute('data-imagen');
-
+                var idsRecolectores = button.getAttribute('data-ids').split(',').map(id => id.trim());
 
                 // Actualizar el contenido del modal
                 var modalTitle = modalEditarMuestra.querySelector('#modalNombreCientifico');
@@ -463,7 +496,7 @@
                 var inputCoordenada = modalEditarMuestra.querySelector('#coordenada');
                 var inputFecha = modalEditarMuestra.querySelector('#fecharecoleccion');
                 var selectUbicacion = modalEditarMuestra.querySelector('#ubicacionSelect'); // nuevo
-                var estadoCheckbox = document.getElementById('estadoCheckbox');
+                var estadoCheckbox = modalEditarMuestra.querySelector('#estadoCheckbox');
                 var inputImagen = modalEditarMuestra.querySelector('#ParaImagen');
 
                 inputCientifico.value = nombreCientifico;
@@ -474,6 +507,34 @@
                 estadoCheckbox.checked = estado;
                 inputImagen.value = imagen;
 
+                // Actualizar la tabla de recolectores
+                var tablaRecolectores = document.getElementById('tabla-recolectores').querySelector('tbody');
+                var filas = Array.from(tablaRecolectores.rows);
+
+                // Ordenar las filas: seleccionadas primero
+                filas.sort(function (a, b) {
+                    var idA = a.querySelector('input[type="checkbox"]').value;
+                    var idB = b.querySelector('input[type="checkbox"]').value;
+                    var seleccionadaA = idsRecolectores.includes(idA);
+                    var seleccionadaB = idsRecolectores.includes(idB);
+                    return (seleccionadaA === seleccionadaB) ? 0 : seleccionadaA ? -1 : 1;
+                });
+
+                // Vaciar la tabla y volver a insertar las filas en el nuevo orden
+                tablaRecolectores.innerHTML = '';
+                filas.forEach(function (fila) {
+                    tablaRecolectores.appendChild(fila);
+                });
+
+                // Marcar los checkboxes de los recolectores seleccionados
+                filas.forEach(function (fila) {
+                    var checkbox = fila.querySelector('input[type="checkbox"]');
+                    if (idsRecolectores.includes(checkbox.value)) {
+                        checkbox.checked = true;
+                    } else {
+                        checkbox.checked = false;
+                    }
+                });
                 // Guardar el estado inicial
                 initialState = {
                     cientifico: nombreCientifico,

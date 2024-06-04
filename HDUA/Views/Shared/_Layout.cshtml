@@ -8,54 +8,20 @@
     <link rel="shortcut icon" href="~/img/planta.ico" type="image/x-icon" />
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
     <style>
         body {
-            background-image: null;
+            background-image: url('img/principal.jpg');
+            background-size: cover; /* Ajusta la imagen para que cubra todo el contenedor */
+            background-position: center; /* Centra la imagen en el contenedor */
+            background-repeat: no-repeat; /* Evita que la imagen se repita */
+            width: 100%;
+            height: 100vh; /* Ajusta la altura para que ocupe toda la pantalla */
         }
     </style>
 </head>
 <body>
     @RenderBody()
 
-    <footer class="bg-transparent border-top fixed-bottom">
-        <div class="container-fluid py-3" style="background-color:#C2E6D6">
-            <div class="row">
-                <div class="col-4 d-flex align-items-center">
-                    <img src="~/img/LOGO_UDLA.png" alt="Logo" width="70" height="70">
-                </div>
-
-                <div class="col-4 d-flex justify-content-center align-items-center">
-                    <samp style="font-size: 2rem;">©</samp>
-                    <samp> Todos los derechos reservados</samp>
-                </div>
-
-                @if (ViewBag.IsLoginView == true)
-                {
-                    <div class="col-4 d-flex align-items-center">
-                        <img src="~/img/LOGO_UDLA.png" alt="Logo" width="80" height="80">
-                    </div>
-                }
-                else
-                {
-                    <div class="col-4 d-flex justify-content-end align-items-center">
-                        <li class="nav-item dropdown" style="list-style: none;">
-                            <a class="nav-link dropdown-toggle d-flex flex-column align-items-center" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="fa-regular fa-user fa-fade" style="font-size: 2.5rem;"></i>
-                                <samp>@User.Identity.Name</samp>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="@Url.Action("Logout","Login")"><samp>Cerrar sesión</samp></a></li>
-                                @if (!Context.Request.Path.Equals("/MiPerfil/MiPerfil", StringComparison.OrdinalIgnoreCase))
-                                {
-                                    <li><a class="dropdown-item" href="@Url.Action("MiPerfil","MiPerfil")"><samp>Mi Perfil</samp></a></li>
-                                }
-                            </ul>
-                        </li>
-                    </div>
-                }
-            </div>
-        </div>
-    </footer>
+    
 </body>
 </html>

@@ -254,7 +254,8 @@ namespace HDUA.DATA
 
         public void EditarMuestra(int id, string cientifico, string vulgar, string imagen, string coordenada,
             string fecha, string altura, string clase, string orden, string familia, string genero, string especie,
-            string ubicacion, string procedencia, string venacion, string forma, string margen, int estado){
+            string ubicacion, string procedencia, string venacion, string forma, string margen, int estado,
+            int cantidad, string ids){
             conectar();
             try{
                 MySqlCommand cmd = new MySqlCommand("EDITARMUESTRA", cn);
@@ -276,6 +277,8 @@ namespace HDUA.DATA
                 cmd.Parameters.AddWithValue("NFORMA", forma);
                 cmd.Parameters.AddWithValue("NMARGEN", margen);
                 cmd.Parameters.AddWithValue("ESTADO", estado);
+                cmd.Parameters.AddWithValue("CANTIDAD", cantidad);
+                cmd.Parameters.AddWithValue("IDS", ids);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 cmd.ExecuteNonQuery();
             }catch (Exception ex){
@@ -448,6 +451,7 @@ namespace HDUA.DATA
                         Venacion = dr[12] +"",
                         Forma = dr[13] +"",
                         Margen = dr[14] +"",
+                        ListaRecolectores = dr[15]+"",
                         Ubicacion = dr[16] +"",
                         Fecha = dr[17] +"",
                         Estado = Convert.ToBoolean(dr[18]) ? true : false
@@ -496,6 +500,7 @@ namespace HDUA.DATA
                         Venacion = dr[12] + "",
                         Forma = dr[13] + "",
                         Margen = dr[14] + "",
+                        ListaRecolectores = dr[15]+"",
                         Ubicacion = dr[16] + "",
                         Fecha = dr[17] + "",
                         Estado = Convert.ToBoolean(dr[18]) ? true : false
@@ -549,6 +554,7 @@ namespace HDUA.DATA
                         Venacion = dr[12] + "",
                         Forma = dr[13] + "",
                         Margen = dr[14] + "",
+                        ListaRecolectores = dr[15] + "",
                         Ubicacion = dr[16] + "",
                         Fecha = dr[17] + "",
                         Estado = Convert.ToBoolean(dr[18]) ? true : false
@@ -821,7 +827,6 @@ namespace HDUA.DATA
             }
             return datos;
         }
-
 
     }
 }
