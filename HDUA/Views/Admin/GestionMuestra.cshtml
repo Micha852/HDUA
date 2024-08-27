@@ -199,6 +199,18 @@
 
                                             <div class="col me-5 ms-5">
                                                 <div class="row mt-3">
+                                                    <select class="form-select" id="division" name="division" required>
+                                                        <option value="Seleccione">Division</option>
+                                                        @foreach (String i in @ViewBag.ltd)
+                                                        {
+                                                            <option>
+                                                                @i
+                                                            </option>
+                                                        }
+                                                    </select>
+                                                </div>
+
+                                                <div class="row mt-3">
                                                     <select class="form-select" id="clase" name="clase" required>
                                                         <option value="Seleccione">Clase</option>
                                                         @foreach (String i in @ViewBag.ltc)

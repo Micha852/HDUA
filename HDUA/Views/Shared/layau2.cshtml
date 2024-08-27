@@ -18,8 +18,8 @@
             white-space: pre-line;
         }
 
-        body {
-            background-image: url('img/principal.jpg');
+        body {  
+            background-image: url('/img/amazonia.jpg');
             background-size: cover; /* Ajusta la imagen para que cubra todo el contenedor */
             background-position: center; /* Centra la imagen en el contenedor */
             background-repeat: no-repeat; /* Evita que la imagen se repita */
@@ -27,11 +27,37 @@
             height: 100vh; /* Ajusta la altura para que ocupe toda la pantalla */
         }
 
+        .footer-img {
+        max-height: 65px;
+    }
+
+    .footer-icon {
+        max-height: 35px;
+    }
+
+    .footer-title {
+        font-size: 1rem;
+    }
+
+    /* Media Queries para pantallas pequeñas */
+    @@media (max-width: 576px) {
+        .footer-img {
+            max-height: 40px;
+        }
+
+        .footer-icon {
+            max-height: 20px;
+        }
+
+        .footer-title {
+            font-size: 0.8rem;
+        }
+    }
     </style>
 
 </head>
 <body>
-    <header class="bg-transparent">
+    <header>
         <nav class="navbar navbar-expand-lg" style="background-color: rgba(255, 255, 255, 0.5);">
             <div class="container-fluid" >
                 <a class="navbar-brand" href="@Url.Action("Principal", "Principal")"><samp>Inicio</samp></a>
@@ -93,25 +119,28 @@
         </nav>
     </header>
 
+    @RenderBody()
+
     <footer class="bg-transparent border-top fixed-bottom">
-        <div class="container-fluid py-3" style="background-color:#C2E6D6">
-            <div class="row justify-content-between align-items-center">
+        <div class="container-fluid py-3" style="background-color:#C2E6D6;">
+            <div class="row justify-content-between align-items-center text-center text-md-start">
                 <div class="col-auto">
-                    <img src="~/img/LOGO_UDLA.png" alt="Logo" width="65" height="65">
+                    <img src="~/img/LOGO_UDLA.png" alt="Logo" class="img-fluid footer-img">
                 </div>
 
-                <div class="col-auto d-flex align-items-center">
-                    <img src="~/img/planta.png" alt="Ícono" style="height: 35px;">
-                    <p class="fs-3 mx-2 mb-0"><samp>Herbario Digital de la Amazonía</samp></p>
-                    <img src="~/img/planta.png" alt="Ícono" style="height: 35px;">
+                <div class="col-auto d-flex flex-column flex-md-row align-items-center footer-text">
+                    <img src="~/img/planta.png" alt="Ícono" class="img-fluid footer-icon">
+                    <p class="mx-2 mb-0 footer-title">Herbario Digital de la Amazonía</p>
+                    <img src="~/img/planta.png" alt="Ícono" class="img-fluid footer-icon">
                 </div>
 
                 <div class="col-auto">
-                    <img src="~/img/LOGO_UDLA.png" alt="Logo" width="65" height="65">
+                    <img src="~/img/LOGO_UDLA.png" alt="Logo" class="img-fluid footer-img">
                 </div>
             </div>
         </div>
     </footer>
+
 
 
     <!-- Modal Historia -->
@@ -248,8 +277,6 @@
 
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-
-    @RenderBody()
 
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
     <script>

@@ -23,6 +23,7 @@ namespace HDUA.Controllers
             ViewBag.lfamilia = procesos.Listar("LISTARFAMILIA");
             ViewBag.lgenero = procesos.Listar("LISTARGENERO");
             ViewBag.ldepartamento = procesos.Listar("LISTARDEPARTAMENTO");
+            ViewBag.ldivision = procesos.Listar("LISTARDIVISION");
             return View();
         }
         public IActionResult Resultado()

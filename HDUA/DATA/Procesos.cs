@@ -338,6 +338,7 @@ namespace HDUA.DATA
                 cmd.Parameters.AddWithValue("NMARGEN", muestra.Margen);
                 cmd.Parameters.AddWithValue("RECOLECTORES", muestra.Recolectores);
                 cmd.Parameters.AddWithValue("IDS", muestra.Ids);
+                cmd.Parameters.AddWithValue("NDIVISION", muestra.Division);
 
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 cmd.ExecuteNonQuery();
@@ -598,13 +599,14 @@ namespace HDUA.DATA
                         Familia = rd[8] + "",
                         Genero = rd[9] + "",
                         Especie = rd[10] + "",
-                        Procedencia = rd[11] + "",
-                        Venacion = rd[12] + "",
-                        Forma = rd[13] + "",
-                        Margen = rd[14] + "",
-                        Ubicacion = rd[15] + "",
-                        ListaRecolectores = rd[16] + "",
-                        Fecha = rd[17]+""
+                        Division = rd[11] + "",
+                        Procedencia = rd[12] + "",
+                        Venacion = rd[13] + "",
+                        Forma = rd[14] + "",
+                        Margen = rd[15] + "",
+                        Ubicacion = rd[16] + "",
+                        ListaRecolectores = rd[17] + "",
+                        Fecha = rd[18]+""
 
                     };
                     muestra.Imagen2 = cnm.GetImage(muestra.Imagen);
