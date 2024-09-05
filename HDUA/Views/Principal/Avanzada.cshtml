@@ -109,7 +109,7 @@
                                 <h5 style="color: #000; background-color: rgba(255, 255, 255, 0.8); padding: 5px 10px; border-radius: 5px;">
                                     Departamento ↓
                                 </h5>
-                                <select class="form-select" name="sdepa" aria-label="Default select example">
+                                <select class="form-select" id="sdepa" name="sdepa" aria-label="Default select example">
                                     <option selected>Seleccione</option>
                                     @foreach (String i in @ViewBag.ldepartamento)
                                     {
@@ -121,12 +121,8 @@
                                 <h5 style="color: #000; background-color: rgba(255, 255, 255, 0.8); padding: 5px 10px; border-radius: 5px;">
                                     Municipio ↓
                                 </h5>
-                                <select class="form-select" name="smuni" aria-label="Default select example">
+                                <select id="smuni" class="form-select" name="smuni" aria-label="Default select example">
                                     <option selected>Seleccione</option>
-                                    @foreach (String i in @ViewBag.ldepartamento)
-                                    {
-                                        <option>@i</option>
-                                    }
                                 </select>
                             </div>
                         </div>
@@ -145,7 +141,29 @@
 
             </div>
         </samp>
-        
     </div>
+
+    <script>
+        $(document).ready(function () {
+            $('#sdepa').change(function () {
+                var departamentoSeleccionado = $(this).val();
+                if (departamentoSeleccionado !== 'Seleccione') {
+                    $.ajax({
+                        url: "@Url.Action("ObtenerMunicipiosPorDepartamento", "Principal")",
+                        type: 'POST',
+                        data: { nombreDepartamento: departamentoSeleccionado },
+                        success: function (data) {
+                            $('#smuni').empty();
+                            $('#smuni').append('<option>' + "Seleccione" + '</option>');
+                            $.each(data, function (index, municipio) {
+                                $('#smuni').append('<option>' + municipio + '</option>');
+                            });
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+
 </body>
 </html>

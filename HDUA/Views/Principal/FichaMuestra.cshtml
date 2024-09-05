@@ -25,7 +25,12 @@
     <title>HDUA</title>
     <style>
         body {
-            background-color: lightgray;
+            background-image: url('/img/_DVE3949.jpg');
+            background-size: cover; /* Ajusta la imagen para que cubra todo el contenedor */
+            background-position: center; /* Centra la imagen en el contenedor */
+            background-repeat: no-repeat; /* Evita que la imagen se repita */
+            width: 100%;
+            height: 100vh; /* Ajusta la altura para que ocupe toda la pantalla */
         }
 
     </style>
@@ -51,6 +56,7 @@
         <div class="col-2">
             <samp>
                 <div id="list-example" class="list-group">
+                    <a href="@Url.Action("Principal", "Principal")" class="fs-5" style="color: #fff; text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5); padding: 10px 20px; border: 2px solid #fff; border-radius: 5px; display: inline-block; background-color: rgba(255, 255, 255, 0.1);"><samp>Volver a buscar</samp><i class='bx bxs-left-top-arrow-circle'></i></a>
                     <a class="list-group-item list-group-item-action" href="#list-item-1">Aspectos generales</a>
                     <a class="list-group-item list-group-item-action" href="#list-item-2">Aspectos específicos</a>
                     <a class="list-group-item list-group-item-action" href="#list-item-3">Comentarios</a>
@@ -84,6 +90,8 @@
                                                         <label for="nombreCientifico" class="mt-2"><u>Nombre científico</u>: @Model.Cientifico</label>
                                                             
                                                         <label for="descripcion" class="mt-2"><u>Descripción</u>: @Model.Procedencia de @Model.Altura metros, de características @Model.Forma, @Model.Venacion y @Model.Margen</label>
+                                                    
+                                                        <label for="proyecto" class="mt-2"><u>Proyecto de origen</u>: @Model.Proyecto</label>
                                                     </div>
                                                 </div>
                                             </div>
@@ -185,9 +193,6 @@
 
             </div>
         </div>
-    </div>
-    <div class="col d-flex justify-content-end align-items-end">
-        <a href="@Url.Action("Principal", "Principal")" class="text-decoration-none me-5" style="font-size: 1.4rem;"><samp>Volver a buscar</samp></a>
     </div>
 
     <div class="modal fade" id="imagenModal" tabindex="-1" aria-labelledby="imagenModalLabel" aria-hidden="true">

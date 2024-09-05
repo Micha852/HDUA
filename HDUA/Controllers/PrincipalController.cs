@@ -16,7 +16,7 @@ namespace HDUA.Controllers
         {
             return View();
         }
-        public IActionResult Avanzada(){
+        public IActionResult Avanzada() {
             ViewBag.lorden = procesos.Listar("LISTARORDEN");
             ViewBag.lclase = procesos.Listar("LISTARCLASE");
             ViewBag.lespecie = procesos.Listar("LISTARESPECIE");
@@ -24,16 +24,26 @@ namespace HDUA.Controllers
             ViewBag.lgenero = procesos.Listar("LISTARGENERO");
             ViewBag.ldepartamento = procesos.Listar("LISTARDEPARTAMENTO");
             ViewBag.ldivision = procesos.Listar("LISTARDIVISION");
+            ViewBag.lmun = procesos.Listar("LISTARMUNICIPIO");
             return View();
         }
+
+        [HttpPost]
+        public ActionResult ObtenerMunicipiosPorDepartamento(string nombreDepartamento)
+        {
+            var municipios = procesos.ObtenerMunicipiosPorDepartamento(nombreDepartamento);
+            return Json(municipios);
+        }
+
         public IActionResult Resultado()
         {
             return View();
         }
 
         [HttpPost]
-        public IActionResult Resultado(string nombre, string sorden, string sclase, string sespecie, string sfamilia, string sgenero, string sdepa)
+        public IActionResult Resultado(string nombre, string sorden, string sclase, string sespecie, string sfamilia, string sgenero, string sdepa, string sdivision, string smuni)
         {
+            Console.WriteLine("sdepa: " + sdepa);
             ViewBag.ltv = procesos.Listar("LISTARTIPOVENACION");
             ViewBag.ltf = procesos.Listar("LISTARTIPOFORMA");
             ViewBag.ltM = procesos.Listar("LISTARTIPOMARGEN");
@@ -48,6 +58,8 @@ namespace HDUA.Controllers
             ViewBag.ltipoubi = procesos.Listar("LISTARTIPOUBICACION");
             ViewBag.ltipoubi2 = procesos.Listar("LISTARTIPOUBI2");
             ViewBag.mostrarrecolector = procesos.ListarRecolector();
+            ViewBag.ldiv = procesos.Listar("LISTARDIVISION");
+            ViewBag.lpro = procesos.Listar("LISTARPROYECTO");
 
             List<MuestraModel> listamuestra = new List<MuestraModel>();
             if (Request.Form["btnCientifico"].Count > 0)
@@ -60,7 +72,7 @@ namespace HDUA.Controllers
             }
             else if (Request.Form["btnParametros"].Count > 0)
             {
-                listamuestra = procesos.ResultadoEspecifico(sorden, sclase, sespecie, sfamilia, sgenero, sdepa);
+                listamuestra = procesos.ResultadoEspecifico(sorden, sclase, sespecie, sfamilia, sgenero, sdepa, sdivision, smuni);
             }
             return View(listamuestra);
         }
@@ -139,7 +151,7 @@ namespace HDUA.Controllers
             string imagen = Request.Form["ParaImagen"] + "";
             string coordenada = Request.Form["coordenada"] + "";
             string fecha = Request.Form["fecharecoleccion"] + "";
-            string altura = Request.Form["altura"] + "";    
+            string altura = Request.Form["altura"] + "";
             string clase = Request.Form["clase"] + "";
             string orden = Request.Form["orden"] + "";
             string familia = Request.Form["familia"] + "";
@@ -151,7 +163,9 @@ namespace HDUA.Controllers
             string forma = Request.Form["forma"] + "";
             string margen = Request.Form["margen"] + "";
             int estado = Request.Form.ContainsKey("estadoCheckbox") ? 1 : 0;
-            if(a.File != null)
+            string division = Request.Form["division"] + "";
+            string proyecto = Request.Form["proyecto"] + "";
+            if (a.File != null)
             {
                 ImagenModel fotico = new ImagenModel();
                 fotico.Nombre = cientifico;
@@ -172,7 +186,7 @@ namespace HDUA.Controllers
 
             string Ids = string.Join(",", usuariosSeleccionados);
 
-            procesos.EditarMuestra(id, cientifico, vulgar, imagen, coordenada, fecha, altura, clase, orden, familia, genero, especie, ubicacion, procedencia, venacion, forma, margen, estado, cantidadRecolectores, Ids);
+            procesos.EditarMuestra(id, cientifico, vulgar, imagen, coordenada, fecha, altura, clase, orden, familia, genero, especie, ubicacion, procedencia, venacion, forma, margen, estado, cantidadRecolectores, Ids, division, proyecto);
             return RedirectToAction("Principal", "Principal");
         }
 

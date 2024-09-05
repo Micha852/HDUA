@@ -255,7 +255,7 @@ namespace HDUA.DATA
         public void EditarMuestra(int id, string cientifico, string vulgar, string imagen, string coordenada,
             string fecha, string altura, string clase, string orden, string familia, string genero, string especie,
             string ubicacion, string procedencia, string venacion, string forma, string margen, int estado,
-            int cantidad, string ids){
+            int cantidad, string ids, string division, string proyecto){
             conectar();
             try{
                 MySqlCommand cmd = new MySqlCommand("EDITARMUESTRA", cn);
@@ -279,6 +279,8 @@ namespace HDUA.DATA
                 cmd.Parameters.AddWithValue("ESTADO", estado);
                 cmd.Parameters.AddWithValue("CANTIDAD", cantidad);
                 cmd.Parameters.AddWithValue("IDS", ids);
+                cmd.Parameters.AddWithValue("NDIVISION", division);
+                cmd.Parameters.AddWithValue("NPROYECTO", proyecto);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 cmd.ExecuteNonQuery();
             }catch (Exception ex){
@@ -339,6 +341,7 @@ namespace HDUA.DATA
                 cmd.Parameters.AddWithValue("RECOLECTORES", muestra.Recolectores);
                 cmd.Parameters.AddWithValue("IDS", muestra.Ids);
                 cmd.Parameters.AddWithValue("NDIVISION", muestra.Division);
+                cmd.Parameters.AddWithValue("NPROYECTO", muestra.Proyecto);
 
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 cmd.ExecuteNonQuery();
@@ -455,7 +458,9 @@ namespace HDUA.DATA
                         ListaRecolectores = dr[15]+"",
                         Ubicacion = dr[16] +"",
                         Fecha = dr[17] +"",
-                        Estado = Convert.ToBoolean(dr[18]) ? true : false
+                        Estado = Convert.ToBoolean(dr[18]) ? true : false,
+                        Division = dr[19] +"",
+                        Proyecto = dr[20] +""
                     };
                     muestra.Imagen2 = cnm.GetImage(muestra.Imagen);
                     lista.Add(muestra);
@@ -504,7 +509,9 @@ namespace HDUA.DATA
                         ListaRecolectores = dr[15]+"",
                         Ubicacion = dr[16] + "",
                         Fecha = dr[17] + "",
-                        Estado = Convert.ToBoolean(dr[18]) ? true : false
+                        Estado = Convert.ToBoolean(dr[18]) ? true : false,
+                        Division = dr[19] + "",
+                        Proyecto = dr[20] + ""
                     };
                     muestra.Imagen2 = cnm.GetImage(muestra.Imagen);
                     lista.Add(muestra);
@@ -521,7 +528,7 @@ namespace HDUA.DATA
             return lista;
         }
 
-        public List<MuestraModel> ResultadoEspecifico(string sorden, string sclase, string sespecie, string sfamilia, string sgenero, string sdepa)
+        public List<MuestraModel> ResultadoEspecifico(string sorden, string sclase, string sespecie, string sfamilia, string sgenero, string sdepa, string sdivision, string smuni)
         {
             var lista = new List<MuestraModel>();
             conectar();
@@ -534,6 +541,8 @@ namespace HDUA.DATA
                 cmd.Parameters.AddWithValue("sfamilia", sfamilia);
                 cmd.Parameters.AddWithValue("sgenero", sgenero);
                 cmd.Parameters.AddWithValue("sdepa", sdepa);
+                cmd.Parameters.AddWithValue("sdivision", sdivision);
+                cmd.Parameters.AddWithValue("smuni", smuni);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 MySqlDataReader dr = cmd.ExecuteReader();
                 while (dr.Read())
@@ -558,7 +567,8 @@ namespace HDUA.DATA
                         ListaRecolectores = dr[15] + "",
                         Ubicacion = dr[16] + "",
                         Fecha = dr[17] + "",
-                        Estado = Convert.ToBoolean(dr[18]) ? true : false
+                        Estado = Convert.ToBoolean(dr[18]) ? true : false,
+                        Division = dr[19] + ""
                     };
                     muestra.Imagen2 = cnm.GetImage(muestra.Imagen);
                     lista.Add(muestra);
@@ -606,7 +616,8 @@ namespace HDUA.DATA
                         Margen = rd[15] + "",
                         Ubicacion = rd[16] + "",
                         ListaRecolectores = rd[17] + "",
-                        Fecha = rd[18]+""
+                        Fecha = rd[18]+"",
+                        Proyecto = rd[19]+""
 
                     };
                     muestra.Imagen2 = cnm.GetImage(muestra.Imagen);

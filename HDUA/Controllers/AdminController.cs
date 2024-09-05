@@ -46,6 +46,7 @@ namespace HDUA.Controllers
             ViewBag.ltipoubi2 = procesos.Listar("LISTARTIPOUBI2");
             ViewBag.mostrarrecolector = procesos.ListarRecolector();
             ViewBag.ltd = procesos.Listar("LISTARDIVISION");
+            ViewBag.ltpro = procesos.Listar("LISTARPROYECTO");
 
             return View();
         }
@@ -115,6 +116,7 @@ namespace HDUA.Controllers
             muestra.Coordenada = Request.Form["coordenadasInput"];
             muestra.File = a.File;
             muestra.Division = Request.Form["division"];
+            muestra.Proyecto = Request.Form["proyecto"];
 
             ImagenModel imagen = new ImagenModel();
             imagen.Nombre = muestra.Cientifico;

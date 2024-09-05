@@ -26,6 +26,15 @@
             justify-content: center;
             margin-top: 20px;
         }
+
+        body {
+            background-image: url('/img/_DVE3949.jpg');
+            background-size: cover; /* Ajusta la imagen para que cubra todo el contenedor */
+            background-position: center; /* Centra la imagen en el contenedor */
+            background-repeat: no-repeat; /* Evita que la imagen se repita */
+            width: 100%;
+            height: 100vh; /* Ajusta la altura para que ocupe toda la pantalla */
+        }
     </style>
 </head>
 
@@ -108,6 +117,8 @@
                                                     data-estado="@m.Estado"
                                                     data-imagen="@m.Imagen"
                                                     data-ids="@m.ListaRecolectores"
+                                                    data-division="@m.Division"
+                                                    data-proyecto="@m.Proyecto"
                                                     data-bs-toggle="modal" data-bs-target="#modalEditarMuestra">
                                                 Editar muestra
                                             </button>
@@ -259,6 +270,16 @@
 
                                             <div class="col me-5 ms-5">
                                                 <div class="row mt-1">
+                                                    <h><samp>División</samp></h>
+                                                    <select class="form-select" id="division" name="division">
+                                                        @foreach (String i in @ViewBag.ldiv)
+                                                        {
+                                                            <option value="@i">@i</option>
+                                                        }
+                                                    </select>
+                                                </div>
+
+                                                <div class="row mt-1">
                                                     <h><samp>Clase</samp></h>
                                                     <select class="form-select" id="clase" name="clase">
                                                         @foreach (String i in @ViewBag.ltc)
@@ -351,6 +372,15 @@
                                                     <input type="text" class="form-control" id="coordenada" name="coordenada">
                                                 </div>
 
+                                                <div class="row mt-1">
+                                                    <h><samp>Proyecto de origen</samp></h>
+                                                    <select class="form-select" id="proyecto" name="proyecto">
+                                                        @foreach (String i in @ViewBag.lpro)
+                                                        {
+                                                            <option value="@i">@i</option>
+                                                        }
+                                                    </select>
+                                                </div>
                                             </div>
 
                                         </div>
@@ -470,6 +500,8 @@
                 var estado = button.getAttribute('data-estado') === 'True';
                 var imagen = button.getAttribute('data-imagen');
                 var idsRecolectores = button.getAttribute('data-ids').split(',').map(id => id.trim());
+                var division = button.getAttribute('data-division');
+                var proyecto = button.getAttribute('data-proyecto');
 
                 // Actualizar el contenido del modal
                 var modalTitle = modalEditarMuestra.querySelector('#modalNombreCientifico');
@@ -494,6 +526,8 @@
                 var selectUbicacion = modalEditarMuestra.querySelector('#ubicacionSelect'); // nuevo
                 var estadoCheckbox = modalEditarMuestra.querySelector('#estadoCheckbox');
                 var inputImagen = modalEditarMuestra.querySelector('#ParaImagen');
+                var selectDivision = modalEditarMuestra.querySelector('#division');
+                var selectProyecto = modalEditarMuestra.querySelector('#proyecto');
 
                 inputCientifico.value = nombreCientifico;
                 inputVulgar.value = nombreVulgar;
@@ -547,7 +581,9 @@
                     genero: genero,
                     orden: orden,
                     familia: familia,
-                    ubicacion: ubicacion
+                    ubicacion: ubicacion,
+                    division: division,
+                    proyecto: proyecto
                 };
 
                 // Seleccionar el option correcto en el select de venacion
@@ -640,6 +676,26 @@
                     }
                 }
 
+                // Seleccionar el option correcto en el select de la division
+                if (selectDivision) {
+                    for (var i = 0; i < selectDivision.options.length; i++) {
+                        if (selectDivision.options[i].value === division) {
+                            selectDivision.selectedIndex = i;
+                            break;
+                        }
+                    }
+                }
+
+                // Seleccionar el option correcto en el select del proyecto
+                if (selectDivision) {
+                    for (var i = 0; i < selectProyecto.options.length; i++) {
+                        if (selectProyecto.options[i].value === proyecto) {
+                            selectProyecto.selectedIndex = i;
+                            break;
+                        }
+                    }
+                }
+
                 if (selectUbicacion && selectUbicacion.options.length > 0) {
                     selectUbicacion.options[0].value = ubicacion;
                     selectUbicacion.options[0].text = ubicacion;
@@ -670,6 +726,7 @@
                 var inputCoordenada = modalEditarMuestra.querySelector('#coordenada');
                 var inputFecha = modalEditarMuestra.querySelector('#fecharecoleccion');
                 var selectUbicacion = modalEditarMuestra.querySelector('#ubicacionSelect');
+
 
                 inputCientifico.value = initialState.cientifico;
                 inputVulgar.value = initialState.vulgar;

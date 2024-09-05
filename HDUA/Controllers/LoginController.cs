@@ -88,12 +88,12 @@ namespace HDUA.Controllers
             UsuarioModel usuario = procesos.ValidarUsuario(NOMBRECORREO, PWORD);
             if (usuario.Nombre != null){
                 if (usuario.Estado != false){
-                    var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.Name, usuario.Nombre),
-                new Claim("id", usuario.Id.ToString()),
-                new Claim(ClaimTypes.Role, usuario.Rol)
-            };
+                    var claims = new List<Claim>{
+                        new Claim(ClaimTypes.Name, usuario.Nombre),
+                        new Claim("id", usuario.Id.ToString()),
+                        new Claim(ClaimTypes.Role, usuario.Rol),
+                            new Claim("Email", NOMBRECORREO) // Aquí guardas el NOMBRECORREO
+                    };
                     var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));

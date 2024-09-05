@@ -9,8 +9,6 @@ public class Startup
         // Registra el servicio IConverter
         services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
 
-        // Configura otros servicios necesarios para la aplicación
-        // services.AddMvc(); por ejemplo
     }
 
     // Este método configura la pipeline de solicitud HTTP.
@@ -22,7 +20,6 @@ public class Startup
         }
         else
         {
-            // Configura manejo de errores en producción
             app.UseExceptionHandler("/Home/Error");
         }
 

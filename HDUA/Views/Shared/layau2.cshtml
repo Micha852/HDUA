@@ -19,7 +19,7 @@
         }
 
         body {  
-            background-image: url('/img/amazonia.jpg');
+            background-image: url('/img/DSC_7852.jpg');
             background-size: cover; /* Ajusta la imagen para que cubra todo el contenedor */
             background-position: center; /* Centra la imagen en el contenedor */
             background-repeat: no-repeat; /* Evita que la imagen se repita */
@@ -53,6 +53,7 @@
             font-size: 0.8rem;
         }
     }
+
     </style>
 
 </head>
@@ -77,16 +78,6 @@
                         </li>
                         <li class="nav-item">
                             <a href="" class="nav-link" data-bs-toggle="modal" data-bs-target="#modalT&C"><samp>T&C</samp></a>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <samp>Idioma</samp>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#"><samp>Español</samp></a></li>
-                                <li><a class="dropdown-item" href="#"><samp>Inglés</samp></a></li>
-                                <li><a class="dropdown-item" href="#"><samp>Portugués</samp></a></li>
-                            </ul>
                         </li>
                     </ul>
 
@@ -140,8 +131,40 @@
             </div>
         </div>
     </footer>
+    
+    @*BURBUJA DE COMENTARIOS PRIVADOS:*@
+    <samp>
+        <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1250; margin-bottom: 100px;">
+            <div class="card shadow-lg chat-bubble" id="chatBubble" style="display: none;">
+                <div class="card-header text-white bg-primary d-flex justify-content-between align-items-center">
+                    ¡Bienvenido!
+                    <button type="button" class="btn btn-outline-danger ms-auto" id="closeChat" aria-label="Close">X</button>
+                </div>
 
+                <div class="row card-body">
+                    <div class="col-auto">
+                        <img src="~/img/PC.png" alt="Logo" class="img-fluid footer-img">
+                    </div>
+                    <div class="col-auto">
+                        <p>
+                            Puedes dejarnos tus <br> comentarios, opiniones y/o <br> sugerencias acá...</p>
+                    </div>
+                </div>
+                <div class="card-footer d-flex">
+                    <input id="mensaje" type="text" class="form-control me-2" placeholder="Escribir...">
+                    <button id="enviar" type="submit" class="btn btn-outline-success btn-sm">Enviar</button>
+                </div>
+            </div>
 
+            <button class="btn p-0" id="chatToggle" style="background: none; border: none;">
+                <img src="~/img/globo.png" class="card-img-top" style="height: 4rem; object-fit: contain;">
+            </button>
+        </div>
+    </samp>
+
+    
+
+    </footer>
 
     <!-- Modal Historia -->
     <div class="modal fade mt-5" id="modalHistoria" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -280,6 +303,60 @@
 
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
     <script>
+
+        const chatToggle = document.getElementById('chatToggle');
+        const chatBubble = document.getElementById('chatBubble');
+        const closeChat = document.getElementById('closeChat');
+
+        // Mostrar la burbuja de chat cuando se hace clic en el botón de chat
+        chatToggle.addEventListener('click', () => {
+            chatBubble.style.display = 'block';
+            chatToggle.style.display = 'none';
+        });
+
+        // Cerrar la burbuja de chat cuando se hace clic en la "X"
+        closeChat.addEventListener('click', () => {
+            chatBubble.style.display = 'none';
+            chatToggle.style.display = 'block';
+        });
+
+        // Cerrar la burbuja de chat cuando se hace clic fuera de ella
+        document.addEventListener('click', (event) => {
+            if (!chatBubble.contains(event.target) && !chatToggle.contains(event.target)) {
+                chatBubble.style.display = 'none';
+                chatToggle.style.display = 'block';
+            }
+        });
+
+        $(document).ready(function () {
+            $('#enviar').click(function () {
+                var mensaje = $('#mensaje').val();
+
+                if (mensaje.trim() !== '') {
+                    $.ajax({
+                        url: '@Url.Action("EnviarComentario", "Correo")',
+                        type: 'POST',
+                        data: { mensaje: mensaje },
+                        success: function (response) {
+                            if (response.success) {
+                                alert(response.message);
+                                $('#mensaje').val('');  // Limpiar el input después de enviar el mensaje
+                            } else {
+                                alert(response.message);
+                            }
+                        },
+                        error: function () {
+                            alert('Error al intentar enviar el comentario.');
+                        }
+                    });
+                } else {
+                    alert('El mensaje no puede estar vacío.');
+                }
+            });
+        });
+
+
+
         $(document).ready(function () {
             $.ajax({
                 url: '@Url.Action("CargarInformacion", "Informacion")',
