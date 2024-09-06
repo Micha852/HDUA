@@ -4,6 +4,10 @@ using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using DocumentFormat.OpenXml.Office2016.Drawing.Command;
+using DinkToPdf;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Microsoft.AspNetCore.Mvc.ViewEngines;
 
 namespace HDUA.Controllers
 {
@@ -12,6 +16,15 @@ namespace HDUA.Controllers
     public class PrincipalController : Controller{
         Procesos procesos = new Procesos();
         ConexionMongo cnm = new ConexionMongo();
+
+        private readonly ICompositeViewEngine _viewEngine;
+
+        // Constructor para inyectar el servicio de ICompositeViewEngine
+        public PrincipalController(ICompositeViewEngine viewEngine)
+        {
+            _viewEngine = viewEngine;
+        }
+
         public IActionResult Principal()
         {
             return View();
@@ -93,6 +106,65 @@ namespace HDUA.Controllers
             muestra.comentarios = comentarios;
             return View(muestra);
         }
+
+        public IActionResult DescargarFichaPdf(int id)
+        {
+            MuestraModel muestra = procesos.FichaMuestra(id);
+
+            var htmlContent = RenderViewToString("FichaMuestraPDF", muestra);
+
+            var converter = new SynchronizedConverter(new PdfTools());
+            var doc = new HtmlToPdfDocument()
+            {
+                GlobalSettings = {
+            ColorMode = ColorMode.Color,
+            Orientation = Orientation.Portrait,
+            PaperSize = PaperKind.A4,
+        },
+                Objects = {
+            new ObjectSettings() {
+                PagesCount = true,
+                HtmlContent = htmlContent,
+                WebSettings = { DefaultEncoding = "utf-8" }
+            }
+        }
+            };
+
+            var pdf = converter.Convert(doc);
+
+            // Retorna el PDF generado como descarga
+            return File(pdf, "application/pdf", $"FichaMuestra_{id}.pdf");
+        }
+
+
+
+        // Método para convertir la vista en cadena HTML
+        public string RenderViewToString(string viewName, object model)
+        {
+            ViewData.Model = model;
+            using (var sw = new StringWriter())
+            {
+                var viewResult = _viewEngine.FindView(ControllerContext, viewName, false);
+                if (!viewResult.Success)
+                {
+                    throw new InvalidOperationException($"No se pudo encontrar la vista {viewName}");
+                }
+
+                var viewContext = new ViewContext(
+                    ControllerContext,
+                    viewResult.View,
+                    ViewData,
+                    TempData,
+                    sw,
+                    new HtmlHelperOptions()
+                );
+
+                viewResult.View.RenderAsync(viewContext).Wait();
+                return sw.GetStringBuilder().ToString();
+            }
+        }
+
+
 
         [HttpPost]
         public ActionResult CrearComentario(string commentInput, int hiddenInputMuestra)

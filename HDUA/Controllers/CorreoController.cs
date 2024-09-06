@@ -12,7 +12,7 @@ namespace HDUA.Controllers
             {
                 string userEmail = User.FindFirst("Email")?.Value;
                 ServicioGmail enviar = new ServicioGmail();
-                string receptor = "disleyguzman08@gmail.com";
+                string receptor = "herbario@uniamazonia.edu.co";
                 string asunto = "Nuevo Comentario/Sugerencia en HDUA";
                 string cuerpo = $"Se ha recibido un nuevo comentario o sugerencia por parte de {userEmail}:<br><br>{mensaje}";
 

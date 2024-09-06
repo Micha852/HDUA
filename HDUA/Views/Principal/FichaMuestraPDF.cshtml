@@ -1,0 +1,19 @@
+﻿@model MuestraModel
+
+<div style="position: relative; text-align: left;">
+    <!-- Imagen de fondo que cubre toda el área -->
+    <img src="data:image/jpg;base64,@Model.Imagen2.Imagen" alt="Imagen de la muestra" style="width: 100%; height: auto;">
+
+    <!-- Cuadro con la información encima de la imagen -->
+    <div style="position: absolute; bottom: 20px; right: 20px; background-color: rgba(255, 255, 255, 0.8); padding: 10px; border: 2px solid #000; max-width: 30%; font-size: 0.9em;">
+        <h4>HERBARIO UNIAMAZONIA (HUAZ)</h4>
+        <p><strong>Nombre Común: </strong>@Model.Cientifico</p>
+        <p><strong>Nombre vulgar: </strong>@Model.Vulgar</p>
+        <p><strong>Descripción: </strong>Procedencia de @Model.Procedencia a @Model.Altura metros, de características @Model.Forma, @Model.Venacion y @Model.Margen</p>
+        <p><strong>Ubicación: </strong>@Model.Ubicacion (@Model.Coordenada)</p>
+        <p><strong>Recolectores: </strong>@Model.ListaRecolectores</p>
+        <p><strong>Fecha de recolección: </strong>@Model.Fecha</p>
+        <p><strong>Proyecto de origen: </strong>@Model.Proyecto</p>
+    </div>
+
+</div>
