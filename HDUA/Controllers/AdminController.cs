@@ -47,6 +47,11 @@ namespace HDUA.Controllers
             ViewBag.mostrarrecolector = procesos.ListarRecolector();
             ViewBag.ltd = procesos.Listar("LISTARDIVISION");
             ViewBag.ltpro = procesos.Listar("LISTARPROYECTO");
+            ViewBag.lcr = procesos.Listar("LISTARCONDICION");
+            ViewBag.lor = procesos.Listar("LISTARORIGEN");
+            ViewBag.lhab = procesos.Listar("LISTARHABITAD");
+            ViewBag.lobl = procesos.Listar("LISTAROBSERVACION");
+            ViewBag.lprot = procesos.Listar("LISTARPROTOCOLO");
 
             return View();
         }
@@ -117,6 +122,14 @@ namespace HDUA.Controllers
             muestra.File = a.File;
             muestra.Division = Request.Form["division"];
             muestra.Proyecto = Request.Form["proyecto"];
+            muestra.Adultos = Request.Form["adultos"];
+            muestra.Jovenes  = Request.Form["jovenes"];
+            muestra.Condicion = Request.Form["condicion"];
+            muestra.Origen = Request.Form["origen"];
+            muestra.Elevacionmin = Request.Form["elevacionmin"];
+            muestra.Elevacionmax = Request.Form["elevacionmax"];
+            muestra.Habitad = Request.Form["habitad"];
+            muestra.ObervacionLocal = Request.Form["observacion"];
 
             ImagenModel imagen = new ImagenModel();
             imagen.Nombre = muestra.Cientifico;
@@ -143,6 +156,23 @@ namespace HDUA.Controllers
             muestra.Ids = string.Join(",", usuariosSeleccionados);
 
             procesos.CrearMuestra(muestra);
+
+            return RedirectToAction("Principal", "Principal");
+        }
+
+        [HttpPost]
+        public ActionResult CrearProyecto()
+        {
+            ProyectoModel a = new ProyectoModel();
+            a.Nombre = Request.Form["nombreProyecto"];
+            a.Inicio = Request.Form["fechaInicio"];
+            a.Fin = Request.Form["fechaFin"];
+            a.Esfuerzo = Request.Form["esfuerzoDias"];
+            a.Observacion = Request.Form["observaciones"];
+            a.Protocolo = Request.Form["selectProtocolo"];
+            a.Hinicio = Request.Form["horaInicio"];
+            a.Hfin = Request.Form["horaFin"];
+            procesos.CrearProyecto(a);
 
             return RedirectToAction("Principal", "Principal");
         }

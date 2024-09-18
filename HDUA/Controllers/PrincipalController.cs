@@ -73,6 +73,10 @@ namespace HDUA.Controllers
             ViewBag.mostrarrecolector = procesos.ListarRecolector();
             ViewBag.ldiv = procesos.Listar("LISTARDIVISION");
             ViewBag.lpro = procesos.Listar("LISTARPROYECTO");
+            ViewBag.lcr = procesos.Listar("LISTARCONDICION");
+            ViewBag.lor = procesos.Listar("LISTARORIGEN");
+            ViewBag.lhab = procesos.Listar("LISTARHABITAD");
+            ViewBag.lobl = procesos.Listar("LISTAROBSERVACION");
 
             List<MuestraModel> listamuestra = new List<MuestraModel>();
             if (Request.Form["btnCientifico"].Count > 0)
@@ -237,6 +241,14 @@ namespace HDUA.Controllers
             int estado = Request.Form.ContainsKey("estadoCheckbox") ? 1 : 0;
             string division = Request.Form["division"] + "";
             string proyecto = Request.Form["proyecto"] + "";
+            string adultos = Request.Form["adultos"] + "";
+            string jovenes = Request.Form["jovenes"] + "";
+            string condicion = Request.Form["condicion"] + "";
+            string origen = Request.Form["origen"] + "";
+            string elevacionmin = Request.Form["elevacionmin"] + "";
+            string elevacionmax = Request.Form["elevacionmax"] + "";
+            string habitad = Request.Form["habitad"] + "";
+            string observacion = Request.Form["observacion"] + "";
             if (a.File != null)
             {
                 ImagenModel fotico = new ImagenModel();
@@ -258,7 +270,9 @@ namespace HDUA.Controllers
 
             string Ids = string.Join(",", usuariosSeleccionados);
 
-            procesos.EditarMuestra(id, cientifico, vulgar, imagen, coordenada, fecha, altura, clase, orden, familia, genero, especie, ubicacion, procedencia, venacion, forma, margen, estado, cantidadRecolectores, Ids, division, proyecto);
+            procesos.EditarMuestra(id, cientifico, vulgar, imagen, coordenada, fecha, altura, clase, orden, familia,
+                genero, especie, ubicacion, procedencia, venacion, forma, margen, estado, cantidadRecolectores, Ids,
+                division, proyecto, adultos, jovenes, condicion, origen, elevacionmin, elevacionmax, habitad, observacion);
             return RedirectToAction("Principal", "Principal");
         }
 

@@ -29,5 +29,13 @@
         public bool Estado { get; set; }
         public string Division { get; set; }
         public string Proyecto { get; set; }
+        public string Adultos { get; set; }
+        public string Jovenes { get; set; }
+        public string Condicion { get; set; }
+        public string Origen { get; set; }
+        public string Elevacionmin { get; set; }
+        public string Elevacionmax { get; set; }
+        public string Habitad { get; set; }
+        public string ObervacionLocal { get; set; }
     }
 }

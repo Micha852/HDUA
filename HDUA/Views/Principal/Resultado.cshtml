@@ -28,7 +28,7 @@
         }
 
         body {
-            background-image: url('/img/_DVE3949.jpg');
+            background-image: url('/img/DSC_7852.jpg');
             background-size: cover; /* Ajusta la imagen para que cubra todo el contenedor */
             background-position: center; /* Centra la imagen en el contenedor */
             background-repeat: no-repeat; /* Evita que la imagen se repita */
@@ -119,6 +119,14 @@
                                                     data-ids="@m.ListaRecolectores"
                                                     data-division="@m.Division"
                                                     data-proyecto="@m.Proyecto"
+                                                    data-adultos="@m.Adultos"
+                                                    data-jovenes="@m.Jovenes"
+                                                    data-condicion="@m.Condicion"
+                                                    data-origen="@m.Origen"
+                                                    data-elevacionmin="@m.Elevacionmin"
+                                                    data-elevacionmax="@m.Elevacionmax"
+                                                    data-habitad="@m.Habitad"
+                                                    data-observacion="@m.ObervacionLocal"
                                                     data-bs-toggle="modal" data-bs-target="#modalEditarMuestra">
                                                 Editar muestra
                                             </button>
@@ -251,10 +259,9 @@
 
 
                                                 <div class="row mt-1">
-                                                    <h><samp>Altura de la procedencia</samp></h>
-                                                    <input type="number" class="form-control" min="1" max="100" id="altura" name="altura">
+                                                    <h><samp>Altura de la procedencia (metros)</samp></h>
+                                                    <input type="number" class="form-control" min="0.1" max="100" step="0.1" id="altura" name="altura">
                                                 </div>
-
 
                                             </div>
                                         </div>
@@ -387,8 +394,84 @@
                                     </div>
                                 </div>
 
-                                
                                 <!-- Parte 3 -->
+                                <div class="carousel-item">
+                                    <div class="container">
+                                        <div class="row">
+
+                                            <h3 class="d-flex justify-content-center align-items-center"><samp> Más Especificaciones</samp></h3>
+
+                                            <div class="col me-5 ms-5">
+                                                <div class="row mt-3">
+                                                    <h><samp>Unidades de adultos</samp></h>
+                                                    <input type="number" class="form-control" min="0" max="100" id="adultos" name="adultos">
+                                                </div>
+
+                                                <div class="row mt-3">
+                                                    <h><samp>Unidades de juveniles</samp></h>
+                                                    <input type="number" class="form-control" min="0" max="100" id="jovenes" name="jovenes">
+                                                </div>
+
+                                                <div class="row mt-3">
+                                                    <h><samp>Condición Reproductiva</samp></h>
+                                                    <select class="form-select" id="condicion" name="condicion">
+                                                        @foreach (String i in @ViewBag.lcr)
+                                                        {
+                                                            <option value="@i">@i</option>
+                                                        }
+                                                    </select>
+                                                </div>
+
+                                                <div class="row mt-3">
+                                                    <h><samp>Origen</samp></h>
+                                                    <select class="form-select" id="origen" name="origen">
+                                                        @foreach (String i in @ViewBag.lor)
+                                                        {
+                                                            <option value="@i">@i</option>
+                                                        }
+                                                    </select>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="col me-5 ms-5">
+
+                                                <div class="row mt-3">
+                                                    <h><samp>Elevación mínima (metros)</samp></h>
+                                                    <input type="number" class="form-control" min="0" max="5000" id="elevacionmin" name="elevacionmin">
+                                                </div>
+
+                                                <div class="row mt-3">
+                                                    <h><samp>Elevación máxima (metros)</samp></h>
+                                                    <input type="number" class="form-control" min="0" max="5000" id="elevacionmax" name="elevacionmax">
+                                                </div>
+
+                                                <div class="row mt-3">
+                                                    <h><samp>Condición Reproductiva</samp></h>
+                                                    <select class="form-select" id="habitad" name="habitad">
+                                                        @foreach (String i in @ViewBag.lhab)
+                                                        {
+                                                            <option value="@i">@i</option>
+                                                        }
+                                                    </select>
+                                                </div>
+
+                                                <div class="row mt-3">
+                                                    <h><samp>Origen</samp></h>
+                                                    <select class="form-select" id="observacion" name="observacion">
+                                                        @foreach (String i in @ViewBag.lobl)
+                                                        {
+                                                            <option value="@i">@i</option>
+                                                        }
+                                                    </select>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Parte 4 -->
                                 <div class="carousel-item">
                                     <div class="container">
 
@@ -502,6 +585,19 @@
                 var idsRecolectores = button.getAttribute('data-ids').split(',').map(id => id.trim());
                 var division = button.getAttribute('data-division');
                 var proyecto = button.getAttribute('data-proyecto');
+                var adultos = button.getAttribute('data-adultos');
+                var jovenes = button.getAttribute('data-jovenes');
+                var condicion = button.getAttribute('data-condicion');
+                var origen = button.getAttribute('data-origen');
+                var elevacionmin = button.getAttribute('data-elevacionmin');
+                var elevacionmax = button.getAttribute('data-elevacionmax');
+                var habitad = button.getAttribute('data-habitad');
+                var observacion = button.getAttribute('data-observacion');
+                console.log(elevacionmin);
+                console.log(elevacionmax);
+
+                altura = altura.replace(',', '.');
+
 
                 // Actualizar el contenido del modal
                 var modalTitle = modalEditarMuestra.querySelector('#modalNombreCientifico');
@@ -523,11 +619,20 @@
                 var selectFamilia = modalEditarMuestra.querySelector('#familia');
                 var inputCoordenada = modalEditarMuestra.querySelector('#coordenada');
                 var inputFecha = modalEditarMuestra.querySelector('#fecharecoleccion');
-                var selectUbicacion = modalEditarMuestra.querySelector('#ubicacionSelect'); // nuevo
+                var selectUbicacion = modalEditarMuestra.querySelector('#ubicacionSelect');
                 var estadoCheckbox = modalEditarMuestra.querySelector('#estadoCheckbox');
                 var inputImagen = modalEditarMuestra.querySelector('#ParaImagen');
                 var selectDivision = modalEditarMuestra.querySelector('#division');
                 var selectProyecto = modalEditarMuestra.querySelector('#proyecto');
+                var inputAdultos = modalEditarMuestra.querySelector('#adultos');
+                var inputJovenes = modalEditarMuestra.querySelector('#jovenes');
+                var selectCondicion = modalEditarMuestra.querySelector('#condicion');
+                var selectOrigen = modalEditarMuestra.querySelector('#origen');
+                var inputElevacionmin = modalEditarMuestra.querySelector('#elevacionmin');
+                var inputElevacionmax = modalEditarMuestra.querySelector('#elevacionmax');
+                var selectHabitad = modalEditarMuestra.querySelector('#habitad');
+                var selectObservacion = modalEditarMuestra.querySelector('#observacion');
+
 
                 inputCientifico.value = nombreCientifico;
                 inputVulgar.value = nombreVulgar;
@@ -536,6 +641,10 @@
                 inputFecha.value = fecha;
                 estadoCheckbox.checked = estado;
                 inputImagen.value = imagen;
+                inputAdultos.value = adultos;
+                inputJovenes.value = jovenes;
+                inputElevacionmin.value = elevacionmin;
+                inputElevacionmax.value = elevacionmax;
 
                 // Actualizar la tabla de recolectores
                 var tablaRecolectores = document.getElementById('tabla-recolectores').querySelector('tbody');
@@ -696,6 +805,46 @@
                     }
                 }
 
+                // Seleccionar el option correcto en el select de la condicion
+                if (selectCondicion) {
+                    for (var i = 0; i < selectCondicion.options.length; i++) {
+                        if (selectCondicion.options[i].value === condicion) {
+                            selectCondicion.selectedIndex = i;
+                            break;
+                        }
+                    }
+                }
+
+                // Seleccionar el option correcto en el select del origen
+                if (selectOrigen) {
+                    for (var i = 0; i < selectOrigen.options.length; i++) {
+                        if (selectOrigen.options[i].value === origen) {
+                            selectOrigen.selectedIndex = i;
+                            break;
+                        }
+                    }
+                }
+
+                // Seleccionar el option correcto en el select del habitad
+                if (selectHabitad) {
+                    for (var i = 0; i < selectHabitad.options.length; i++) {
+                        if (selectHabitad.options[i].value === habitad) {
+                            selectHabitad.selectedIndex = i;
+                            break;
+                        }
+                    }
+                }
+
+                // Seleccionar el option correcto en el select de la observacion
+                if (selectObservacion) {
+                    for (var i = 0; i < selectObservacion.options.length; i++) {
+                        if (selectObservacion.options[i].value === observacion) {
+                            selectObservacion.selectedIndex = i;
+                            break;
+                        }
+                    }
+                }
+
                 if (selectUbicacion && selectUbicacion.options.length > 0) {
                     selectUbicacion.options[0].value = ubicacion;
                     selectUbicacion.options[0].text = ubicacion;
@@ -707,124 +856,6 @@
                 inputId.value = idMuestra;
             });
 
-            
-
-            modalEditarMuestra.addEventListener('hidden.bs.modal', function () {
-                // Restaurar el estado inicial
-                var inputCientifico = modalEditarMuestra.querySelector('#cientifico');
-                var inputVulgar = modalEditarMuestra.querySelector('#vulgar');
-                var selectVenacion = modalEditarMuestra.querySelector('#venacion');
-                var selectForma = modalEditarMuestra.querySelector('#forma');
-                var selectMargen = modalEditarMuestra.querySelector('#margen');
-                var selectProcedencia = modalEditarMuestra.querySelector('#procedencia');
-                var inputAltura = modalEditarMuestra.querySelector('#altura');
-                var selectClase = modalEditarMuestra.querySelector('#clase');
-                var selectEspecie = modalEditarMuestra.querySelector('#especie');
-                var selectGenero = modalEditarMuestra.querySelector('#genero');
-                var selectOrden = modalEditarMuestra.querySelector('#orden');
-                var selectFamilia = modalEditarMuestra.querySelector('#familia');
-                var inputCoordenada = modalEditarMuestra.querySelector('#coordenada');
-                var inputFecha = modalEditarMuestra.querySelector('#fecharecoleccion');
-                var selectUbicacion = modalEditarMuestra.querySelector('#ubicacionSelect');
-
-
-                inputCientifico.value = initialState.cientifico;
-                inputVulgar.value = initialState.vulgar;
-                inputAltura.value = initialState.altura;
-                inputCoordenada.value = initialState.coordenada;
-                inputFecha.value = initialState.fecha;
-
-                if (selectVenacion) {
-                    for (var i = 0; i < selectVenacion.options.length; i++) {
-                        if (selectVenacion.options[i].value === initialState.venacion) {
-                            selectVenacion.selectedIndex = i;
-                            break;
-                        }
-                    }
-                }
-
-                if (selectForma) {
-                    for (var i = 0; i < selectForma.options.length; i++) {
-                        if (selectForma.options[i].value === initialState.forma) {
-                            selectForma.selectedIndex = i;
-                            break;
-                        }
-                    }
-                }
-
-                if (selectMargen) {
-                    for (var i = 0; i < selectMargen.options.length; i++) {
-                        if (selectMargen.options[i].value === initialState.margen) {
-                            selectMargen.selectedIndex = i;
-                            break;
-                        }
-                    }
-                }
-
-                if (selectProcedencia) {
-                    for (var i = 0; i < selectProcedencia.options.length; i++) {
-                        if (selectProcedencia.options[i].value === initialState.procedencia) {
-                            selectProcedencia.selectedIndex = i;
-                            break;
-                        }
-                    }
-                }
-
-                if (selectClase) {
-                    for (var i = 0; i < selectClase.options.length; i++) {
-                        if (selectClase.options[i].value === initialState.clase) {
-                            selectClase.selectedIndex = i;
-                            break;
-                        }
-                    }
-                }
-
-                if (selectEspecie) {
-                    for (var i = 0; i < selectEspecie.options.length; i++) {
-                        if (selectEspecie.options[i].value === initialState.especie) {
-                            selectEspecie.selectedIndex = i;
-                            break;
-                        }
-                    }
-                }
-
-                if (selectGenero) {
-                    for (var i = 0; i < selectGenero.options.length; i++) {
-                        if (selectGenero.options[i].value === initialState.genero) {
-                            selectGenero.selectedIndex = i;
-                            break;
-                        }
-                    }
-                }
-
-                if (selectOrden) {
-                    for (var i = 0; i < selectOrden.options.length; i++) {
-                        if (selectOrden.options[i].value === initialState.orden) {
-                            selectOrden.selectedIndex = i;
-                            break;
-                        }
-                    }
-                }
-
-                if (selectFamilia) {
-                    for (var i = 0; i < selectFamilia.options.length; i++) {
-                        if (selectFamilia.options[i].value === initialState.familia) {
-                            selectFamilia.selectedIndex = i;
-                            break;
-                        }
-                    }
-                }
-
-                if (selectUbicacion && selectUbicacion.options.length > 0) {
-                    selectUbicacion.options[0].value = initialState.ubicacion;
-                    selectUbicacion.options[0].text = initialState.ubicacion;
-                    selectUbicacion.selectedIndex = 0;
-                }
-
-                // Actualizar el campo oculto del ID
-                var inputIdMuestra = modalEditarMuestra.querySelector('#inputIdMuestra');
-                inputIdMuestra.value = initialState.idMuestra;
-            });
         });
 
         $(document).ready(function () {

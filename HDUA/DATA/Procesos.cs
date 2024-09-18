@@ -255,7 +255,8 @@ namespace HDUA.DATA
         public void EditarMuestra(int id, string cientifico, string vulgar, string imagen, string coordenada,
             string fecha, string altura, string clase, string orden, string familia, string genero, string especie,
             string ubicacion, string procedencia, string venacion, string forma, string margen, int estado,
-            int cantidad, string ids, string division, string proyecto){
+            int cantidad, string ids, string division, string proyecto, string adultos, string jovenes, string condicion,
+            string origen, string elevacionmin, string elevacionmax, string habitad, string observacion){
             conectar();
             try{
                 MySqlCommand cmd = new MySqlCommand("EDITARMUESTRA", cn);
@@ -281,6 +282,14 @@ namespace HDUA.DATA
                 cmd.Parameters.AddWithValue("IDS", ids);
                 cmd.Parameters.AddWithValue("NDIVISION", division);
                 cmd.Parameters.AddWithValue("NPROYECTO", proyecto);
+                cmd.Parameters.AddWithValue("ADULTOS", adultos);
+                cmd.Parameters.AddWithValue("JOVENES", jovenes);
+                cmd.Parameters.AddWithValue("NCONDICION", condicion);
+                cmd.Parameters.AddWithValue("NORIGEN", origen);
+                cmd.Parameters.AddWithValue("ELEVACIONMIN", elevacionmin);
+                cmd.Parameters.AddWithValue("ELEVACIONMAX", elevacionmax);
+                cmd.Parameters.AddWithValue("NHABITAD", habitad);
+                cmd.Parameters.AddWithValue("NOBSERVACION", observacion);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 cmd.ExecuteNonQuery();
             }catch (Exception ex){
@@ -342,6 +351,42 @@ namespace HDUA.DATA
                 cmd.Parameters.AddWithValue("IDS", muestra.Ids);
                 cmd.Parameters.AddWithValue("NDIVISION", muestra.Division);
                 cmd.Parameters.AddWithValue("NPROYECTO", muestra.Proyecto);
+                cmd.Parameters.AddWithValue("CADULTOS", muestra.Adultos);
+                cmd.Parameters.AddWithValue("CJOVENES", muestra.Jovenes);
+                cmd.Parameters.AddWithValue("NCONDICION", muestra.Condicion);
+                cmd.Parameters.AddWithValue("NORIGEN", muestra.Origen);
+                cmd.Parameters.AddWithValue("ELEVACIONMIN", muestra.Elevacionmin);
+                cmd.Parameters.AddWithValue("ELEVACIONMAX", muestra.Elevacionmax);
+                cmd.Parameters.AddWithValue("NHABITAD", muestra.Habitad);
+                cmd.Parameters.AddWithValue("NOBSERVACION", muestra.ObervacionLocal);
+
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+            finally
+            {
+                desconectar();
+            }
+        }
+
+        public void CrearProyecto(ProyectoModel proyecto)
+        {
+            conectar();
+            try
+            {
+                MySqlCommand cmd = new MySqlCommand("CREARPROYECTO", cn);
+                cmd.Parameters.AddWithValue("NOMBRE", proyecto.Nombre);
+                cmd.Parameters.AddWithValue("INICIO", proyecto.Inicio);
+                cmd.Parameters.AddWithValue("FIN", proyecto.Fin);
+                cmd.Parameters.AddWithValue("ESFUERZO", proyecto.Esfuerzo);
+                cmd.Parameters.AddWithValue("OBSERVACION", proyecto.Observacion);
+                cmd.Parameters.AddWithValue("NPROTOCOLO", proyecto.Protocolo);
+                cmd.Parameters.AddWithValue("HINICIO", proyecto.Hinicio);
+                cmd.Parameters.AddWithValue("HFIN", proyecto.Hfin);
 
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 cmd.ExecuteNonQuery();
@@ -460,7 +505,15 @@ namespace HDUA.DATA
                         Fecha = dr[17] +"",
                         Estado = Convert.ToBoolean(dr[18]) ? true : false,
                         Division = dr[19] +"",
-                        Proyecto = dr[20] +""
+                        Proyecto = dr[20] +"",
+                        Adultos = dr[21] +"",
+                        Jovenes = dr[22] +"",
+                        Condicion = dr[23] +"",
+                        Origen = dr[24] +"",
+                        Elevacionmin = dr[25] +"",
+                        Elevacionmax = dr[26] +"",
+                        Habitad = dr[27] +"",
+                        ObervacionLocal = dr[28] +""
                     };
                     muestra.Imagen2 = cnm.GetImage(muestra.Imagen);
                     lista.Add(muestra);
@@ -511,7 +564,15 @@ namespace HDUA.DATA
                         Fecha = dr[17] + "",
                         Estado = Convert.ToBoolean(dr[18]) ? true : false,
                         Division = dr[19] + "",
-                        Proyecto = dr[20] + ""
+                        Proyecto = dr[20] + "",
+                        Adultos = dr[21] + "",
+                        Jovenes = dr[22] + "",
+                        Condicion = dr[23] + "",
+                        Origen = dr[24] + "",
+                        Elevacionmin = dr[25] + "",
+                        Elevacionmax = dr[26] + "",
+                        Habitad = dr[27] + "",
+                        ObervacionLocal = dr[28] + ""
                     };
                     muestra.Imagen2 = cnm.GetImage(muestra.Imagen);
                     lista.Add(muestra);
@@ -568,7 +629,16 @@ namespace HDUA.DATA
                         Ubicacion = dr[16] + "",
                         Fecha = dr[17] + "",
                         Estado = Convert.ToBoolean(dr[18]) ? true : false,
-                        Division = dr[19] + ""
+                        Division = dr[19] + "",
+                        Proyecto = dr[20] +"",
+                        Adultos = dr[21] + "",
+                        Jovenes = dr[22] + "",
+                        Condicion = dr[23] + "",
+                        Origen = dr[24] + "",
+                        Elevacionmin = dr[25] + "",
+                        Elevacionmax = dr[26] + "",
+                        Habitad = dr[27] + "",
+                        ObervacionLocal = dr[28] + ""
                     };
                     muestra.Imagen2 = cnm.GetImage(muestra.Imagen);
                     lista.Add(muestra);

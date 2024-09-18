@@ -13,6 +13,8 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.3/js/bootstrap.min.js"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
 
     <title>HDUA</title>
@@ -49,16 +51,15 @@
                     </div>
                 </div>
 
-                <div class="col d-flex justify-content-center align-items-center flex-column">
-                    <form action="@Url.Action("Resultado", "Principal")" method="post">
-                        <div class="row-md-auto mt-5 text-center">
-                            <input type="text" name="nombre" class="form-control rounded-pill border border-dark" placeholder="Nombre científico" aria-describedby="button-addon1">
-                        </div>
-                        <div class="row-md-auto mt-3 text-center">
-                            <button type="submit" name="btnCientifico" class="btn btn-success" style="color: lightgray;"><samp>Buscar</samp></button>
-                        </div>
-                    </form>
-
+                <div class="col mt-5 d-flex justify-content-center align-items-center flex-column">
+                    <div class="row-md-auto text-center">
+                        <img src="~/img/proyecto.png" alt="Ícono" width="100" height="100">
+                    </div>
+                    <div class="row-md-auto text-center">
+                        <a href="@Url.Action("", "")" class="btn btn-success mt-3" style="display: block; margin: 0 auto; color: lightgray" data-bs-toggle="modal" data-bs-target="#modalAñadirProyecto">
+                            <samp>Añadir proyecto</samp>
+                        </a>
+                    </div>
                 </div>
             </div>
 
@@ -88,6 +89,7 @@
         </div>
     </div>
 
+    <!-- Modal para Añadir Muestra -->
     <div class="modal fade mt-5" id="modalAñadirMuestra" tabindex="-1" aria-labelledby="modalAñadirMuestraLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -176,7 +178,7 @@
                                                 </div>
 
                                                 <div class="row mt-3">
-                                                    <input type="number" class="form-control" min="1" max="100" placeholder="Altura de la procedencia" id="altura" name="altura" required>
+                                                    <input type="number" class="form-control" min="0.1" max="100" step="0.1" placeholder="Altura de la procedencia (Metros)" id="altura" name="altura" required>
                                                 </div>
 
                                             </div>
@@ -322,6 +324,88 @@
                                 <!-- Parte 3 -->
                                 <div class="carousel-item">
                                     <div class="container">
+                                        <div class="row">
+
+                                            <h3 class="d-flex justify-content-center align-items-center"><samp>Otras Especificaciones</samp></h3>
+
+                                            <div class="col me-5 ms-5">
+                                                <div class="row mt-3">
+                                                    <input type="number" class="form-control" min="0" max="100" placeholder="Unidades de Adultos" id="adultos" name="adultos" required>
+                                                </div>
+
+                                                <div class="row mt-3">
+                                                    <input type="number" class="form-control" min="0" max="100" placeholder="Unidades de Juveniles" id="jovenes" name="jovenes" required>
+                                                </div>
+
+                                                <div class="row mt-3">
+                                                    <select class="form-select" id="condicion" name="condicion" required>
+                                                        <option value="Seleccione">Condición Reproductiva</option>
+                                                        @foreach (String i in @ViewBag.lcr)
+                                                        {
+                                                            <option>
+                                                                @i
+                                                            </option>
+                                                        }
+                                                    </select>
+                                                </div>
+
+                                                <div class="row mt-3">
+                                                    <select class="form-select" id="origen" name="origen" required>
+                                                        <option value="Seleccione">Origen</option>
+                                                        @foreach (String i in @ViewBag.lor)
+                                                        {
+                                                            <option>
+                                                                @i
+                                                            </option>
+                                                        }
+                                                    </select>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="col me-5 ms-5">
+                                                
+                                                <div class="row mt-3">
+                                                    <input type="number" class="form-control" min="0" max="5000" placeholder="Elevación mínima (metros)" id="elevacionmin" name="elevacionmin" required>
+                                                </div>
+
+                                                <div class="row mt-3">
+                                                    <input type="number" class="form-control" min="0" max="5000" placeholder="Elevacion máxima (metros)" id="elevacionmax" name="elevacionmax" required>
+                                                </div>
+
+                                                <div class="row mt-3">
+                                                    <select class="form-select" id="habitad" name="habitad" required>
+                                                        <option value="Seleccione">Habitad</option>
+                                                        @foreach (String i in @ViewBag.lhab)
+                                                        {
+                                                            <option>
+                                                                @i
+                                                            </option>
+                                                        }
+                                                    </select>
+                                                </div>
+
+                                                <div class="row mt-3">
+                                                    <select class="form-select" id="observacion" name="observacion" required>
+                                                        <option value="Seleccione">Observación local</option>
+                                                        @foreach (String i in @ViewBag.lobl)
+                                                        {
+                                                            <option>
+                                                                @i
+                                                            </option>
+                                                        }
+                                                    </select>
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Parte 4 -->
+                                <div class="carousel-item">
+                                    <div class="container">
 
                                         <h3 class="d-flex justify-content-center align-items-center"><samp>Asociar recolectores</samp></h3>
 
@@ -393,6 +477,7 @@
         </div>
     </div>
 
+    <!-- Modal para Añadir Parametros -->
     <div class="modal fade mt-5" id="modalAñadirParametros" tabindex="-1" aria-labelledby="modalAñadirParametrosLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -408,8 +493,7 @@
                             <h5 class="text-center">Características</h5>
                             <div class="mb-3">
                                 <label for="selectCaracteristica" class="form-label">Seleccione una característica</label>
-                                <select class="form-select" id="selectCaracteristica" name="selectCaracteristica">
-                                    <option selected>Seleccionar opción</option>
+                                    <select class="form-select" id="selectCaracteristica" name="selectCaracteristica" size="5" style="overflow-y: auto;">
                                     <option>Division</option>
                                     <option>Clase</option>
                                     <option>Orden</option>
@@ -420,8 +504,11 @@
                                     <option>Tipo de forma</option>
                                     <option>Tipo de margen</option>
                                     <option>Procedencia de la muestra</option>
-                                    <option>Proyecto</option>
                                     <option>Tipo de ubicación</option>
+                                    <option>Condición reproductiva</option>
+                                    <option>Origen</option>
+                                    <option>Habitad</option>
+                                    <option>Observación local</option>
                                 </select>
                             </div>
                             <div class="mb-3">
@@ -485,8 +572,106 @@
     </div>
 </div>
 
+    <!-- Modal para Añadir Proyecto -->
+    <div class="modal fade mt-5" id="modalAñadirProyecto" tabindex="-1" aria-labelledby="modalAñadirProyectoLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalAñadirParametrosLabel">Añadir proyecto</h5>
+                    <button type="button" class="btn btn-outline-danger ms-auto" id="cerrarAP" data-bs-dismiss="modal" aria-label="Close"><samp>X</samp></button>
+                </div>
+                <div class="modal-body" style="background-color: #C2E6D6">
+                    <form id="formularioproyecto" action="@Url.Action("CrearProyecto","Admin")" method="post">
+                        <div class="row">
+
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="nombreProyecto" class="form-label">Nombre del Proyecto</label>
+                                    <input type="text" class="form-control" id="nombreProyecto" name="nombreProyecto" placeholder="Ingresar nombre..." required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="selectProtocolo" class="form-label">Protocolo de Muestreo</label>
+                                    <select class="form-select" id="selectProtocolo" name="selectProtocolo" required>
+                                        <option value="">Seleccionar...</option>
+                                        @foreach (String i in @ViewBag.lprot)
+                                        {
+                                            <option>@i</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="fechaInicio" class="form-label">Fecha de Inicio</label>
+                                    <input type="date" class="form-control" id="fechaInicio" name="fechaInicio" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="fechaFin" class="form-label">Fecha de Fin</label>
+                                    <input type="date" class="form-control" id="fechaFin" name="fechaFin" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="esfuerzoDias" class="form-label">Esfuerzo en Días</label>
+                                    <input type="number" class="form-control" min="0" max="100" id="esfuerzoDias" name="esfuerzoDias" placeholder="Número de días..." required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="observaciones" class="form-label">Observaciones</label>
+                                    <textarea class="form-control" id="observaciones" name="observaciones" rows="3" placeholder="Añadir observaciones"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Nueva fila con Hora de Inicio y Hora de Fin -->
+                        <div class="row">
+                            <!-- Hora de Inicio -->
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="horaInicio" class="form-label">Hora de Inicio</label>
+                                    <input type="text" class="form-control" id="horaInicio" name="horaInicio" required>
+                                </div>
+                            </div>
+
+                            <!-- Hora de Fin -->
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="horaFin" class="form-label">Hora de Fin</label>
+                                    <input type="text" class="form-control" id="horaFin" name="horaFin" required>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal"><samp>Cancelar</samp></button>
+                    <button type="submit" class="btn btn-outline-success" form="formularioproyecto"><samp>Finalizar</samp></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <script>
+        flatpickr("#horaInicio", {
+            enableTime: true,
+            noCalendar: true,
+            dateFormat: "H:i", // 24-hour format
+            time_24hr: true
+        });
+
+        flatpickr("#horaFin", {
+            enableTime: true,
+            noCalendar: true,
+            dateFormat: "H:i", // 24-hour format
+            time_24hr: true
+        });
+
         document.addEventListener('DOMContentLoaded', (event) => {
             const formulario = document.getElementById('formulario');
 
