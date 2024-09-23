@@ -7,6 +7,8 @@ using DinkToPdf.Contracts;
 using Microsoft.AspNetCore.Http.Extensions;
 using ClosedXML.Excel;
 using DocumentFormat.OpenXml.Spreadsheet;
+using System.Diagnostics;
+using System.Data;
 
 
 namespace HDUA.Controllers
@@ -130,6 +132,9 @@ namespace HDUA.Controllers
             muestra.Elevacionmax = Request.Form["elevacionmax"];
             muestra.Habitad = Request.Form["habitad"];
             muestra.ObervacionLocal = Request.Form["observacion"];
+            muestra.Catalogo = Request.Form["ncatalogo"];
+            muestra.Registro = Request.Form["nregistro"];
+            muestra.Autor = Request.Form["autor"];
 
             ImagenModel imagen = new ImagenModel();
             imagen.Nombre = muestra.Cientifico;
@@ -183,6 +188,7 @@ namespace HDUA.Controllers
             ubi.Nombre = Request.Form["inputUbicacion"];
             ubi.Tipoubi = Request.Form["selectTipoUbicacion"];
             ubi.Municipio = Request.Form["municipioSelect2"];
+            ubi.Cuerpodeagua = Request.Form["selectcuerpodeagua"];
             procesos.CrearUbicacion(ubi);
             return RedirectToAction("GestionMuestra", "Admin");
         }
@@ -298,5 +304,27 @@ namespace HDUA.Controllers
             }
         }
 
+        [HttpPost]
+        public IActionResult GenerarInforme(DateTime inicio, DateTime fin)
+        {
+            // Obtener los datos filtrados por las fechas
+            DataTable datos = procesos.ObtenerDatosInforme(inicio, fin);
+
+            // Generar el archivo Excel
+            byte[] archivoExcel = procesos.GenerarInformeExcel(datos);
+
+            // Devolver el archivo Excel como un archivo descargable
+            return File(archivoExcel, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "InformeDarwinCore.xlsx");
+        }
+
+        [HttpPost]
+        public IActionResult EditarParametros(string categoria, string opcion, string nuevoValor)
+        {
+            // Llamada al método EditarParametros de la clase Procesos
+            procesos.EditarParametros(categoria, opcion, nuevoValor);
+
+            // Redirigir a la página principal o a una vista de éxito
+            return RedirectToAction("GestionMuestra", "Admin");
+        }
     }
 }

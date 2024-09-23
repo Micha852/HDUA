@@ -127,6 +127,9 @@
                                                     data-elevacionmax="@m.Elevacionmax"
                                                     data-habitad="@m.Habitad"
                                                     data-observacion="@m.ObervacionLocal"
+                                                    data-catalogo="@m.Catalogo"
+                                                    data-registro="@m.Registro"
+                                                    data-autor="@m.Autor"
                                                     data-bs-toggle="modal" data-bs-target="#modalEditarMuestra">
                                                 Editar muestra
                                             </button>
@@ -407,12 +410,12 @@
                                                     <input type="number" class="form-control" min="0" max="100" id="adultos" name="adultos">
                                                 </div>
 
-                                                <div class="row mt-3">
+                                                <div class="row mt-1">
                                                     <h><samp>Unidades de juveniles</samp></h>
                                                     <input type="number" class="form-control" min="0" max="100" id="jovenes" name="jovenes">
                                                 </div>
 
-                                                <div class="row mt-3">
+                                                <div class="row mt-1">
                                                     <h><samp>Condición Reproductiva</samp></h>
                                                     <select class="form-select" id="condicion" name="condicion">
                                                         @foreach (String i in @ViewBag.lcr)
@@ -422,7 +425,7 @@
                                                     </select>
                                                 </div>
 
-                                                <div class="row mt-3">
+                                                <div class="row mt-1">
                                                     <h><samp>Origen</samp></h>
                                                     <select class="form-select" id="origen" name="origen">
                                                         @foreach (String i in @ViewBag.lor)
@@ -432,21 +435,31 @@
                                                     </select>
                                                 </div>
 
+                                                <div class="row mt-1">
+                                                    <h><samp>Número de catálogo</samp></h>
+                                                    <input type="text" class="form-control" placeholder="Número de catálogo" oninput="this.value = this.value.toUpperCase()" id="catalogo" name="catalogo">
+                                                </div>
+
+                                                <div class="row mt-1">
+                                                    <h><samp>Número de registro</samp></h>
+                                                    <input type="text" class="form-control" placeholder="Número de registro" oninput="this.value = this.value.toUpperCase()" id="registro" name="registro">
+                                                </div>
+
                                             </div>
 
                                             <div class="col me-5 ms-5">
 
-                                                <div class="row mt-3">
+                                                <div class="row mt-1">
                                                     <h><samp>Elevación mínima (metros)</samp></h>
                                                     <input type="number" class="form-control" min="0" max="5000" id="elevacionmin" name="elevacionmin">
                                                 </div>
 
-                                                <div class="row mt-3">
+                                                <div class="row mt-1">
                                                     <h><samp>Elevación máxima (metros)</samp></h>
                                                     <input type="number" class="form-control" min="0" max="5000" id="elevacionmax" name="elevacionmax">
                                                 </div>
 
-                                                <div class="row mt-3">
+                                                <div class="row mt-1">
                                                     <h><samp>Condición Reproductiva</samp></h>
                                                     <select class="form-select" id="habitad" name="habitad">
                                                         @foreach (String i in @ViewBag.lhab)
@@ -456,7 +469,7 @@
                                                     </select>
                                                 </div>
 
-                                                <div class="row mt-3">
+                                                <div class="row mt-1">
                                                     <h><samp>Origen</samp></h>
                                                     <select class="form-select" id="observacion" name="observacion">
                                                         @foreach (String i in @ViewBag.lobl)
@@ -464,6 +477,11 @@
                                                             <option value="@i">@i</option>
                                                         }
                                                     </select>
+                                                </div>
+
+                                                <div class="row mt-1">
+                                                    <h><samp>Autor nombre científico</samp></h>
+                                                    <input type="text" class="form-control" placeholder="Autor nombre científico" oninput="this.value = this.value.toUpperCase()" id="autor" name="autor">
                                                 </div>
 
                                             </div>
@@ -593,8 +611,11 @@
                 var elevacionmax = button.getAttribute('data-elevacionmax');
                 var habitad = button.getAttribute('data-habitad');
                 var observacion = button.getAttribute('data-observacion');
-                console.log(elevacionmin);
-                console.log(elevacionmax);
+                var catalogo = button.getAttribute('data-catalogo');
+                var registro = button.getAttribute('data-registro');
+                var autor = button.getAttribute('data-autor');
+
+                console.log(catalogo, registro, autor)
 
                 altura = altura.replace(',', '.');
 
@@ -632,7 +653,9 @@
                 var inputElevacionmax = modalEditarMuestra.querySelector('#elevacionmax');
                 var selectHabitad = modalEditarMuestra.querySelector('#habitad');
                 var selectObservacion = modalEditarMuestra.querySelector('#observacion');
-
+                var inputCatalogo = modalEditarMuestra.querySelector('#catalogo');
+                var inputRegistro = modalEditarMuestra.querySelector('#registro');
+                var inputAutor = modalEditarMuestra.querySelector('#autor');
 
                 inputCientifico.value = nombreCientifico;
                 inputVulgar.value = nombreVulgar;
@@ -645,6 +668,9 @@
                 inputJovenes.value = jovenes;
                 inputElevacionmin.value = elevacionmin;
                 inputElevacionmax.value = elevacionmax;
+                inputCatalogo.value = catalogo;
+                inputRegistro.value = registro;
+                inputAutor.value = autor;
 
                 // Actualizar la tabla de recolectores
                 var tablaRecolectores = document.getElementById('tabla-recolectores').querySelector('tbody');

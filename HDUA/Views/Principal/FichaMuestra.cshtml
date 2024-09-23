@@ -90,7 +90,15 @@
                                                     <div class="col mt-2" style="font-size: 1.5rem;">
                                                         <label for="nombreComun" class="mt-2"><u>Nombre común</u>: @Model.Vulgar</label>
                                                             
-                                                        <label for="nombreCientifico" class="mt-2"><u>Nombre científico</u>: @Model.Cientifico</label>
+                                                        <label for="nombreCientifico" class="mt-2">
+                                                            <u>Nombre científico</u>:
+                                                            @Model.Cientifico
+                                                            @if (@Model.Especie != "NO APLICA")
+                                                            {
+                                                                @Model.Especie
+                                                            }
+                                                        </label>
+
                                                             
                                                         <label for="descripcion" class="mt-2"><u>Descripción</u>: @Model.Procedencia de @Model.Altura metros, con características de hojas en forma @Model.Forma, venación @Model.Venacion y margen @Model.Margen</label>
                                                     
@@ -109,6 +117,7 @@
                                                     <div class="col mt-2">
                                                         <div id="map" style="height: 400px;"></div> <!-- Contenedor para el mapa -->
                                                         <label for="coordenadas" class="mt-2"><u>Coordenadas</u>: @Model.Coordenada</label>
+                                                        <label for="elevacion" class="mt-2"><u>Elevación</u>: Entre @Model.Elevacionmin y @Model.Elevacionmax metros</label>
                                                     </div>
 
 
@@ -119,11 +128,11 @@
 
                                                         <label for="orden" class="mt-2"><u>Orden</u>: @Model.Orden</label><br>
 
-                                                        <label for="especie" class="mt-2"><u>Especie</u>: @Model.Especie</label><br>
-
                                                         <label for="familia" class="mt-2"><u>Familia</u>: @Model.Familia</label><br>
 
                                                         <label for="genero" class="mt-2"><u>Género</u>: @Model.Genero</label><br>
+
+                                                        <label for="especie" class="mt-2"><u>Especie</u>: @Model.Especie</label><br>
 
                                                         <label for="ubicacion" class="mt-2"><u>Ubicación</u>: Departamento del @Model.Ubicacion</label>
 

@@ -1,5 +1,4 @@
 ﻿using MySql.Data.MySqlClient;
-//using Org.BouncyCastle.Crypto.Tls;
 using HDUA.Models;
 using System.ComponentModel;
 using System.Data;
@@ -12,6 +11,8 @@ using System;
 using DocumentFormat.OpenXml.Office2010.Excel;
 using System.Runtime.Intrinsics.X86;
 using DocumentFormat.OpenXml.Wordprocessing;
+using ClosedXML.Excel;
+
 
 namespace HDUA.DATA
 {
@@ -256,7 +257,8 @@ namespace HDUA.DATA
             string fecha, string altura, string clase, string orden, string familia, string genero, string especie,
             string ubicacion, string procedencia, string venacion, string forma, string margen, int estado,
             int cantidad, string ids, string division, string proyecto, string adultos, string jovenes, string condicion,
-            string origen, string elevacionmin, string elevacionmax, string habitad, string observacion){
+            string origen, string elevacionmin, string elevacionmax, string habitad, string observacion,
+            string catalogo, string registro, string autor){
             conectar();
             try{
                 MySqlCommand cmd = new MySqlCommand("EDITARMUESTRA", cn);
@@ -290,6 +292,9 @@ namespace HDUA.DATA
                 cmd.Parameters.AddWithValue("ELEVACIONMAX", elevacionmax);
                 cmd.Parameters.AddWithValue("NHABITAD", habitad);
                 cmd.Parameters.AddWithValue("NOBSERVACION", observacion);
+                cmd.Parameters.AddWithValue("NCATALOGO", catalogo);
+                cmd.Parameters.AddWithValue("NREGISTRO", registro);
+                cmd.Parameters.AddWithValue("NAUTOR", autor);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 cmd.ExecuteNonQuery();
             }catch (Exception ex){
@@ -359,6 +364,9 @@ namespace HDUA.DATA
                 cmd.Parameters.AddWithValue("ELEVACIONMAX", muestra.Elevacionmax);
                 cmd.Parameters.AddWithValue("NHABITAD", muestra.Habitad);
                 cmd.Parameters.AddWithValue("NOBSERVACION", muestra.ObervacionLocal);
+                cmd.Parameters.AddWithValue("NCATALOGO", muestra.Catalogo);
+                cmd.Parameters.AddWithValue("NREGISTRO", muestra.Registro);
+                cmd.Parameters.AddWithValue("NOMBREAUTOR", muestra.Autor);
 
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 cmd.ExecuteNonQuery();
@@ -513,7 +521,10 @@ namespace HDUA.DATA
                         Elevacionmin = dr[25] +"",
                         Elevacionmax = dr[26] +"",
                         Habitad = dr[27] +"",
-                        ObervacionLocal = dr[28] +""
+                        ObervacionLocal = dr[28] +"",
+                        Catalogo = dr[29] +"",
+                        Registro = dr[30] +"",
+                        Autor = dr[31] +""
                     };
                     muestra.Imagen2 = cnm.GetImage(muestra.Imagen);
                     lista.Add(muestra);
@@ -572,7 +583,10 @@ namespace HDUA.DATA
                         Elevacionmin = dr[25] + "",
                         Elevacionmax = dr[26] + "",
                         Habitad = dr[27] + "",
-                        ObervacionLocal = dr[28] + ""
+                        ObervacionLocal = dr[28] + "",
+                        Catalogo = dr[29] + "",
+                        Registro = dr[30] + "",
+                        Autor = dr[31] + ""
                     };
                     muestra.Imagen2 = cnm.GetImage(muestra.Imagen);
                     lista.Add(muestra);
@@ -638,7 +652,10 @@ namespace HDUA.DATA
                         Elevacionmin = dr[25] + "",
                         Elevacionmax = dr[26] + "",
                         Habitad = dr[27] + "",
-                        ObervacionLocal = dr[28] + ""
+                        ObervacionLocal = dr[28] + "",
+                        Catalogo = dr[29] + "",
+                        Registro = dr[30] + "",
+                        Autor = dr[31] + ""
                     };
                     muestra.Imagen2 = cnm.GetImage(muestra.Imagen);
                     lista.Add(muestra);
@@ -687,7 +704,9 @@ namespace HDUA.DATA
                         Ubicacion = rd[16] + "",
                         ListaRecolectores = rd[17] + "",
                         Fecha = rd[18]+"",
-                        Proyecto = rd[19]+""
+                        Proyecto = rd[19]+"",
+                        Elevacionmin = rd[20]+"",
+                        Elevacionmax = rd[21]+""
 
                     };
                     muestra.Imagen2 = cnm.GetImage(muestra.Imagen);
@@ -744,6 +763,7 @@ namespace HDUA.DATA
                 cmd.Parameters.AddWithValue("MUNI", ubi.Municipio);
                 cmd.Parameters.AddWithValue("TIPOUBI", ubi.Tipoubi);
                 cmd.Parameters.AddWithValue("NOMBRE", ubi.Nombre);
+                cmd.Parameters.AddWithValue("ISCDA", ubi.Cuerpodeagua);
 
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 cmd.ExecuteNonQuery();
@@ -909,6 +929,78 @@ namespace HDUA.DATA
                 desconectar();
             }
             return datos;
+        }
+
+        //Para la consulta de Darwin Core
+        public DataTable ObtenerDatosInforme(DateTime inicio, DateTime fin)
+        {
+            conectar();
+            DataTable dt = new DataTable();
+
+            try
+            {
+                string query = "CALL DARWINCORE(@inicio, @fin)"; // Llamar el procedimiento almacenado
+                MySqlCommand cmd = new MySqlCommand(query, cn);
+                cmd.Parameters.AddWithValue("@inicio", inicio);
+                cmd.Parameters.AddWithValue("@fin", fin);
+
+                MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+                da.Fill(dt); // Llenar el DataTable con los resultados
+            }
+            catch (Exception ex)
+            {
+                // Manejar la excepción según corresponda
+                Console.WriteLine(ex.ToString());
+            }
+            finally
+            {
+                desconectar();
+            }
+
+            return dt;
+        }
+
+        public byte[] GenerarInformeExcel(DataTable datos)
+        {
+            using (var workbook = new XLWorkbook())
+            {
+                var worksheet = workbook.Worksheets.Add("Informe");
+                worksheet.Cell(1, 1).InsertTable(datos); // Insertar el DataTable en la hoja
+
+                using (var stream = new System.IO.MemoryStream())
+                {
+                    workbook.SaveAs(stream); // Guardar el archivo Excel en un MemoryStream
+                    return stream.ToArray(); // Devolver el archivo en formato byte[]
+                }
+            }
+        }
+
+        public void EditarParametros(string tabla, string parametro, string cambio)
+        {
+            conectar();
+            try
+            {
+                // Llamada al procedimiento almacenado EDITARPARAMETROS
+                MySqlCommand cmd = new MySqlCommand("EDITARPARAMETROS", cn);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+                // Agregar los parámetros al comando
+                cmd.Parameters.AddWithValue("TABLA", tabla);
+                cmd.Parameters.AddWithValue("PARAMETRO", parametro);
+                cmd.Parameters.AddWithValue("CAMBIO", cambio);
+
+                // Ejecutar el comando
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                // Manejo de errores
+                Console.WriteLine(ex.Message);
+            }
+            finally
+            {
+                desconectar();
+            }
         }
 
     }

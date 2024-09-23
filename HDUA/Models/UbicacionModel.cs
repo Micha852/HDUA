@@ -7,5 +7,6 @@
         public Boolean Estado { get; set; }
         public string Tipoubi { get; set; }
         public string Municipio { get; set; }
+        public string Cuerpodeagua { get; set; }
     }
 }

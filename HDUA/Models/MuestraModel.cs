@@ -37,5 +37,8 @@
         public string Elevacionmax { get; set; }
         public string Habitad { get; set; }
         public string ObervacionLocal { get; set; }
+        public string Catalogo { get; set; }
+        public string Registro { get; set; }
+        public string Autor { get; set; }
     }
 }

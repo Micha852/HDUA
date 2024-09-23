@@ -73,17 +73,24 @@
                     </a>
                 </div>
 
-                <div class="row-md-auto text-center">
-                    <div class="row-md-auto mt-5 text-center">
-                        <img src="~/img/flechatras2.png" alt="Ícono" width="100" height="100">
-                    </div>
-                    <div class="row-md-auto mt-3 text-center">
-                        <a href="@Url.Action("Principal", "Admin")" class="btn btn-success" style="color: lightgray">
-                            <samp>Volver</samp>
-                        </a>
-                    </div>
+                <div class="col mt-5 d-flex justify-content-center align-items-center flex-column">
+                    <img src="~/img/editarp.png" alt="Ícono" width="100" height="100">
+                    <a href="#" class="btn btn-success mt-3" style="display: block; margin: 0 auto; color: lightgray" data-bs-toggle="modal" data-bs-target="#modalEditarParametros">
+                        <samp>Editar parámetros</samp>
+                    </a>
                 </div>
 
+            </div>
+
+            <div class="row-md-auto text-center">
+                <div class="row-md-auto text-center">
+                    <img src="~/img/flechatras2.png" alt="Ícono" width="100" height="100">
+                </div>
+                <div class="row-md-auto text-center">
+                    <a href="@Url.Action("Principal", "Admin")" class="btn btn-success" style="color: lightgray">
+                        <samp>Volver</samp>
+                    </a>
+                </div>
             </div>
 
         </div>
@@ -361,6 +368,14 @@
                                                     </select>
                                                 </div>
 
+                                                <div class="row mt-3">
+                                                    <input type="text" class="form-control" placeholder="Número de catlálogo" oninput="this.value = this.value.toLowerCase()" id="ncatalogo" name="ncatalogo" required>
+                                                </div>
+
+                                                <div class="row mt-3">
+                                                    <input type="text" class="form-control" placeholder="Número de registro" oninput="this.value = this.value.toLowerCase()" id="nregistro" name="nregistro" required>
+                                                </div>
+
                                             </div>
 
                                             <div class="col me-5 ms-5">
@@ -395,6 +410,10 @@
                                                             </option>
                                                         }
                                                     </select>
+                                                </div>
+
+                                                <div class="row mt-3">
+                                                    <input type="text" class="form-control" placeholder="Autor nombre científico" id="autor" name="autor" required>
                                                 </div>
 
                                             </div>
@@ -509,7 +528,7 @@
                                     <option>Origen</option>
                                     <option>Habitad</option>
                                     <option>Observación local</option>
-                                </select>
+                                    </select>
                             </div>
                             <div class="mb-3">
                                 <label for="inputCaracteristica" class="form-label">Nombre</label>
@@ -557,6 +576,13 @@
                             <div class="mb-3">
                                 <label for="inputUbicacion" class="form-label">Nombre</label>
                                 <input type="text" class="form-control" id="inputUbicacion" name="inputUbicacion" placeholder="Ingrese el nombre...">
+                            </div>
+                            <div class="mb-3">
+                                <label for="cuerpodeagua" class="form-label">¿Es un cuerpo de agua?</label>
+                                <select class="form-select" id="selectcuerpodeagua" name="selectcuerpodeagua">
+                                    <option>Sí</option>
+                                    <option>No</option>
+                                </select>
                             </div>
                             <div class="text-center">
                                 <button type="submit" class="btn btn-success">Guardar</button>
@@ -656,6 +682,57 @@
         </div>
     </div>
 
+    <!-- Modal para Editar Parametros -->
+    <div class="modal fade mt-5" id="modalEditarParametros" tabindex="-1" aria-labelledby="modalEditarParametros" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalAñadirParametrosLabel">Editar parámetros</h5>
+                    <button type="button" class="btn btn-outline-danger ms-auto" id="cerrarAP" data-bs-dismiss="modal" aria-label="Close"><samp>X</samp></button>
+                </div>
+                <div class="modal-body" style="background-color: #C2E6D6">
+                    <form id="formularioEditar" method="post" action="@Url.Action("EditarParametros", "Admin")">
+                        <div class="mb-3">
+                            <label for="selectCategoria" class="form-label">Seleccionar característica</label>
+                            <select class="form-select" id="selectCategoria" name="categoria" onchange="actualizarOpciones()" required>
+                                <option value="" selected>Seleccionar...</option>
+                                <option>TIPO DE VENACION</option>
+                                <option>TIPO DE FORMA</option>
+                                <option>TIPO DE MARGEN</option>
+                                <option>PROCEDENCIA</option>
+                                <option>DIVISION</option>
+                                <option>CLASE</option>
+                                <option>GENERO</option>
+                                <option>ORDEN</option>
+                                <option>FAMILIA</option>
+                                <option>PROYECTO DE ORIGEN</option>
+                                <option>CONDICION REPRODUCTIVA</option>
+                                <option>ORIGEN</option>
+                                <option>HABITAD</option>
+                                <option>OBSERVACION LOCAL</option>
+                                <option>PROTOCOLO DE MUESTREO</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="selectOpciones" class="form-label">Opciones disponibles</label>
+                            <select class="form-select" id="selectOpciones" name="opcion" required>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="nuevoValor" class="form-label">Nuevo valor</label>
+                            <input type="text" class="form-control" id="nuevoValor" name="nuevoValor" placeholder="Ingrese el nuevo valor" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal"><samp>Cancelar</samp></button>
+                    <button type="submit" class="btn btn-outline-success" form="formularioEditar"><samp>Finalizar</samp></button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script>
         flatpickr("#horaInicio", {
@@ -813,6 +890,55 @@
                 }
             });
         });
+
+        function actualizarOpciones() {
+            var categoria = document.getElementById("selectCategoria").value;
+            var selectOpciones = document.getElementById("selectOpciones");
+
+            // Limpiar las opciones anteriores
+            selectOpciones.innerHTML = '';
+
+            // Dependiendo de la categoría seleccionada, actualiza las opciones
+            if (categoria === 'TIPO DE VENACION') {
+                var opciones = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.ltv));
+            } else if (categoria === 'TIPO DE FORMA') {
+                var opciones = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.ltf));
+            } else if (categoria === 'TIPO DE MARGEN') {
+                var opciones = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.ltM));
+            } else if (categoria === 'PROCEDENCIA') {
+                var opciones = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.ltp));
+            } else if (categoria === 'DIVISION') {
+                var opciones = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.ltd));
+            } else if (categoria === 'CLASE') {
+                var opciones = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.ltc));
+            } else if (categoria === 'GENERO') {
+                var opciones = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.ltg));
+            } else if (categoria === 'ORDEN') {
+                var opciones = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.lto));
+            } else if (categoria === 'FAMILIA') {
+                var opciones = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.ltfami));
+            } else if (categoria === 'PROYECTO DE ORIGEN') {
+                var opciones = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.ltpro));
+            } else if (categoria === 'CONDICION REPRODUCTIVA') {
+                var opciones = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.lcr));
+            } else if (categoria === 'ORIGEN') {
+                var opciones = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.lor));
+            } else if (categoria === 'HABITAD') {
+                var opciones = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.lhab));
+            } else if (categoria === 'OBSERVACION LOCAL') {
+                var opciones = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.lobl));
+            } else if (categoria === 'PROTOCOLO DE MUESTREO') {
+                var opciones = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.lprot));
+            }
+
+            // Llenar el select con las nuevas opciones
+            opciones.forEach(function (opcion) {
+                var opt = document.createElement('option');
+                opt.value = opcion;
+                opt.innerHTML = opcion;
+                selectOpciones.appendChild(opt);
+            });
+        }
     </script>
 
 </body>

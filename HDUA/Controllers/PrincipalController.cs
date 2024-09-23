@@ -249,6 +249,9 @@ namespace HDUA.Controllers
             string elevacionmax = Request.Form["elevacionmax"] + "";
             string habitad = Request.Form["habitad"] + "";
             string observacion = Request.Form["observacion"] + "";
+            string catalogo = Request.Form["catalogo"] + "";
+            string registro = Request.Form["registro"] + "";
+            string autor = Request.Form["autor"] + "";
             if (a.File != null)
             {
                 ImagenModel fotico = new ImagenModel();
@@ -272,7 +275,8 @@ namespace HDUA.Controllers
 
             procesos.EditarMuestra(id, cientifico, vulgar, imagen, coordenada, fecha, altura, clase, orden, familia,
                 genero, especie, ubicacion, procedencia, venacion, forma, margen, estado, cantidadRecolectores, Ids,
-                division, proyecto, adultos, jovenes, condicion, origen, elevacionmin, elevacionmax, habitad, observacion);
+                division, proyecto, adultos, jovenes, condicion, origen, elevacionmin, elevacionmax, habitad, observacion,
+                catalogo, registro, autor);
             return RedirectToAction("Principal", "Principal");
         }
 
