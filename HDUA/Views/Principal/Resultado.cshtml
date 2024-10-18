@@ -29,12 +29,151 @@
 
         body {
             background-image: url('/img/DSC_7852.jpg');
-            background-size: cover; /* Ajusta la imagen para que cubra todo el contenedor */
-            background-position: center; /* Centra la imagen en el contenedor */
-            background-repeat: no-repeat; /* Evita que la imagen se repita */
+            background-size: cover; /* Permite que la imagen cubra el área visible */
+            background-position: center;
+            background-repeat: repeat-y; /* Repite la imagen solo verticalmente */
             width: 100%;
-            height: 100vh; /* Ajusta la altura para que ocupe toda la pantalla */
+            height: auto; /* Deja que el fondo cubra toda la página según el contenido */
+            min-height: 100vh; /* Asegura que siempre cubra al menos la pantalla visible */
         }
+
+        /* Estilos generales para el modal */
+    .modal-content {
+        width: 100%;
+        padding: 20px;
+    }
+
+    .modal-header,
+    .modal-footer {
+        text-align: center;
+    }
+
+    .carousel-inner .container {
+        max-width: 100%;
+        padding: 0 15px;
+    }
+
+    .col {
+        padding: 10px;
+    }
+
+    .row.mt-5 {
+        margin-top: 3rem;
+    }
+/* Media query para pantallas menores o iguales a 900px */
+@@media (max-width: 900px) {
+    .row.mt-5 {
+        margin-top: 2rem;
+    }
+
+    .col {
+        padding: 10px;
+    }
+
+    .panel-heading {
+        font-size: 1.5rem;
+    }
+
+    .modal-dialog {
+        max-width: 700px;
+        margin: 20px auto;
+    }
+
+    .carousel-inner .container {
+        padding: 0 10px;
+    }
+
+    .col {
+        margin-bottom: 20px;
+    }
+}
+
+/* Media query para pantallas menores o iguales a 480px */
+@@media (max-width: 480px) {
+    .row.mt-5 {
+        margin-top: 1.5rem;
+    }
+
+    .col {
+        padding: 5px;
+        text-align: center;
+    }
+
+    .panel-heading {
+        font-size: 1.2rem;
+    }
+
+    .modal-dialog {
+        max-width: 90%;
+        margin: 20px auto;
+    }
+
+    .modal-header h5 {
+        font-size: 1.2rem;
+    }
+
+    .col {
+        padding: 5px;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    input[type="date"],
+    select {
+        font-size: 0.9rem;
+    }
+
+    .carousel-control-prev-icon,
+    .carousel-control-next-icon {
+        width: 30px;
+        height: 30px;
+    }
+}
+
+/* Media query para pantallas menores o iguales a 420px */
+@@media (max-width: 420px) {
+    .row.mt-5 {
+        margin-top: 1rem;
+    }
+
+    .col {
+        padding: 5px;
+        text-align: center;
+    }
+
+    .panel-heading {
+        font-size: 1rem;
+    }
+
+    .modal-dialog {
+        max-width: 95%;
+    }
+
+    .modal-header h5 {
+        font-size: 1rem;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    input[type="date"],
+    select {
+        font-size: 0.8rem;
+    }
+
+    .btn {
+        font-size: 0.8rem;
+    }
+
+    .carousel-control-prev,
+    .carousel-control-next {
+        width: 50%;
+    }
+
+    .form-check-label {
+        font-size: 0.8rem;
+    }
+}
+
     </style>
 </head>
 
@@ -42,16 +181,8 @@
 <body>
 
     <div class="row mt-5">
-        <div class="col d-flex justify-content-end align-items-end">
-            <h3>___________________________</h3>
-        </div>
-
         <div class="col d-flex justify-content-center align-items-center" style="background-color: rgba(128, 128, 128, 0.5);">
             <h3 class="panel-heading"><samp>RESULTADOS DE LA BÚSQUEDA</samp></h3>
-        </div>
-
-        <div class="col d-flex justify-content-start align-items-start">
-            <h3>___________________________</h3>
         </div>
     </div>
 
@@ -153,9 +284,23 @@
     </samp>
 
     <!--................................................................-->
-    <div class="col mt-3 d-flex justify-content-center align-items-center flex-column">
+    <div class="col d-flex justify-content-center align-items-center flex-column">
         <div class="row-md-auto text-center">
             <a href="@Url.Action("Principal", "Principal")" class="btn btn-success" style="display: block; margin: 0 auto; color: lightgray">Volver a buscar</a>
+        </div>
+    </div>
+
+    <div class="mt-lg-5">
+        <div class="row mt-lg-5">
+            <div class="col mt-lg-5">
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-lg-5">
+        <div class="row mt-lg-5">
+            <div class="col mt-lg-5">
+            </div>
         </div>
     </div>
 

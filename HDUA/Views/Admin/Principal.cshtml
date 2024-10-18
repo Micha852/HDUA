@@ -17,26 +17,129 @@
             background-color: lightgray;
         }
 
+        /* Estilos generales */
+.container {
+    max-width: 100%;
+}
+
+.border {
+    padding: 15px;
+    border-radius: 10px;
+}
+
+.row .col {
+    text-align: center;
+}
+
+/* Media query para pantallas menores o iguales a 900px */
+@@media (max-width: 900px) {
+    .panel-heading {
+        font-size: 1.8rem;
+        text-align: center;
+    }
+
+    .border {
+        margin: 20px auto;
+        padding: 15px;
+    }
+
+    .border .row {
+        flex-direction: column;
+    }
+
+    .col img {
+        max-width: 70px;
+        height: auto;
+        margin: 10px 0;
+    }
+
+    .col {
+        margin-bottom: 10px;
+    }
+
+    .col a {
+        font-size: 1.2rem;
+    }
+}
+
+/* Media query para pantallas menores o iguales a 480px */
+@@media (max-width: 480px) {
+    .panel-heading {
+        font-size: 1.5rem;
+    }
+
+    .border {
+        padding: 10px;
+    }
+
+    .col img {
+        max-width: 60px;
+        height: auto;
+        margin: 8px 0;
+    }
+
+    .col a {
+        font-size: 1rem;
+    }
+
+    .border .row {
+        gap: 10px;
+    }
+
+    .fs-4 {
+        font-size: 1.2rem;
+    }
+}
+
+/* Media query para pantallas menores o iguales a 420px */
+@@media (max-width: 420px) {
+    .panel-heading {
+        font-size: 1.2rem;
+    }
+
+    .border {
+        padding: 8px;
+    }
+
+    .col img {
+        max-width: 50px;
+        height: auto;
+        margin: 5px 0;
+    }
+
+    .col a {
+        font-size: 0.9rem;
+    }
+
+    .fs-4 {
+        font-size: 1rem;
+        padding: 8px 16px;
+    }
+
+    /* Ajuste del enlace al inicio */
+    .mt-4 {
+        margin-top: 20px;
+    }
+
+    a.fs-4 {
+        width: 100%;
+        display: block;
+        text-align: center;
+        margin-bottom: 15px;
+    }
+}
 
     </style>
 </head>
 
 <body>
-    <div class="row mt-5">
-        <div class="col d-flex justify-content-end align-items-end">
-            <h3>___________________________</h3>
-        </div>
-
+    <div class="row mt-4">
         <div class="col d-flex justify-content-center align-items-center" style="background-color: rgba(128, 128, 128, 0.5);">
             <h3 class="panel-heading"><samp>PANEL DE CONTROL DEL SISTEMA</samp></h3>
         </div>
-        
-        <div class="col d-flex justify-content-start align-items-start">
-            <h3>___________________________</h3>
-        </div>
     </div>
 
-    <div class="container mt-5">
+    <div class="container mt-3">
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <!-- Gestión de muestras -->
@@ -91,18 +194,11 @@
                     </div>
                 </div>
 
-                <div style="text-align: center;" class="mt-4">
+                <div style="text-align: center; padding-bottom: 100px;" class="mt-4">
                     <a href="@Url.Action("Principal", "Principal")" class="fs-4" style="color: #fff; text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5); padding: 10px 20px; border: 2px solid #fff; border-radius: 8px; display: inline-block; background-color: rgba(255, 255, 255, 0.1);"><samp>Volver a inicio</samp><i class='bx bxs-home'></i></a>
                 </div>
-
             </div>
         </div>
     </div>
-
-
-
-
 </body>
-
-
 </html>

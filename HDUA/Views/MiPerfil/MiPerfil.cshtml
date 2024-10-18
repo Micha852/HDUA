@@ -18,21 +18,119 @@
             background-color: lightgray;
         }
 
+/* Media query para pantallas menores o iguales a 900px */
+@@media (max-width: 900px) {
+    .container {
+        padding: 10px;
+    }
+
+    .panel-heading {
+        font-size: 1.8rem;
+        text-align: center;
+    }
+
+    .card {
+        padding: 15px;
+    }
+
+    label {
+        font-size: 1rem;
+    }
+
+    input, select {
+        font-size: 0.95rem;
+    }
+
+    #btnEditar, #btnGuardar {
+        width: 80%;
+        margin: 10px auto;
+    }
+}
+
+/* Media query para pantallas menores o iguales a 480px */
+@@media (max-width: 480px) {
+    .panel-heading {
+        font-size: 1.5rem;
+        text-align: center;
+    }
+
+    .card {
+        padding: 10px;
+    }
+
+    label, .form-label {
+        font-size: 0.9rem;
+    }
+
+    input, select {
+        font-size: 0.85rem;
+    }
+
+    #btnEditar, #btnGuardar {
+        width: 100%;
+        font-size: 0.9rem;
+    }
+
+    .btn {
+        padding: 8px 12px;
+    }
+
+    .modal-content {
+        padding: 10px;
+    }
+}
+
+/* Media query para pantallas menores o iguales a 420px */
+@@media (max-width: 420px) {
+    .panel-heading {
+        font-size: 1.2rem;
+        text-align: center;
+    }
+
+    .card {
+        padding: 8px;
+    }
+
+    label, .form-label {
+        font-size: 0.8rem;
+    }
+
+    input, select {
+        font-size: 0.8rem;
+    }
+
+    #btnEditar, #btnGuardar {
+        width: 100%;
+        font-size: 0.8rem;
+    }
+
+    .btn {
+        padding: 6px 10px;
+        font-size: 0.8rem;
+    }
+
+    .modal-title {
+        font-size: 1rem;
+    }
+
+    .form-check-label {
+        font-size: 0.8rem;
+    }
+    
+    /* Asegura que los botones estén visibles */
+    .container {
+        padding-bottom: 60px; /* Incrementa el espacio inferior para los botones */
+    }
+}
+
+
     </style>
 </head>
 
 <body>
     <div class="row mt-5">
-        <div class="col d-flex justify-content-end align-items-end">
-            <h3>___________________________</h3>
-        </div>
-
         <div class="col d-flex justify-content-center align-items-center" style="background-color: rgba(255, 255, 255, 0.5);">
             <h3 class="panel-heading"><samp>MIS DATOS</samp></h3>
-        </div>
-
-        <div class="col d-flex justify-content-start align-items-start">
-            <h3>___________________________</h3>
         </div>
     </div>
 
@@ -134,25 +232,17 @@
         </div>
     </samp>
 
-
-    <div class="row">
-        <div class="col d-flex justify-content-center align-items-center">
-            <h3>____________________________________________________________________________________________________________</h3>
-        </div>
-    </div>
-
-    <div class="col d-flex justify-content-between align-items-center">
+    <div class="col d-flex justify-content-between align-items-center" style="padding-bottom: 100px;">
         @if (User.IsInRole("VISITANTE"))
         {
-            <button type="button ms-5" class="btn btn-danger btn-auto"
-                    data-id="@Model.Id"
-                    data-bs-toggle="modal" data-bs-target="#modalDesactivarPerfil">
+            <button type="button" class="btn custom-button fs-5" data-id="@Model.Id"
+                    data-bs-toggle="modal" data-bs-target="#modalDesactivarPerfil" style="color: #fff; text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5); padding: 10px 20px; border: 2px solid #fff; border-radius: 8px; background-color: rgba(255, 255, 255, 0.1);">
                 Desactivar perfil
             </button>
-        }
-        <a href="@Url.Action("Principal", "Principal")" class="text-decoration-none me-5" style="background-color: rgba(255, 255, 255, 0.7); font-size: 1.2rem;"><samp>Volver a inicio</samp></a>
-    </div>
 
+        }
+        <a href="@Url.Action("Principal", "Principal")" class="fs-5 custom-button" style="color: #fff; text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5); padding: 10px 20px; border: 2px solid #fff; border-radius: 8px; display: inline-block; background-color: rgba(255, 255, 255, 0.1);"><samp>Volver a inicio</samp><i class='bx bxs-left-top-arrow-circle'></i></a>
+    </div>
 
 
     <!-- Modal Confirmación de Desactivaciónón de Perfil -->

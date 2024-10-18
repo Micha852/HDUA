@@ -33,47 +33,175 @@
             height: 100vh; /* Ajusta la altura para que ocupe toda la pantalla */
         }
 
+        /* Pantallas medianas (768px - 1199px) */
+@@media (min-width: 768px) and (max-width: 1199px) {
+    .side-menu {
+        display: none;
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 200px;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.8);
+        color: white;
+        padding: 1rem;
+        z-index: 1000;
+    }
+
+    .side-menu.show {
+        display: block;
+    }
+
+    .toggle-button {
+        display: block;
+        position: fixed;
+        top: 10px;
+        left: 10px;
+        z-index: 1100;
+        background-color: #28a745;
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        cursor: pointer;
+    }
+
+    /* Ocultar el botón "Menú" cuando el menú lateral esté abierto */
+    .side-menu.show ~ .toggle-button {
+        display: none;
+    }
+
+    .content-area {
+        margin: 0 auto;
+    }
+}
+
+        /* Pantallas pequeñas (<= 767px) */
+        @@media (max-width: 767px) {
+            .side-menu {
+                display: none;
+                position: fixed;
+                left: 0;
+                top: 0;
+                width: 200px;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.9);
+                color: white;
+                padding: 1rem;
+                z-index: 1000;
+            }
+
+                .side-menu.show {
+                    display: block;
+                }
+
+            .toggle-button {
+                display: block;
+                position: relative; /* Cambia a relativa */
+                margin-top: 1rem; /* Añade margen para colocar el botón donde deseas */
+                margin-bottom: 1rem; /* Para separar del contenido */
+                z-index: 1100;
+                background-color: #28a745;
+                color: white;
+                border: none;
+                padding: 0.5rem 1rem;
+                cursor: pointer;
+            }
+            /* Ocultar el botón "Menú" cuando el menú lateral esté abierto */
+            .side-menu.show ~ .toggle-button {
+                display: none;
+            }
+
+            .content-area {
+                margin: 0.5rem auto;
+                padding: 0.5rem;
+                width: 95%;
+            }
+
+            .scrollspy-example {
+                max-height: calc(100vh - 100px);
+                padding: 0.5rem;
+            }
+
+            .card {
+                margin: 0.5rem;
+                padding: 0.5rem;
+            }
+
+            .card-body {
+                padding: 0.5rem;
+            }
+
+            .card-img-top {
+                height: auto;
+                width: 100%;
+                object-fit: contain;
+            }
+
+            .btn {
+                font-size: 0.8rem;
+                padding: 0.3rem 0.6rem;
+            }
+
+            h3 {
+                font-size: 2rem;
+                text-align: center;
+            }
+
+            label {
+                font-size: 1.2rem;
+            }
+
+            .comment-section {
+                padding: 0.5rem;
+            }
+
+            .comment-card {
+                margin: 0.3rem;
+            }
+        }
+
+
+
+
     </style>
 </head>
 
 <body>
 
     <div class="row mt-4">
-        <div class="col d-flex justify-content-end align-items-end">
-            <h3>___________________________</h3>
-        </div>
-
         <div class="col d-flex justify-content-center align-items-center" style="background-color: rgba(128, 128, 128, 0.5);">
             <h3 class="panel-heading"><samp>MUESTRA BOTÁNICA SELECCIONADA</samp></h3>
         </div>
-
-        <div class="col d-flex justify-content-start align-items-start">
-            <h3>___________________________</h3>
-        </div>
     </div>
 
-    <div class="row mt-2 d-flex justify-content-center align-items-center border border-black">
-        <div class="col-2">
+    <div class="row mt-2 d-flex justify-content-center align-items-center">
+        <div class="col-2 side-menu" id="sideMenu">
             <samp>
                 <div id="list-example" class="list-group">
                     <a href="@Url.Action("Principal", "Principal")" class="fs-5" style="color: #fff; text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5); padding: 10px 20px; border: 2px solid #fff; border-radius: 5px; display: inline-block; background-color: rgba(255, 255, 255, 0.1);"><samp>Volver a buscar</samp><i class='bx bxs-left-top-arrow-circle'></i></a>
                     <a class="list-group-item list-group-item-action" href="#list-item-1">Aspectos generales</a>
                     <a class="list-group-item list-group-item-action" href="#list-item-2">Aspectos específicos</a>
                     <a class="list-group-item list-group-item-action" href="#list-item-3">Comentarios</a>
-                    <a href="@Url.Action("DescargarFichaPdf", "Principal", new { id = Model.Id })" class="fs-5" style="color: #fff; text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5); padding: 10px 20px; border: 2px solid #fff; border-radius: 5px; display: inline-block; background-color: rgba(255, 255, 255, 0.1);">
-                        <samp>Descargar ficha</samp><i class='bx bx-download'></i>
-                    </a>
+                    @{
+                        if (User.IsInRole("ADMINISTRADOR"))
+                        {
+                            <a href="@Url.Action("DescargarFichaPdf", "Principal", new { id = Model.Id })" class="fs-5" style="color: #fff; text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5); padding: 10px 20px; border: 2px solid #fff; border-radius: 5px; display: inline-block; background-color: rgba(255, 255, 255, 0.1);">
+                                <samp>Descargar ficha</samp><i class='bx bx-download'></i>
+                            </a>
+                        }
+                    }
+                    
                 </div>
             </samp>
         </div>
-        <div class="col-10">
-            <div data-bs-spy="scroll" data-bs-target="#list-example" data-bs-smooth-scroll="true" class="scrollspy-example" tabindex="0" style="max-height: 500px; overflow-y: auto;">
+        <div class="col-10 content-area">
+            <div data-bs-spy="scroll" data-bs-target="#list-example" data-bs-smooth-scroll="true" class="scrollspy-example" tabindex="0" style="max-height: 520px; overflow-y: auto;">
 
                 <samp>
                     <div class="container">
                         <div class="row justify-content-center">
                             <div class="col-12">
-                                <div class="card border border-success border-5">
+                                <div class="card border-success border-5">
                                     <div class="card-body" style="height: auto;">
 
                                         <p>
@@ -206,6 +334,8 @@
             </div>
         </div>
     </div>
+    <button class="toggle-button" onclick="toggleMenu()">☰ Menú</button>
+
 
     <div class="modal fade" id="imagenModal" tabindex="-1" aria-labelledby="imagenModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl" style="margin-top: -0.5%;">
@@ -262,6 +392,11 @@
 
 
     <script>
+        function toggleMenu() {
+            const sideMenu = document.getElementById('sideMenu');
+            sideMenu.classList.toggle('show');
+        }
+
         var inpuText = document.getElementById('commentInput');
         var inputId = document.getElementById('hiddenInputMuestra');
         var comentarios = document.getElementById('comentariosDiv');
