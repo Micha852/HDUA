@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34607.119
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HDUA", "HDUA\HDUA.csproj", "{D61B7A1E-C699-4D26-85C9-80B4103B041F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D61B7A1E-C699-4D26-85C9-80B4103B041F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D61B7A1E-C699-4D26-85C9-80B4103B041F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D61B7A1E-C699-4D26-85C9-80B4103B041F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D61B7A1E-C699-4D26-85C9-80B4103B041F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {63E8C60F-7EAE-415F-818B-3D2DE95A3107}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,135 @@
+﻿@{
+    Layout = "~/Views/Shared/layau2.cshtml";
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.3/js/bootstrap.min.js"></script>
+    <title>HDUA</title>
+    <style>
+        .content-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .form-row {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .logo {
+            width: 195px;
+            height: 175px;
+        }
+
+        .btn-custom {
+            font-size: 1.25rem; /* fs-4 equivalente */
+            color: #fff;
+            text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
+            padding: 10px 20px;
+            border: 2px solid #fff;
+            border-radius: 8px;
+            display: inline-block;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-search {
+            font-size: 1rem; /* Tamaño del texto por defecto */
+            padding: 10px 20px; /* Padding por defecto */
+            display: inline-flex;
+            align-items: center;
+        }
+
+            .btn-search i {
+                margin-left: 8px; /* Espacio entre el texto y el icono */
+            }
+
+        @@media (max-width: 768px) {
+            .logo {
+            width: 140px;
+            height: 120px;
+            }
+
+            .btn-custom {
+                font-size: 1rem; /* Reducción del tamaño de la fuente */
+                padding: 8px 16px; /* Reducción del padding */
+            }
+
+            .btn-search {
+                font-size: 0.875rem; /* Tamaño del texto más pequeño */
+                padding: 8px 16px; /* Padding reducido */
+            }
+        }
+
+        @@media (max-width: 480px) {
+            .logo {
+              width: 115px;
+              height: 95px;
+            }
+
+            .btn-custom {
+                font-size: 0.875rem; /* Reducción adicional del tamaño de la fuente */
+                padding: 6px 12px; /* Reducción adicional del padding */
+            }
+
+            .btn-search {
+                font-size: 0.75rem; /* Tamaño del texto aún más pequeño */
+                padding: 6px 12px; /* Padding más reducido */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="position-absolute top-50 start-50 translate-middle content-wrapper">
+        <div class="row justify-content-center align-items-center mb-4">
+            <img src="~/img/logoher.webp" alt="Logo" class="logo">
+        </div>
+
+        <div class="form-row">
+            <form action="/" method="post" id="cientifico" class="col input-group me-5">
+                <input type="text" class="form-control rounded-pill border border-dark" placeholder="Nombre científico" aria-label="Example text with button addon" aria-describedby="button-addon1" name="nombre" data-bs-toggle="popover" data-bs-html="true" data-bs-content='Ejemplos de nombres científicos: <a href="https://udlaedu-my.sharepoint.com/:t:/g/personal/mic_martinez_udla_edu_co/EavScadUd-FKj21R6TmbULkBRKrSjjyGRjzVijl-UGqm9Q?e=hP3054" target="_blank">https://udlaedu-my.sharepoint.com/:t:/g/personal/mic_martinez_udla_edu_co/EavScadUd-FKj21R6TmbULkBRKrSjjyGRjzVijl-UGqm9Q?e=hP3054</a>'>
+                <button class="btn btn-success btn-search" type="submit" id="button-addon1" formaction="@Url.Action("Resultado", "Principal")" name="btnCientifico">
+                    <samp>Buscar</samp><i class='bx bx-search-alt'></i>
+                </button>
+            </form>
+
+            <form action="/" method="post" id="vulgar" class="col input-group me-5">
+                <input type="text" class="form-control rounded-pill border border-dark" placeholder="Nombre vulgar" aria-label="Example text with button addon" aria-describedby="button-addon1" name="nombre" data-bs-toggle="popover" data-bs-html="true" data-bs-content='Ejemplos de nombres vulgares: <a href="https://udlaedu-my.sharepoint.com/:t:/g/personal/mic_martinez_udla_edu_co/EW9zjwv_JHdLnioUjDvtRiIBc5rqJB78QDjKyDw3GlMdCA?e=N8Y0fA" target="_blank">https://udlaedu-my.sharepoint.com/:t:/g/personal/mic_martinez_udla_edu_co/EW9zjwv_JHdLnioUjDvtRiIBc5rqJB78QDjKyDw3GlMdCA?e=N8Y0fA    </a>'>
+                <button class="btn btn-success btn-search" type="submit" id="button-addon1" formaction="@Url.Action("Resultado", "Principal")" name="btnVulgar">
+                    <samp>Buscar</samp><i class='bx bx-search-alt'></i>
+                </button>
+            </form>
+        </div>
+
+        <div class="col text-center mt-5">
+            <a href="@Url.Action("Avanzada","Principal")" class="btn-custom">Búsqueda por parámetros <i class='bx bxs-hand-up'></i></a>
+        </div>
+        @{
+            if (User.IsInRole("ADMINISTRADOR") || User.IsInRole("COLABORADOR"))
+            {
+                <div class="col text-center mt-5">
+                    <a href="@Url.Action("Principal", "Admin")" class="btn-custom">Pánel de control <i class='bx bxs-window-alt'></i></a>
+                </div>
+            }
+        }
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            $('[data-bs-toggle="popover"]').popover({
+                trigger: 'focus',
+                placement: 'top'
+            });
+        });
+    </script>
+</body>
+</html>

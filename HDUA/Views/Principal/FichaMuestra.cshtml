@@ -1,0 +1,650 @@
+﻿@model MuestraModel
+@{
+    Layout = "~/Views/Shared/layau2.cshtml";
+}
+@{
+    var fullName = User.Identity.Name;
+    var claimsPrincipal = User;
+    var idLogin = Convert.ToInt32(claimsPrincipal.Claims.FirstOrDefault(c => c.Type == "id").Value);
+    var firstName = fullName.Split(' ')[0];
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.3/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+
+
+    <title>HDUA</title>
+    <style>
+        body {
+            background-image: url('/img/DSC_7852.webp');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            width: 100%;
+            height: 100vh;
+        }
+
+        /* Pantallas medianas (768px - 1199px) */
+@@media (min-width: 768px) and (max-width: 1199px) {
+    .side-menu {
+        display: none;
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 200px;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.8);
+        color: white;
+        padding: 1rem;
+        z-index: 1000;
+    }
+
+    .side-menu.show {
+        display: block;
+    }
+
+    .toggle-button {
+        display: block;
+        position: fixed;
+        top: 10px;
+        left: 10px;
+        z-index: 1100;
+        background-color: #28a745;
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        cursor: pointer;
+    }
+
+    /* Ocultar el botón "Menú" cuando el menú lateral esté abierto */
+    .side-menu.show ~ .toggle-button {
+        display: none;
+    }
+
+    .content-area {
+        margin: 0 auto;
+    }
+}
+
+        /* Pantallas pequeñas (<= 767px) */
+        @@media (max-width: 767px) {
+            .side-menu {
+                display: none;
+                position: fixed;
+                left: 0;
+                top: 0;
+                width: 200px;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.9);
+                color: white;
+                padding: 1rem;
+                z-index: 1000;
+            }
+
+                .side-menu.show {
+                    display: block;
+                }
+
+            .toggle-button {
+                display: block;
+                position: relative;
+                margin-top: 1rem;
+                margin-bottom: 1rem;
+                z-index: 1100;
+                background-color: #28a745;
+                color: white;
+                border: none;
+                padding: 0.5rem 1rem;
+                cursor: pointer;
+            }
+            /* Ocultar el botón "Menú" cuando el menú lateral esté abierto */
+            .side-menu.show ~ .toggle-button {
+                display: none;
+            }
+
+            .content-area {
+                margin: 0.5rem auto;
+                padding: 0.5rem;
+                width: 95%;
+            }
+
+            .scrollspy-example {
+                max-height: calc(100vh - 100px);
+                padding: 0.5rem;
+            }
+
+            .card {
+                margin: 0.5rem;
+                padding: 0.5rem;
+            }
+
+            .card-body {
+                padding: 0.5rem;
+            }
+
+            .card-img-top {
+                height: auto;
+                width: 100%;
+                object-fit: contain;
+            }
+
+            .btn {
+                font-size: 0.8rem;
+                padding: 0.3rem 0.6rem;
+            }
+
+            h3 {
+                font-size: 2rem;
+                text-align: center;
+            }
+
+            label {
+                font-size: 1.2rem;
+            }
+
+            .comment-section {
+                padding: 0.5rem;
+            }
+
+            .comment-card {
+                margin: 0.3rem;
+            }
+
+            h3 {
+                font-size: 2rem !important;
+                text-align: center;
+            }
+        }
+
+
+
+
+    </style>
+</head>
+
+<body>
+
+    <div class="row mt-4">
+        <div class="col d-flex justify-content-center align-items-center" style="background-color: rgba(128, 128, 128, 0.5);">
+            <h3 class="panel-heading"><samp>MUESTRA BOTÁNICA SELECCIONADA</samp></h3>
+        </div>
+    </div>
+
+    <div class="row mt-2 d-flex justify-content-center align-items-center">
+        <div class="col-2 side-menu" id="sideMenu">
+            <samp>
+                <div id="list-example" class="list-group">
+                    <a href="@Url.Action("Principal", "Principal")" class="fs-5" style="color: #fff; text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5); padding: 10px 20px; border: 2px solid #fff; border-radius: 5px; display: inline-block; background-color: rgba(255, 255, 255, 0.1);"><samp>Volver a buscar</samp><i class='bx bxs-left-top-arrow-circle'></i></a>
+                    <a class="list-group-item list-group-item-action" href="#list-item-1">Aspectos generales</a>
+                    <a class="list-group-item list-group-item-action" href="#list-item-2">Aspectos específicos</a>
+                    <a class="list-group-item list-group-item-action" href="#list-item-3">Comentarios</a>
+                    @{
+                        if (User.IsInRole("ADMINISTRADOR"))
+                        {
+                            <a href="@Url.Action("DescargarFichaPdf", "Principal", new { id = Model.Id })" class="fs-5" style="color: #fff; text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5); padding: 10px 20px; border: 2px solid #fff; border-radius: 5px; display: inline-block; background-color: rgba(255, 255, 255, 0.1);">
+                                <samp>Descargar ficha</samp><i class='bx bx-download'></i>
+                            </a>
+                        }
+                    }
+                    
+                </div>
+            </samp>
+        </div>
+        <div class="col-10 content-area">
+            <div data-bs-spy="scroll" data-bs-target="#list-example" data-bs-smooth-scroll="true" class="scrollspy-example" tabindex="0" style="max-height: 520px; overflow-y: auto;">
+
+                <samp>
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-12">
+                                <div class="card border-success border-5">
+                                    <div class="card-body" style="height: auto;">
+
+                                        <p>
+                                            <h3 id="list-item-1" class="text-center" style="font-style: italic; font-size: 3rem;" >Aspectos generales</h3>
+                                            <div class="col mt-3 align-content-center">
+                                                <div class="row mt-3 justify-content: center align-items: center">
+                                                    <div class="col d-flex flex-column align-items-center">
+                                                        <img src="data:image/jpg;base64,@Model.Imagen2.Imagen" class="card-img-top" style="height: 30rem; object-fit: contain;">
+                                                        <button type="button" class="btn btn-outline-success mt-2" data-bs-toggle="modal" data-bs-target="#imagenModal">
+                                                            Ampliar Imagen
+                                                        </button>
+                                                    </div>
+
+                                                    <div class="col mt-2" style="font-size: 1.5rem;">
+                                                        <label for="nombreComun" class="mt-2"><u>Nombre común</u>: @Model.Vulgar</label>
+                                                            
+                                                        <label for="nombreCientifico" class="mt-2">
+                                                            <u>Nombre científico</u>:
+                                                            @Model.Cientifico
+                                                            @if (@Model.Especie != "NO APLICA")
+                                                            {
+                                                                @Model.Especie
+                                                            }
+                                                        </label>
+
+                                                            
+                                                        <label for="descripcion" class="mt-2"><u>Descripción</u>: @Model.Procedencia de @Model.Altura metros, con características de hojas en forma @Model.Forma, venación @Model.Venacion y margen @Model.Margen</label>
+                                                    
+                                                        <label for="proyecto" class="mt-2"><u>Proyecto de origen</u>: @Model.Proyecto</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <h3>____________________________________________________________________________</h3>
+                                        </p>
+
+                                        <p>
+                                            <h3 id="list-item-2" class="mt-5 text-center" style="font-style: italic; font-size: 3rem;">Aspectos específicos</h3>
+                                            <div class="col mt-3">
+                                                <div class="row mt-3">
+
+                                                    <div class="col mt-2">
+                                                        <div id="map" style="height: 400px;"></div> <!-- Contenedor para el mapa -->
+                                                        <label for="coordenadas" class="mt-2"><u>Coordenadas</u>: @Model.Coordenada</label>
+                                                        <label for="elevacion" class="mt-2"><u>Elevación</u>: Entre @Model.Elevacionmin y @Model.Elevacionmax metros</label>
+                                                    </div>
+
+
+                                                    <div class="col mt-2" style="font-size: 1.5rem;">
+                                                        <label for="division"><u>División</u>: @Model.Division</label><br>
+
+                                                        <label for="clase"><u>Clase</u>: @Model.Clase</label><br>
+
+                                                        <label for="orden" class="mt-2"><u>Orden</u>: @Model.Orden</label><br>
+
+                                                        <label for="familia" class="mt-2"><u>Familia</u>: @Model.Familia</label><br>
+
+                                                        <label for="genero" class="mt-2"><u>Género</u>: @Model.Genero</label><br>
+
+                                                        <label for="especie" class="mt-2"><u>Especie</u>: @Model.Especie</label><br>
+
+                                                        <label for="ubicacion" class="mt-2"><u>Ubicación</u>: Departamento del @Model.Ubicacion</label>
+
+                                                        <label for="recolectores" class="mt-2"><u>Recolectores</u>: @Model.ListaRecolectores</label>
+
+                                                        <label for="fecharecoleccion" class="mt-2"><u>Fecha de recolección</u>: @Model.Fecha</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <h3>____________________________________________________________________________</h3>
+                                        </p>
+
+                                        <p>
+                                            <h3 id="list-item-3" class="text-center mt-5" style="font-style: italic; font-size: 3rem;">Sección de comentarios</h3>
+                                            <div class="d-flex mt-3 justify-content-center">
+                                                <div class="me-2">
+                                                    <i class='bx bx-user-pin' style="font-size: 35px;"></i>
+                                                </div>
+                                                <div class="me-2">
+                                                    <label for="commentInput" class="form-label mb-0">@firstName</label>
+                                                </div>
+                                                <div class="flex-grow-1 me-2">
+                                                    <input type="text" class="form-control" id="commentInput" name="commentInput" placeholder="Escriba su comentario aquí...">
+                                                </div>
+                                                <div>
+                                                    <button type="submit" class="btn btn-success" id="submitBtn" disabled onclick="aux()">Publicar</button>
+                                                </div>
+                                                <input type="hidden" id="hiddenInputMuestra" name="hiddenInputMuestra" value="@Model.Id">
+                                            </div>
+
+                                            <div class="col mt-3">
+                                                <div class="row text-center" id="comentariosDiv">
+                                                    @foreach (ComentarioModel i in Model.comentarios)
+                                                    {
+                                                        <div class="card mb-3">
+                                                            <div class="card-body text-start">
+                                                                <p class="card-text"><strong>@i.Usuario:</strong> @i.Texto</p>
+                                                                @if (@idLogin == @i.idUser)
+                                                                {
+                                                                    <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editarComentarioModal" data-id="@i.Id" data-comentario="@i.Texto" data-user="@i.Usuario">
+                                                                        Editar
+                                                                    </button>
+                                                                    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmarEliminarModal" data-id="@i.Id">
+                                                                        Eliminar
+                                                                    </button>
+                                                                }
+                                                                else if ((User.IsInRole("ADMINISTRADOR")))
+                                                                {
+                                                                    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmarEliminarModal" data-id="@i.Id">
+                                                                        Eliminar
+                                                                    </button>
+                                                                }
+                                                            </div>
+
+                                                        </div>
+                                                    }
+                                                </div>
+                                            </div>
+
+
+                                        </p>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </samp>
+
+
+            </div>
+        </div>
+    </div>
+    <button class="toggle-button" onclick="toggleMenu()">☰ Menú</button>
+
+
+    <div class="modal fade" id="imagenModal" tabindex="-1" aria-labelledby="imagenModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl" style="margin-top: -0.5%;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="imagenModalLabel">Imagen Ampliada</h5>
+                    <button type="button" class="btn btn-outline-danger ms-auto" id="cerrarImagen" data-bs-dismiss="modal" aria-label="Close"><samp>X</samp></button>
+                </div>
+                <div class="modal-body">
+                    <img src="data:image/jpg;base64,@Model.Imagen2.Imagen" class="img-fluid">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Editar Comentario -->
+    <div class="modal fade mt-5" id="editarComentarioModal" tabindex="-1" aria-labelledby="editarComentarioLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editarComentarioLabel">Editar Comentario</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="text" class="form-control" id="editarComentarioInput">
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-warning" id="btnGuardarComentario">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Modal de eliminacion (comentario) -->
+    <div class="modal fade mt-5" id="confirmarEliminarModal" tabindex="-1" aria-labelledby="confirmarEliminarLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmarEliminarLabel">Confirmar eliminación</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    ¿Seguro que desea eliminar el comentario?
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-danger" id="btnEliminarComentario">Eliminar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        function toggleMenu() {
+            const sideMenu = document.getElementById('sideMenu');
+            sideMenu.classList.toggle('show');
+        }
+
+        var inpuText = document.getElementById('commentInput');
+        var inputId = document.getElementById('hiddenInputMuestra');
+        var comentarios = document.getElementById('comentariosDiv');
+
+        function aux(){
+            CrearComentario(inpuText.value, inputId.value);
+            inpuText.value = '';
+            submitBtn.disabled = true;
+        }
+
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const commentInput = document.getElementById('commentInput');
+            const submitBtn = document.getElementById('submitBtn');
+
+            commentInput.addEventListener('input', function () {
+                if (commentInput.value.trim().length > 0) {
+                    submitBtn.disabled = false;
+                } else {
+                    submitBtn.disabled = true;
+                }
+            });
+        });
+
+        function CrearComentario(commentInput, hiddenInputMuestra) {
+            $.ajax({
+                url: "@Url.Action("CrearComentario", "Principal")",
+                type: "POST",
+                traditional: true,
+                data: { commentInput: commentInput, hiddenInputMuestra: hiddenInputMuestra },
+                success: function (result) {
+                    // Crear el HTML para el nuevo comentario con las opciones de editar y eliminar
+                    var nuevoComentarioHTML = `
+                        <div class="card mb-3">
+                            <div class="card-body text-start">
+                                <p class="card-text"><strong>${result[result.length - 1].usuario}:</strong> ${result[result.length - 1].texto}</p>
+                                <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editarComentarioModal" data-id="${result[result.length - 1].id}" data-comentario="${result[result.length - 1].texto}" data-user="${result[result.length - 1].usuario}">
+                                    Editar
+                                </button>
+                                <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmarEliminarModal" data-id="${result[result.length - 1].id}">
+                                    Eliminar
+                                </button>
+                            </div>
+                        </div>
+                    `;
+
+                    // Agregar el nuevo comentario al contenedor de comentarios
+                    var comentariosDiv = document.getElementById('comentariosDiv');
+                    comentariosDiv.innerHTML = nuevoComentarioHTML + comentariosDiv.innerHTML;
+
+                    // Asignar eventos a los botones de editar y eliminar del nuevo comentario
+                    var nuevoComentario = comentariosDiv.firstChild;
+                    var editarBtn = nuevoComentario.querySelector('.editar-btn');
+                    var eliminarBtn = nuevoComentario.querySelector('.eliminar-btn');
+
+                    // Aquí puedes agregar los eventos onclick para los botones editar y eliminar
+                    editarBtn.onclick = function () {
+                        // Agregar la lógica para editar el comentario
+                        console.log("Editar comentario");
+                    };
+
+                    eliminarBtn.onclick = function () {
+                        // Agregar la lógica para eliminar el comentario
+                        console.log("Eliminar comentario");
+                    };
+                },
+                error: function (xhr, status, error) {
+                    console.log("error");
+                    console.error(error);
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', (event) => {
+            // Variable para almacenar el ID del comentario a eliminar
+            let comentarioIdParaEliminar = null;
+            let comentarioIdParaEditar = null;
+            let usuarioParaEditar = null;
+
+            // Manejar el evento de clic en el botón "Eliminar" dentro del modal
+            document.getElementById('btnEliminarComentario').addEventListener('click', function () {
+                eliminarComentario(comentarioIdParaEliminar);
+            });
+
+            // Manejar el evento de clic en el botón "Guardar" dentro del modal
+            document.getElementById('btnGuardarComentario').addEventListener('click', function () {
+                const nuevoComentario = document.getElementById('editarComentarioInput').value;
+                editarComentario(comentarioIdParaEditar, nuevoComentario, usuarioParaEditar);
+            });
+
+            // Evento delegado para botones de eliminar
+            document.getElementById('comentariosDiv').addEventListener('click', function (event) {
+                if (event.target.matches('button[data-bs-target="#confirmarEliminarModal"]')) {
+                    comentarioIdParaEliminar = event.target.getAttribute('data-id');
+                }
+            });
+
+            // Evento delegado para botones de editar
+            document.getElementById('comentariosDiv').addEventListener('click', function (event) {
+                if (event.target.matches('button[data-bs-target="#editarComentarioModal"]')) {
+                    comentarioIdParaEditar = event.target.getAttribute('data-id');
+                    const comentarioActual = event.target.getAttribute('data-comentario');
+                    usuarioParaEditar = event.target.getAttribute('data-user');
+
+                    // Establecer el valor del input en el modal
+                    document.getElementById('editarComentarioInput').value = comentarioActual;
+                }
+            });
+        });
+
+        // Función para eliminar el comentario
+        function eliminarComentario(idComentario) {
+            $.ajax({
+                url: '@Url.Action("EliminarComentario", "Principal")',
+                type: 'POST',
+                data: { id: idComentario },
+                success: function (result) {
+                    if (result.success) {
+                        // Eliminar el comentario de la interfaz de usuario
+                        document.querySelector(`button[data-id="${idComentario}"]`).closest('.card').remove();
+                        // Cerrar el modal
+                        var modal = bootstrap.Modal.getInstance(document.getElementById('confirmarEliminarModal'));
+                        modal.hide();
+
+                        // Mostrar alerta de éxito
+                        alert("El comentario ha sido eliminado.");
+                    } else {
+                        console.error(result.error);
+                        alert('Hubo un error al eliminar el comentario.');
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.log("error");
+                    console.error(error);
+                    alert('Hubo un error al eliminar el comentario.');
+                }
+            });
+        }
+        
+        document.addEventListener('DOMContentLoaded', (event) => {
+            let comentarioIdParaEditar = null;
+            let usuarioParaEditar = null;
+
+            // Obtener todos los botones de editar
+            const editButtons = document.querySelectorAll('button[data-bs-target="#editarComentarioModal"]');
+
+            // Asignar evento click a cada botón de editar
+            editButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    // Guardar el ID del comentario, el texto actual y el usuario
+                    comentarioIdParaEditar = this.getAttribute('data-id');
+                    const comentarioActual = this.getAttribute('data-comentario');
+                    usuarioParaEditar = this.getAttribute('data-user');
+
+                    // Establecer el valor del input en el modal
+                    document.getElementById('editarComentarioInput').value = comentarioActual;
+                });
+            });
+
+            // Manejar el evento de clic en el botón "Guardar" dentro del modal
+            document.getElementById('btnGuardarComentario').addEventListener('click', function () {
+                const nuevoComentario = document.getElementById('editarComentarioInput').value;
+                editarComentario(comentarioIdParaEditar, nuevoComentario, usuarioParaEditar);
+            });
+        });
+
+        // Función para editar el comentario
+        function editarComentario(idComentario, nuevoComentario, usuario) {
+            $.ajax({
+                url: '@Url.Action("EditarComentario", "Principal")',
+                type: 'POST',
+                data: { id: idComentario, newComentario: nuevoComentario },
+                success: function (result) {
+                    if (result.success) {
+                        // Actualizar el comentario en la interfaz de usuario
+                        const comentarioCard = document.querySelector(`button[data-id='${idComentario}']`).closest('.card');
+                        const comentarioElemento = comentarioCard.querySelector('.card-text');
+                        comentarioElemento.innerHTML = `<strong>${usuario}:</strong> ${nuevoComentario}`;
+
+                        // Actualizar el valor de data-comentario en el botón de editar
+                        const editButton = comentarioCard.querySelector('button[data-bs-target="#editarComentarioModal"]');
+                        editButton.setAttribute('data-comentario', nuevoComentario);
+
+                        // Cerrar el modal
+                        var modal = bootstrap.Modal.getInstance(document.getElementById('editarComentarioModal'));
+                        modal.hide();
+                    } else {
+                        console.error(result.error);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.log("error");
+                    console.error(error);
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // Convertir DMS a decimal
+            function dmsToDecimal(dms) {
+                const parts = dms.match(/(\d+)[°](\d+)['](\d+\.?\d*)["]?([NSEW])/);
+                let degrees = parseFloat(parts[1]);
+                let minutes = parseFloat(parts[2]);
+                let seconds = parseFloat(parts[3]);
+                let direction = parts[4];
+
+                let decimal = degrees + minutes / 60 + seconds / 3600;
+
+                if (direction === "S" || direction === "W") {
+                    decimal *= -1;
+                }
+
+                return decimal;
+            }
+
+            function decodeHtml(html) {
+                var txt = document.createElement("textarea");
+                txt.innerHTML = html;
+                return txt.value;
+            }
+
+            // Coordenadas DMS de @Model.Coordenada
+            let coordenadas = decodeHtml("@Model.Coordenada");
+
+            let coordArray = coordenadas.split(" ");
+            let dmsLat = coordArray[0];
+            let dmsLng = coordArray[1];
+
+            // Convertir a decimal
+            let lat = dmsToDecimal(dmsLat);
+            let lng = dmsToDecimal(dmsLng);
+
+            // Inicializar el mapa
+            var map = L.map('map').setView([lat, lng], 13);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+
+            L.marker([lat, lng]).addTo(map)
+                .bindPopup('Ubicación según coordenadas.')
+                .openPopup();
+        });
+
+    </script>
+</body>
+</html>

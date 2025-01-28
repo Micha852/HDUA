@@ -1,0 +1,83 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutLogin.cshtml";
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.3/js/bootstrap.min.js"></script>
+        <title>HDUA</title>
+
+        <style>
+            body {
+                background-color: lightgray;
+            }
+        </style>
+
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-4" style="background-color:#C2E6D6">
+
+                <div class="card shadow-lg border border-black" style="background-color:#C2E6D6">
+
+                    <div style="margin: 0 auto; text-align: center;">
+                        <h3 class="card-title text-black fs-3"><samp>Inicio de sesión</samp></h3>
+                    </div>
+
+                    <div class="card-body">
+
+                        @if (TempData["ErrorMessage"] != null)
+                        {
+                            <div class="alert alert-danger" role="alert">
+                                @TempData["ErrorMessage"]
+                            </div>
+                        }
+
+                        <form action="@Url.Action("login","Login")" method="post">
+
+                            <div class="mb-3">
+                                <img src="~/img/usericon.webp" alt="Ícono de usuario" width="40" height="40">
+                                <input type="text" class="form-control" id="usuario" placeholder="Correo..." name="NOMBRECORREO">
+                            </div>
+
+                            <div class="mb-3">
+                                <img src="~/img/candado.webp" alt="Ícono de usuario" width="40" height="40">
+                                <input type="password" class="form-control" id="contrasena" placeholder="Contraseña..." name="PWORD">
+                            </div>
+
+                            <button type="submit" class="btn btn-outline-secondary" style="display: block; margin: 0 auto; color: black">Ingresar</button>
+
+                        </form>
+
+                        <a href="@Url.Action("LoginChaira", "Login")" class="btn btn-outline-primary" style="display: block; margin-top: 10px;">
+                            Iniciar sesión con Chaira
+                        </a>
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col text-start">
+                            <a href="@Url.Action("Registrarme", "Login")"><samp>Registrarme</samp></a>
+                        </div>
+
+                        <div class="col text-start">
+                            <a href="@Url.Action("Reestaurar", "Login")"><samp>Reestaurar contraseña</samp></a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

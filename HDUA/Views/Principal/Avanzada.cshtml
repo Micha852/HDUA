@@ -1,0 +1,322 @@
+﻿@{
+    Layout = "~/Views/Shared/layau2.cshtml";
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <title>HDUA</title>
+    
+    <style>
+    /* Estilo para pantallas medianas, como tabletas (max-width: 768px) */
+@@media (max-width: 900px) {
+    .fs-4 {
+        font-size: 1.2rem !important; /* Reducir el tamaño de la fuente */
+    }
+
+    .custom-button {
+        font-size: 1.2rem; /* Reducir el tamaño de fuente */
+        padding: 8px 16px; /* Reducir el padding */
+        border-width: 1.5px; /* Reducir el grosor del borde */
+    }
+
+            .responsive-margin {
+                margin-top: 3rem !important; /* Reducir el margen superior para pantallas medianas */
+            }
+
+    #aaa {
+        width: 85%;
+        padding: 5px;
+    }
+
+    /* Ajuste de márgenes */
+    .row.m-5 {
+        margin-top: 1rem !important;
+        margin-bottom: 1rem !important;
+    }
+
+    .col {
+        margin-bottom: 10px;
+    }
+
+    /* Reducir el espaciado superior para títulos */
+    h5 {
+        margin-top: 1rem !important;  /* Cambiar de mt-5 a mt-3, por ejemplo */
+        font-size: 0.9rem;
+    }
+
+    .form-select {
+        width: 100%;
+        font-size: 0.8rem;
+    }
+
+    .btn {
+        width: 100%;
+        padding: 8px;
+        font-size: 0.9rem;
+    }
+}
+
+/* Estilo para pantallas pequeñas, como teléfonos móviles (max-width: 480px) */
+@@media (max-width: 480px) {
+    .fs-4 {
+        font-size: 1rem !important; /* Reducir aún más el tamaño de la fuente */
+    }
+
+    .custom-button {
+        font-size: 1rem; /* Reducir aún más el tamaño de fuente */
+        padding: 6px 12px; /* Reducir más el padding */
+        border-width: 1px; /* Reducir aún más el grosor del borde */
+    }
+
+            .responsive-margin {
+                margin-top: 2rem !important; /* Reducir aún más el margen superior para pantallas pequeñas */
+            }
+
+    #aaa {
+        width: 90%;
+        padding: 5px;
+    }
+
+    /* Ajuste de márgenes */
+    .row.m-5 {
+        margin-top: 0.5rem !important;
+        margin-bottom: 0.5rem !important;
+    }
+
+    .col {
+        margin-bottom: 8px;
+    }
+
+    /* Reducir el espaciado superior para títulos */
+    h5 {
+        margin-top: 0.8rem !important;  /* Cambiar de mt-3 a mt-2, por ejemplo */
+        font-size: 0.8rem;
+    }
+
+    .form-select {
+        width: 100%;
+        font-size: 0.7rem;
+        padding: 4px;
+    }
+
+    .btn {
+        width: 100%;
+        padding: 6px;
+        font-size: 0.8rem;
+    }
+}
+
+/* Estilo adicional para pantallas más pequeñas (max-width: 360px) */
+@@media (max-width: 420px) {
+    .fs-4 {
+        font-size: 0.9rem !important; /* Reducir más el tamaño de la fuente */
+    }
+
+    .custom-button {
+        font-size: 0.9rem; /* Reducir más el tamaño de fuente */
+        padding: 5px 10px; /* Reducir el padding para dispositivos muy pequeños */
+        border-width: 1px; /* Mantener el grosor del borde */
+    }
+
+            .responsive-margin {
+                margin-top: 1rem !important; /* Reducir aún más el margen superior para pantallas muy pequeñas */
+            }
+
+    #aaa {
+        width: 97%;
+        padding: 5px;
+    }
+
+    /* Ajuste de márgenes */
+    .row.m-5 {
+        margin-top: 0.3rem !important;
+        margin-bottom: 0.3rem !important;
+    }
+
+    .col {
+        margin-bottom: 5px;
+    }
+
+    /* Reducir el espaciado superior para títulos */
+    h5 {
+        margin-top: 0.5rem !important;  /* Cambiar de mt-2 a mt-1, por ejemplo */
+        font-size: 0.75rem;
+    }
+
+    .form-select {
+        width: 100%;
+        font-size: 0.60rem;
+        padding: 3px;
+    }
+
+    .btn {
+        width: 100%;
+        padding: 5px;
+        font-size: 0.70rem;
+    }
+}
+
+    </style>
+
+</head>
+<body>
+    <div class="position-absolute top-50 start-50 translate-middle" id="aaa">
+
+        <div class="col text-center mt-5 responsive-margin">
+            <a href="@Url.Action("Principal", "Principal")" class="fs-4 custom-button" style="color: #fff; text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5); padding: 10px 20px; border: 2px solid #fff; border-radius: 8px; display: inline-block; background-color: rgba(255, 255, 255, 0.1);"><samp>Búsqueda específica</samp><i class='bx bxs-left-top-arrow-circle'></i></a>
+        </div>
+        <samp>
+            <div class="row">
+                <form action="/" method="post" id="parametros" class="me-5">
+                    <div class="container">
+                        <!-- Primera fila: División, Clase, Orden -->
+                        <div class="row m-5 text-center">
+                            <div class="col">
+                                <h5 style="color: #000; background-color: rgba(255, 255, 255, 0.8); padding: 5px 10px; border-radius: 5px;">
+                                    División ↓
+                                </h5>
+                                <select class="form-select" name="sdivision" aria-label="Default select example">
+                                    <option selected>Seleccione</option>
+                                    @foreach (String i in @ViewBag.ldivision)
+                                    {
+                                        <option>@i</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col">
+                                <h5 style="color: #000; background-color: rgba(255, 255, 255, 0.8); padding: 5px 10px; border-radius: 5px;">
+                                    Clase ↓
+                                </h5>
+                                <select class="form-select" name="sclase" aria-label="Default select example">
+                                    <option selected>Seleccione</option>
+                                    @foreach (String i in @ViewBag.lclase)
+                                    {
+                                        <option>@i</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col">
+                                <h5 style="color: #000; background-color: rgba(255, 255, 255, 0.8); padding: 5px 10px; border-radius: 5px;">
+                                    Orden ↓
+                                </h5>
+                                <select class="form-select" name="sorden" aria-label="Default select example">
+                                    <option selected>Seleccione</option>
+                                    @foreach (String i in @ViewBag.lorden)
+                                    {
+                                        <option>@i</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Segunda fila: Familia, Género, Especie -->
+                        <div class="row m-5 text-center">
+                            <div class="col">
+                                <h5 style="color: #000; background-color: rgba(255, 255, 255, 0.8); padding: 5px 10px; border-radius: 5px;">
+                                    Familia ↓
+                                </h5>
+                                <select class="form-select" name="sfamilia" aria-label="Default select example">
+                                    <option selected>Seleccione</option>
+                                    @foreach (String i in @ViewBag.lfamilia)
+                                    {
+                                        <option>@i</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col">
+                                <h5 style="color: #000; background-color: rgba(255, 255, 255, 0.8); padding: 5px 10px; border-radius: 5px;">
+                                    Género ↓
+                                </h5>
+                                <select class="form-select" name="sgenero" aria-label="Default select example">
+                                    <option selected>Seleccione</option>
+                                    @foreach (String i in @ViewBag.lgenero)
+                                    {
+                                        <option>@i</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col">
+                                <h5 style="color: #000; background-color: rgba(255, 255, 255, 0.8); padding: 5px 10px; border-radius: 5px;">
+                                    Especie ↓
+                                </h5>
+                                <select class="form-select" name="sespecie" aria-label="Default select example">
+                                    <option selected>Seleccione</option>
+                                    @foreach (String i in @ViewBag.lespecie)
+                                    {
+                                        <option>@i</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Tercera fila: Departamento, Municipio -->
+                        <div class="row m-5 text-center">
+                            <div class="col">
+                                <h5 style="color: #000; background-color: rgba(255, 255, 255, 0.8); padding: 5px 10px; border-radius: 5px;">
+                                    Departamento ↓
+                                </h5>
+                                <select class="form-select" id="sdepa" name="sdepa" aria-label="Default select example">
+                                    <option selected>Seleccione</option>
+                                    @foreach (String i in @ViewBag.ldepartamento)
+                                    {
+                                        <option>@i</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col">
+                                <h5 style="color: #000; background-color: rgba(255, 255, 255, 0.8); padding: 5px 10px; border-radius: 5px;">
+                                    Municipio ↓
+                                </h5>
+                                <select id="smuni" class="form-select" name="smuni" aria-label="Default select example">
+                                    <option selected>Seleccione</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Botón de envío -->
+                        <div class="row m-5 text-center">
+                            <div class="col">
+                                <button class="btn btn-success px-3 py-2" type="submit" id="button-addon1" formaction="@Url.Action("Resultado", "Principal")" name="btnParametros">
+                                    <samp>Buscar <i class='bx bx-search-alt'></i></samp>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+
+            </div>
+        </samp>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            $('#sdepa').change(function () {
+                var departamentoSeleccionado = $(this).val();
+                if (departamentoSeleccionado !== 'Seleccione') {
+                    $.ajax({
+                        url: "@Url.Action("ObtenerMunicipiosPorDepartamento", "Principal")",
+                        type: 'POST',
+                        data: { nombreDepartamento: departamentoSeleccionado },
+                        success: function (data) {
+                            $('#smuni').empty();
+                            $('#smuni').append('<option>' + "Seleccione" + '</option>');
+                            $.each(data, function (index, municipio) {
+                                $('#smuni').append('<option>' + municipio + '</option>');
+                            });
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>

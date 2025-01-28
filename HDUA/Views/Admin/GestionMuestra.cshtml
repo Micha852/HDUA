@@ -1,0 +1,1100 @@
+﻿@{
+    Layout = "~/Views/Shared/layau2.cshtml";
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.3/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <title>HDUA</title>
+
+    <style>
+
+
+/* Pantallas medianas (768px - 1199px): Mantener el diseño en dos columnas */
+@@media (min-width: 768px) and (max-width: 1199px) {
+    .container .col-md-6 {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 1.5rem;
+    }
+
+    .col {
+        margin-top: 1.5rem;
+    }
+
+    .modal-lg {
+        max-width: 90%;
+    }
+
+    .modal-content {
+        padding: 1.5rem;
+    }
+
+    .carousel-inner form {
+        flex-direction: row;
+    }
+
+    .modal-dialog {
+        max-width: 700px;
+    }
+}
+
+/* Pantallas pequeñas (576px - 767px) */
+@@media (min-width: 576px) and (max-width: 767px) {
+    .container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .col-md-6 {
+        width: 100%;
+        display: flex;
+        justify-content: space-around;
+        margin-bottom: 2rem;
+    }
+
+    .col {
+        margin-top: 1.5rem;
+    }
+
+    img {
+        width: 80px;
+        height: 80px;
+    }
+
+    .btn {
+        font-size: 1rem;
+        padding: 0.5rem 1rem;
+    }
+
+    .modal-dialog {
+        max-width: 95%;
+    }
+
+    .modal-content {
+        padding: 1rem;
+    }
+
+    .carousel-inner form {
+        flex-direction: column;
+    }
+
+    .container .col {
+        margin-top: 1.5rem;
+    }
+
+    .form-select, .form-control {
+        font-size: 0.9rem;
+    }
+}
+
+/* Pantallas extra pequeñas (<= 575px) */
+@@media (max-width: 575px) {
+    .container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .col-md-6 {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .col {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        margin-top: 1.5rem;
+    }
+
+    img {
+        width: 55px;
+        height: 55px;
+    }
+
+    .btn {
+        font-size: 0.8rem;
+        padding: 0.4rem 0.8rem;
+    }
+
+    .form-select, .form-control {
+        font-size: 0.8rem;
+    }
+
+    .modal-dialog {
+        width: 90%;
+        margin: 0 auto;
+    }
+
+    .modal-content {
+        padding: 0.3rem;
+    }
+
+    .carousel-inner form {
+        flex-direction: column;
+    }
+
+    .container {
+        padding: 0.3rem;
+    }
+
+    /* Ajustes para hacer que las filas de los inputs ocupen todo el ancho disponible */
+    .row {
+        margin: 0;
+        width: 100%;
+    }
+
+    /* Asegurar que los controles del carrusel sean visibles y de fácil acceso */
+    .carousel-control-prev,
+    .carousel-control-next {
+        width: 80%;
+        font-size: 0.6rem;
+    }
+}
+    </style>
+</head>
+
+<body>
+
+    <div class="row mt-2">
+        <div class="col d-flex justify-content-center align-items-center" style="background-color: rgba(128, 128, 128, 0.5);">
+            <h3 class="panel-heading"><samp>GESTIÓN DE MUESTRAS</samp></h3>
+        </div>
+    </div>
+
+    <div class="container mt-2">
+        <div class="row">
+            <div class="col-md-6">
+
+                <div class="col mt-5 d-flex justify-content-center align-items-center flex-column">
+                    <div class="row-md-auto text-center">
+                        <img src="~/img/añadir.webp" alt="Ícono" width="100" height="100">
+                    </div>
+                    <div class="row-md-auto text-center">
+                        <a href="@Url.Action("", "")" class="btn btn-success mt-3" style="display: block; margin: 0 auto; color: lightgray" data-bs-toggle="modal" data-bs-target="#modalAñadirMuestra">
+                            <samp>Añadir muestra</samp>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="col mt-5 d-flex justify-content-center align-items-center flex-column">
+                    <div class="row-md-auto text-center">
+                        <img src="~/img/proyecto.webp" alt="Ícono" width="100" height="100">
+                    </div>
+                    <div class="row-md-auto text-center">
+                        <a href="@Url.Action("", "")" class="btn btn-success mt-3" style="display: block; margin: 0 auto; color: lightgray" data-bs-toggle="modal" data-bs-target="#modalAñadirProyecto">
+                            <samp>Añadir proyecto</samp>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-md-6">
+
+                <div class="col mt-5 d-flex justify-content-center align-items-center flex-column">
+                    <img src="~/img/añadirc.webp" alt="Ícono" width="100" height="100">
+                    <a href="#" class="btn btn-success mt-3" style="display: block; margin: 0 auto; color: lightgray" data-bs-toggle="modal" data-bs-target="#modalAñadirParametros">
+                        <samp>Agregar parámetros</samp>
+                    </a>
+                </div>
+
+                <div class="col mt-5 d-flex justify-content-center align-items-center flex-column">
+                    <img src="~/img/editarp.webp" alt="Ícono" width="100" height="100">
+                    <a href="#" class="btn btn-success mt-3" style="display: block; margin: 0 auto; color: lightgray" data-bs-toggle="modal" data-bs-target="#modalEditarParametros">
+                        <samp>Editar parámetros</samp>
+                    </a>
+                </div>
+
+            </div>
+
+            <div class="row-md-auto text-center">
+                <div class="row-md-auto text-center">
+                    <img src="~/img/flechatras2.webp" alt="Ícono" width="100" height="100">
+                </div>
+                <div class="row-md-auto text-center">
+                    <a href="@Url.Action("Principal", "Admin")" class="btn btn-success" style="color: lightgray;">
+                        <samp>Volver</samp>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Modal para Añadir Muestra -->
+    <div class="modal fade mt-5" id="modalAñadirMuestra" tabindex="-1" aria-labelledby="modalAñadirMuestraLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalAñadirMuestraLabel"><samp>Añadir Muestra</samp></h5>
+                    <button type="button" class="btn btn-outline-danger ms-auto" id="cerrarHistoria" data-bs-dismiss="modal" aria-label="Close"><samp>X</samp></button>
+                </div>
+
+                <div class="modal-body" style="background-color: #C2E6D6">
+                    <div id="carouselExampleControls" class="carousel slide" data-bs-interval="false">
+                        <div class="carousel-inner ">
+                            <form action="@Url.Action("CrearMuestra","Admin")" method="post" id="formulario" enctype="multipart/form-data">
+                                <!-- Parte 1 -->
+                                <div class="carousel-item active">
+                                    <div class="container">
+                                        <div class="row">
+
+                                            <h3 class="d-flex justify-content-center align-items-center"><samp>Generalidades</samp></h3>
+
+                                            <div class="col me-5 ms-5">
+                                                <div class="row mt-3">
+                                                    <input type="text" class="form-control" placeholder="Nombre científico" oninput="this.value = this.value.toUpperCase()" id="cientifico" name="cientifico" required>
+                                                </div>
+                                                <div class="row mt-3">
+                                                    <input type="text" class="form-control" placeholder="Nombre vulgar" oninput="this.value = this.value.toUpperCase()" id="vulgar" name="vulgar" required>
+                                                </div>
+                                                @* INSERTAR IMAGEN *@
+                                                <div class="row mt-3">
+                                                    <label for="formFile" class="form-label"><samp>Seleccionar imágen de muestra</samp></label>
+                                                    <input class="form-control" type="file" accept="image/*" id="formFile" name="File" required>
+                                                </div>
+
+                                                <div class="row mt-3">
+                                                    <label for="formFile" class="form-label"><samp>Fecha recolección</samp></label>
+                                                    <input type="date" class="form-control" id="fecharecolecccion" name="fecharecolecccion" required>
+                                                </div>
+                                            </div>
+
+                                            <div class="col me-5 ms-5">
+                                                <div class="row mt-3">
+                                                    <select class="form-select" id="venacion" name="venacion" required>
+                                                        <option value="Seleccione">Tipo venación</option>
+                                                        @foreach (String i in @ViewBag.ltv)
+                                                        {
+                                                            <option>
+                                                                @i
+                                                            </option>
+                                                        }
+                                                    </select>
+                                                </div>
+
+                                                <div class="row mt-3">
+                                                    <select class="form-select" id="forma" name="forma" required>
+                                                        <option value="Seleccione">Tipo forma</option>
+                                                        @foreach (String i in @ViewBag.ltf)
+                                                        {
+                                                            <option>
+                                                                @i
+                                                            </option>
+                                                        }
+                                                    </select>
+                                                </div>
+
+                                                <div class="row mt-3">
+                                                    <select class="form-select" id="margen" name="margen" required>
+                                                        <option value="Seleccione">Tipo margen</option>
+                                                        @foreach (String i in @ViewBag.ltm)
+                                                        {
+                                                            <option>
+                                                                @i
+                                                            </option>
+                                                        }
+                                                    </select>
+                                                </div>
+
+                                                <div class="row mt-3">
+                                                    <select class="form-select" id="procedencia" name="procedencia" required>
+                                                        <option value="Seleccione">Procedencia</option>
+                                                        @foreach (String i in @ViewBag.ltp)
+                                                        {
+                                                            <option>
+                                                                @i
+                                                            </option>
+                                                        }
+                                                    </select>
+                                                </div>
+
+                                                <div class="row mt-3">
+                                                    <input type="number" class="form-control" min="0.1" max="100" step="0.1" placeholder="Altura de la procedencia (Metros)" id="altura" name="altura" required>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Parte 2 -->
+                                <div class="carousel-item">
+                                    <div class="container">
+                                        <div class="row">
+
+                                            <h3 class="d-flex justify-content-center align-items-center"><samp>Especificaciones</samp></h3>
+
+                                            <div class="col me-5 ms-5">
+                                                <div class="row mt-3">
+                                                    <select class="form-select" id="division" name="division" required>
+                                                        <option value="Seleccione">Division</option>
+                                                        @foreach (String i in @ViewBag.ltd)
+                                                        {
+                                                            <option>
+                                                                @i
+                                                            </option>
+                                                        }
+                                                    </select>
+                                                </div>
+
+                                                <div class="row mt-3">
+                                                    <select class="form-select" id="clase" name="clase" required>
+                                                        <option value="Seleccione">Clase</option>
+                                                        @foreach (String i in @ViewBag.ltc)
+                                                        {
+                                                            <option>
+                                                                @i
+                                                            </option>
+                                                        }
+                                                    </select>
+                                                </div>
+
+                                                <div class="row mt-3">
+                                                    <select class="form-select" id="especie" name="especie" required>
+                                                        <option value="Seleccione">Especie</option>
+                                                        @foreach (String i in @ViewBag.lte)
+                                                        {
+                                                            <option>
+                                                                @i
+                                                            </option>
+                                                        }
+                                                    </select>
+                                                </div>
+
+                                                <div class="row mt-3">
+                                                    <select class="form-select" id="genero" name="genero" required>
+                                                        <option value="Seleccione">Género</option>
+                                                        @foreach (String i in @ViewBag.ltg)
+                                                        {
+                                                            <option>
+                                                                @i
+                                                            </option>
+                                                        }
+                                                    </select>
+                                                </div>
+
+                                                <div class="row mt-3">
+                                                    <select id="departmentSelect" class="form-select" name="departmentSelect" required>
+                                                        <option value="Seleccione">Departamento</option>
+                                                        @foreach (String i in @ViewBag.ldep)
+                                                        {
+                                                            <option>
+                                                                @i
+                                                            </option>
+                                                        }
+                                                    </select>
+                                                </div>
+
+                                                <div class="row mt-3">
+                                                    <select id="municipioSelect" class="form-select" name="municipioSelect" required>
+                                                        <option selected>Municipio</option>
+                                                    </select>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="col me-5 ms-5">
+                                                <div class="row mt-3">
+                                                    <select class="form-select" id="orden" name="orden" required>
+                                                        <option value="Seleccione">Orden</option>
+                                                        @foreach (String i in @ViewBag.lto)
+                                                        {
+                                                            <option>
+                                                                @i
+                                                            </option>
+                                                        }
+                                                    </select>
+                                                </div>
+
+                                                <div class="row mt-3">
+                                                    <select class="form-select" id="familia" name="familia" required>
+                                                        <option value="Seleccione">Familia</option>
+                                                        @foreach (String i in @ViewBag.ltfami)
+                                                        {
+                                                            <option>
+                                                                @i
+                                                            </option>
+                                                        }
+                                                    </select>
+                                                </div>
+
+                                                <div class="row mt-3">
+                                                    <select class="form-select" id="tipoUbicacionSelect" name="tipoUbicacionSelect" required>
+                                                        <option selected>Tipo ubicación</option>
+                                                    </select>
+                                                </div>
+
+                                                <div class="row mt-3">
+                                                    <select class="form-select" id="ubicacionSelect" name="ubicacionSelect" required>
+                                                        <option selected>Ubicación</option>
+                                                    </select>
+                                                </div>
+
+                                                <div class="row mt-3">
+                                                    <input type="text" class="form-control" id="coordenadasInput" name="coordenadasInput" placeholder="Coordenadas en Grados Decimales" required>
+                                                </div>
+
+                                                <div class="row mt-3">
+                                                    <select class="form-select" id="proyecto" name="proyecto" required>
+                                                        <option value="Seleccione">Proyecto origen</option>
+                                                        @foreach (String i in @ViewBag.ltpro)
+                                                        {
+                                                            <option>
+                                                                @i
+                                                            </option>
+                                                        }
+                                                    </select>
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Parte 3 -->
+                                <div class="carousel-item">
+                                    <div class="container">
+                                        <div class="row">
+
+                                            <h3 class="d-flex justify-content-center align-items-center"><samp>Otras Especificaciones</samp></h3>
+
+                                            <div class="col me-5 ms-5">
+                                                <div class="row mt-3">
+                                                    <input type="number" class="form-control" min="0" max="100" placeholder="Unidades de Adultos" id="adultos" name="adultos" required>
+                                                </div>
+
+                                                <div class="row mt-3">
+                                                    <input type="number" class="form-control" min="0" max="100" placeholder="Unidades de Juveniles" id="jovenes" name="jovenes" required>
+                                                </div>
+
+                                                <div class="row mt-3">
+                                                    <select class="form-select" id="condicion" name="condicion" required>
+                                                        <option value="Seleccione">Condición Reproductiva</option>
+                                                        @foreach (String i in @ViewBag.lcr)
+                                                        {
+                                                            <option>
+                                                                @i
+                                                            </option>
+                                                        }
+                                                    </select>
+                                                </div>
+
+                                                <div class="row mt-3">
+                                                    <select class="form-select" id="origen" name="origen" required>
+                                                        <option value="Seleccione">Origen</option>
+                                                        @foreach (String i in @ViewBag.lor)
+                                                        {
+                                                            <option>
+                                                                @i
+                                                            </option>
+                                                        }
+                                                    </select>
+                                                </div>
+
+                                                <div class="row mt-3">
+                                                    <input type="text" class="form-control" placeholder="Número de catlálogo" oninput="this.value = this.value.toLowerCase()" id="ncatalogo" name="ncatalogo" required>
+                                                </div>
+
+                                                <div class="row mt-3">
+                                                    <input type="text" class="form-control" placeholder="Número de registro" oninput="this.value = this.value.toLowerCase()" id="nregistro" name="nregistro" required>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="col me-5 ms-5">
+                                                
+                                                <div class="row mt-3">
+                                                    <input type="number" class="form-control" min="0" max="5000" placeholder="Elevación mínima (metros)" id="elevacionmin" name="elevacionmin" required>
+                                                </div>
+
+                                                <div class="row mt-3">
+                                                    <input type="number" class="form-control" min="0" max="5000" placeholder="Elevacion máxima (metros)" id="elevacionmax" name="elevacionmax" required>
+                                                </div>
+
+                                                <div class="row mt-3">
+                                                    <select class="form-select" id="habitad" name="habitad" required>
+                                                        <option value="Seleccione">Habitad</option>
+                                                        @foreach (String i in @ViewBag.lhab)
+                                                        {
+                                                            <option>
+                                                                @i
+                                                            </option>
+                                                        }
+                                                    </select>
+                                                </div>
+
+                                                <div class="row mt-3">
+                                                    <select class="form-select" id="observacion" name="observacion" required>
+                                                        <option value="Seleccione">Observación local</option>
+                                                        @foreach (String i in @ViewBag.lobl)
+                                                        {
+                                                            <option>
+                                                                @i
+                                                            </option>
+                                                        }
+                                                    </select>
+                                                </div>
+
+                                                <div class="row mt-3">
+                                                    <input type="text" class="form-control" placeholder="Autor nombre científico" id="autor" name="autor" required>
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Parte 4 -->
+                                <div class="carousel-item">
+                                    <div class="container">
+
+                                        <h3 class="d-flex justify-content-center align-items-center"><samp>Asociar recolectores</samp></h3>
+
+
+                                        <div class="row mt-3 ms-5 justify-content-end">
+                                            <div class="col-auto">
+                                                <button type="button" class="btn btn-link btn-buscar" id="buscarbtn">
+                                                    <i class='bx bx-search-alt' style="font-size: 1.5rem;"></i>
+                                                </button>
+
+                                            </div>
+                                            <div class="col-auto">
+                                                <input type="text" class="form-control" id="buscar-recolector" placeholder="Buscar recolector">
+                                            </div>
+                                        </div>
+
+                                        <div style="max-height: 300px; overflow-y: auto;">
+                                            <table id="tabla-recolectores" class="table table-striped table-hover mt-3">
+                                                <thead>
+                                                    <tr>
+                                                        <th scope="col"><samp>Nombre</samp></th>
+                                                        <th scope="col"><samp>Muestras ligadas</samp></th>
+                                                        <th scope="col"><samp>Seleccionar</samp></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach (RecolectorModel i in ViewBag.mostrarrecolector)
+                                                    {
+                                                        <tr>
+                                                            <td>@i.Nombre</td>
+                                                            <td>@i.Cantidad</td>
+                                                            <td>
+                                                                <input type="checkbox" name="usuariosSeleccionados" value="@i.Id" />
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </form>
+
+                        </div>
+
+                        <!-- Controles del carrusel -->
+                        <button class="carousel-control-prev btn btn-outline-success me-5" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+
+                        <button class="carousel-control-next btn btn-outline-success ms-5" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+
+
+
+                    </div>
+                </div>
+
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal"><samp>Cancelar</samp></button>
+                    <button type="submit" class="btn btn-outline-success" form="formulario"><samp>Finalizar</samp></button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para Añadir Parametros -->
+    <div class="modal fade mt-5" id="modalAñadirParametros" tabindex="-1" aria-labelledby="modalAñadirParametrosLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalAñadirParametrosLabel">Añadir parámetros</h5>
+                <button type="button" class="btn btn-outline-danger ms-auto" id="cerrarAP" data-bs-dismiss="modal" aria-label="Close"><samp>X</samp></button>
+            </div>
+            <div class="modal-body" style="background-color: #C2E6D6">
+                <div class="row">
+                    <!-- Formulario Características -->
+                    <div class="col-md-6 d-flex align-items-center justify-content-center">
+                        <form id="formCaracteristicas" action="@Url.Action("CrearParameros","Admin")" method="post">
+                            <h5 class="text-center">Características</h5>
+                            <div class="mb-3">
+                                <label for="selectCaracteristica" class="form-label">Seleccione una característica</label>
+                                    <select class="form-select" id="selectCaracteristica" name="selectCaracteristica">
+                                    <option>Division</option>
+                                    <option>Clase</option>
+                                    <option>Orden</option>
+                                    <option>Familia</option>
+                                    <option>Genero</option>
+                                    <option>Especie</option>
+                                    <option>Tipo de venación</option>
+                                    <option>Tipo de forma</option>
+                                    <option>Tipo de margen</option>
+                                    <option>Procedencia de la muestra</option>
+                                    <option>Tipo de ubicación</option>
+                                    <option>Condición reproductiva</option>
+                                    <option>Origen</option>
+                                    <option>Habitad</option>
+                                    <option>Observación local</option>
+                                    </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="inputCaracteristica" class="form-label">Nombre</label>
+                                <input type="text" class="form-control" id="inputCaracteristica" name="inputCaracteristica" placeholder="Ingrese el nombre...">
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-success">Guardar</button>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- Formulario Ubicación -->
+                        <div class="col-md-6 d-flex align-items-center justify-content-center">
+                        <form id="formUbicacion" action="@Url.Action("CrearUbicacion","Admin")" method="post">
+                            <h5 class="text-center">Ubicación</h5>
+                            <div class="mb-3">
+                                <label for="selectDepartamento" class="form-label">Departamento</label>
+                                <select id="departmentSelect2" class="form-select" name="departmentSelect2">
+                                    <option value="Seleccione">Seleccionar departamento</option>
+                                    @foreach (String i in @ViewBag.ldep)
+                                    {
+                                        <option>
+                                            @i
+                                        </option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="selectMunicipio" class="form-label">Municipio</label>
+                                <select id="municipioSelect2" class="form-select" name="municipioSelect2">
+                                    <option selected>-</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="selectTipoUbicacion" class="form-label">Tipo de Ubicación</label>
+                                <select class="form-select" id="selectTipoUbicacion" name="selectTipoUbicacion">
+                                    <option value="Seleccione">Seleccionar tipo</option>
+                                    @foreach (String i in @ViewBag.ltipoubi2)
+                                    {
+                                        <option>
+                                            @i
+                                        </option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="inputUbicacion" class="form-label">Nombre</label>
+                                <input type="text" class="form-control" id="inputUbicacion" name="inputUbicacion" placeholder="Ingrese el nombre...">
+                            </div>
+                            <div class="mb-3">
+                                <label for="cuerpodeagua" class="form-label">¿Es un cuerpo de agua?</label>
+                                <select class="form-select" id="selectcuerpodeagua" name="selectcuerpodeagua">
+                                    <option>Sí</option>
+                                    <option>No</option>
+                                </select>
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-success">Guardar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal"><samp>Cancelar</samp></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <!-- Modal para Añadir Proyecto -->
+    <div class="modal fade mt-5" id="modalAñadirProyecto" tabindex="-1" aria-labelledby="modalAñadirProyectoLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalAñadirParametrosLabel">Añadir proyecto</h5>
+                    <button type="button" class="btn btn-outline-danger ms-auto" id="cerrarAP" data-bs-dismiss="modal" aria-label="Close"><samp>X</samp></button>
+                </div>
+                <div class="modal-body" style="background-color: #C2E6D6">
+                    <form id="formularioproyecto" action="@Url.Action("CrearProyecto","Admin")" method="post">
+                        <div class="row">
+
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="nombreProyecto" class="form-label">Nombre del Proyecto</label>
+                                    <input type="text" class="form-control" id="nombreProyecto" name="nombreProyecto" placeholder="Ingresar nombre..." required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="selectProtocolo" class="form-label">Protocolo de Muestreo</label>
+                                    <select class="form-select" id="selectProtocolo" name="selectProtocolo" required>
+                                        <option value="">Seleccionar...</option>
+                                        @foreach (String i in @ViewBag.lprot)
+                                        {
+                                            <option>@i</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="fechaInicio" class="form-label">Fecha de Inicio</label>
+                                    <input type="date" class="form-control" id="fechaInicio" name="fechaInicio" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="fechaFin" class="form-label">Fecha de Fin</label>
+                                    <input type="date" class="form-control" id="fechaFin" name="fechaFin" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="esfuerzoDias" class="form-label">Esfuerzo en Días</label>
+                                    <input type="number" class="form-control" min="0" max="100" id="esfuerzoDias" name="esfuerzoDias" placeholder="Número de días..." required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="observaciones" class="form-label">Observaciones</label>
+                                    <input class="form-control" id="observaciones" name="observaciones" placeholder="Añadir observaciones"></input>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Nueva fila con Hora de Inicio y Hora de Fin -->
+                        <div class="row">
+                            <!-- Hora de Inicio -->
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="horaInicio" class="form-label">Hora de Inicio</label>
+                                    <input type="text" class="form-control" id="horaInicio" name="horaInicio" required>
+                                </div>
+                            </div>
+
+                            <!-- Hora de Fin -->
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="horaFin" class="form-label">Hora de Fin</label>
+                                    <input type="text" class="form-control" id="horaFin" name="horaFin" required>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal"><samp>Cancelar</samp></button>
+                    <button type="submit" class="btn btn-outline-success" form="formularioproyecto"><samp>Finalizar</samp></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para Editar Parametros -->
+    <div class="modal fade mt-5" id="modalEditarParametros" tabindex="-1" aria-labelledby="modalEditarParametros" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalAñadirParametrosLabel">Editar parámetros</h5>
+                    <button type="button" class="btn btn-outline-danger ms-auto" id="cerrarAP" data-bs-dismiss="modal" aria-label="Close"><samp>X</samp></button>
+                </div>
+                <div class="modal-body" style="background-color: #C2E6D6">
+                    <form id="formularioEditar" method="post" action="@Url.Action("EditarParametros", "Admin")">
+                        <div class="mb-3">
+                            <label for="selectCategoria" class="form-label">Seleccionar característica</label>
+                            <select class="form-select" id="selectCategoria" name="categoria" onchange="actualizarOpciones()" required>
+                                <option value="" selected>Seleccionar...</option>
+                                <option>TIPO DE VENACION</option>
+                                <option>TIPO DE FORMA</option>
+                                <option>TIPO DE MARGEN</option>
+                                <option>PROCEDENCIA</option>
+                                <option>DIVISION</option>
+                                <option>CLASE</option>
+                                <option>GENERO</option>
+                                <option>ORDEN</option>
+                                <option>FAMILIA</option>
+                                <option>PROYECTO DE ORIGEN</option>
+                                <option>CONDICION REPRODUCTIVA</option>
+                                <option>ORIGEN</option>
+                                <option>HABITAD</option>
+                                <option>OBSERVACION LOCAL</option>
+                                <option>PROTOCOLO DE MUESTREO</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="selectOpciones" class="form-label">Opciones disponibles</label>
+                            <select class="form-select" id="selectOpciones" name="opcion" required>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="nuevoValor" class="form-label">Nuevo valor</label>
+                            <input type="text" class="form-control" id="nuevoValor" name="nuevoValor" placeholder="Ingrese el nuevo valor" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal"><samp>Cancelar</samp></button>
+                    <button type="submit" class="btn btn-outline-success" form="formularioEditar"><samp>Finalizar</samp></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        flatpickr("#horaInicio", {
+            enableTime: true,
+            noCalendar: true,
+            dateFormat: "H:i", // 24-hour format
+            time_24hr: true
+        });
+
+        flatpickr("#horaFin", {
+            enableTime: true,
+            noCalendar: true,
+            dateFormat: "H:i", // 24-hour format
+            time_24hr: true
+        });
+
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const formulario = document.getElementById('formulario');
+
+            formulario.addEventListener('submit', function (event) {
+                // Mostrar la alerta
+                alert("La muestra ha sido creada");
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const formulario = document.getElementById('formCaracteristicas');
+
+            formulario.addEventListener('submit', function (event) {
+                // Mostrar la alerta
+                alert("La característica ha sido creada");
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const formulario = document.getElementById('formUbicacion');
+
+            formulario.addEventListener('submit', function (event) {
+                // Mostrar la alerta
+                alert("La ubicación ha sido creada");
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const formulario = document.getElementById('formularioproyecto');
+
+            formulario.addEventListener('submit', function (event) {
+                // Mostrar la alerta
+                alert("El proyecto ha sido creado");
+            });
+        });
+
+        $(document).ready(function () {
+            $('#departmentSelect').change(function () {
+                var departamentoSeleccionado = $(this).val();
+                if (departamentoSeleccionado !== 'Seleccione') {
+                    $.ajax({
+                        url: "@Url.Action("ObtenerMunicipiosPorDepartamento", "Admin")",
+                        type: 'POST',
+                        data: { nombreDepartamento: departamentoSeleccionado },
+                        success: function (data) {
+                            $('#municipioSelect').empty();
+                            $('#municipioSelect').append('<option>' + "Seleccione municipio" + '</option>');
+                            $.each(data, function (index, municipio) {
+                                $('#municipioSelect').append('<option>' + municipio + '</option>');
+                            });
+                        }
+                    });
+                }
+            });
+        });
+
+        $(document).ready(function () {
+            $('#municipioSelect').change(function () {
+                var municipioSeleccionado = $(this).val();
+                if (municipioSeleccionado !== 'Seleccione') {
+                    $.ajax({
+                        url: "@Url.Action("ObtenerTiposUbicacionPorMunicipio", "Admin")",
+                        type: 'POST',
+                        data: { nombreMunicipio: municipioSeleccionado },
+                        success: function (data) {
+                            $('#tipoUbicacionSelect').empty();
+                            $('#tipoUbicacionSelect').append('<option>' + "Seleccione el tipo de ubicación" + '</option>');
+                            $.each(data, function (index, tipoUbicacion) {
+                                $('#tipoUbicacionSelect').append('<option>' + tipoUbicacion + '</option>');
+                            });
+                        }
+                    });
+                }
+            });
+        });
+
+        $(document).ready(function () {
+            $('#tipoUbicacionSelect').change(function () {
+                var tipoSeleccionado = $('#tipoUbicacionSelect').val();
+                var municipioSeleccionado = $('#municipioSelect').val();
+                $.ajax({
+                    url: "@Url.Action("ObtenerUbicacionesPorTipoYMunicipio", "Admin")",
+                    type: 'POST',
+                    data: { nombreTipo: tipoSeleccionado, nombreMunicipio: municipioSeleccionado },
+                    success: function (data) {
+                        $('#ubicacionSelect').empty();
+                        $('#ubicacionSelect').append('<option>' + "Seleccione ubicación" + '</option>');
+                        $.each(data, function (index, ubicacion) {
+                            $('#ubicacionSelect').append('<option>' + ubicacion + '</option>');
+                        });
+                    }
+                });
+            });
+        });
+
+        const coordenadasInput = document.getElementById('coordenadasInput');
+
+        coordenadasInput.addEventListener('input', function () {
+            const coordenadas = this.value.trim();
+            const pattern = /^\d{1,2}°\d{1,2}'\d{1,2}\.\d{1}["][NSEW]\s*\d{1,3}°\d{1,2}'\d{1,2}\.\d{1}["][NSEW]$/;
+
+            if (!pattern.test(coordenadas)) {
+                this.setCustomValidity('El formato de coordenadas es incorrecto. Por favor, ingresa las coordenadas en Grados Decimales, por ejemplo, 1°05\'02.4"N 76°37\'57.6"W');
+            } else {
+                this.setCustomValidity('');
+            }
+        });
+
+
+        $(document).ready(function () {
+            $('#buscarbtn').click(function () {
+                var inputText = $('#buscar-recolector').val().trim().toLowerCase();
+                $('#tabla-recolectores tbody tr').filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(inputText) > -1);
+                });
+            });
+        });
+
+        $(document).ready(function () {
+            $('#guardar-recolectores').click(function () {
+                var recolectoresSeleccionados = [];
+                $('.checkbox-recolector:checked').each(function () {
+                    var idRecolector = $(this).val();
+                    recolectoresSeleccionados.push(idRecolector);
+                });
+
+                // Imprime los IDs de recolectores seleccionados en la consola
+                console.log('Recolectores seleccionados:', recolectoresSeleccionados);
+            });
+        });
+
+        $(document).ready(function () {
+            $('#departmentSelect2').change(function () {
+                var departamentoSeleccionado = $(this).val();
+                if (departamentoSeleccionado !== 'Seleccione') {
+                    $.ajax({
+                        url: "@Url.Action("ObtenerMunicipiosPorDepartamento", "Admin")",
+                        type: 'POST',
+                        data: { nombreDepartamento: departamentoSeleccionado },
+                        success: function (data) {
+                            $('#municipioSelect2').empty();
+                            $('#municipioSelect2').append('<option>' + "Seleccione municipio" + '</option>');
+                            $.each(data, function (index, municipio) {
+                                $('#municipioSelect2').append('<option>' + municipio + '</option>');
+                            });
+                        }
+                    });
+                }
+            });
+        });
+
+        function actualizarOpciones() {
+            var categoria = document.getElementById("selectCategoria").value;
+            var selectOpciones = document.getElementById("selectOpciones");
+
+            // Limpiar las opciones anteriores
+            selectOpciones.innerHTML = '';
+
+            // Dependiendo de la categoría seleccionada, actualiza las opciones
+            if (categoria === 'TIPO DE VENACION') {
+                var opciones = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.ltv));
+            } else if (categoria === 'TIPO DE FORMA') {
+                var opciones = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.ltf));
+            } else if (categoria === 'TIPO DE MARGEN') {
+                var opciones = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.ltM));
+            } else if (categoria === 'PROCEDENCIA') {
+                var opciones = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.ltp));
+            } else if (categoria === 'DIVISION') {
+                var opciones = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.ltd));
+            } else if (categoria === 'CLASE') {
+                var opciones = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.ltc));
+            } else if (categoria === 'GENERO') {
+                var opciones = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.ltg));
+            } else if (categoria === 'ORDEN') {
+                var opciones = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.lto));
+            } else if (categoria === 'FAMILIA') {
+                var opciones = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.ltfami));
+            } else if (categoria === 'PROYECTO DE ORIGEN') {
+                var opciones = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.ltpro));
+            } else if (categoria === 'CONDICION REPRODUCTIVA') {
+                var opciones = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.lcr));
+            } else if (categoria === 'ORIGEN') {
+                var opciones = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.lor));
+            } else if (categoria === 'HABITAD') {
+                var opciones = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.lhab));
+            } else if (categoria === 'OBSERVACION LOCAL') {
+                var opciones = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.lobl));
+            } else if (categoria === 'PROTOCOLO DE MUESTREO') {
+                var opciones = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.lprot));
+            }
+
+            // Llenar el select con las nuevas opciones
+            opciones.forEach(function (opcion) {
+                var opt = document.createElement('option');
+                opt.value = opcion;
+                opt.innerHTML = opcion;
+                selectOpciones.appendChild(opt);
+            });
+        }
+    </script>
+
+</body>
+</html>

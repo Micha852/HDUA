@@ -1,0 +1,511 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Herbario Digital Enrique Forero</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        #modoVisualizacionHistoria,
+        #modoVisualizacionDatos,
+        #modoVisualizacionContactos,
+        #modoVisualizacionTYC {
+            white-space: pre-line;
+        }
+
+        body {  
+            background-image: url('/img/DSC_7144.webp');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            width: 100%;
+            height: 100vh;
+        }
+
+        .footer-img {
+        max-height: 65px;
+    }
+
+    .footer-icon {
+        max-height: 35px;
+    }
+
+    .footer-title {
+        font-size: 1rem;
+    }
+
+    @@media (max-width: 576px) {
+        .footer-img {
+            max-height: 40px;
+        }
+
+        .footer-icon {
+            max-height: 20px;
+        }
+
+        .footer-title {
+            font-size: 0.8rem;
+        }
+    }
+
+        @@media (max-width: 391px) {
+            .footer-img {
+                max-height: 35px;
+            }
+
+            .footer-icon {
+                max-height: 17px;
+            }
+
+            .footer-title {
+                font-size: 0.6rem;
+    </style>
+
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg" style="background-color: rgba(255, 255, 255, 0.5);">
+            <div class="container-fluid" >
+                <a class="navbar-brand" href="@Url.Action("Principal", "Principal")"><samp>Inicio</samp></a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a href="" class="nav-link" data-bs-toggle="modal" data-bs-target="#modalHistoria"><samp>Historia</samp></a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="" class="nav-link" data-bs-toggle="modal" data-bs-target="#modalDatos"><samp>Datos</samp></a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="" class="nav-link" data-bs-toggle="modal" data-bs-target="#modalContactos"><samp>Contactos</samp></a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="" class="nav-link" data-bs-toggle="modal" data-bs-target="#modalT&C"><samp>T&C</samp></a>
+                        </li>
+                    </ul>
+
+                    @if (ViewBag.IsLoginView == true)
+                    {
+                        <div class="col-4 d-flex align-items-center">
+                            <img src="~/img/LOGO_UDLA.webp" alt="Logo" width="80" height="80">
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="col-4 d-flex justify-content-end align-items-center">
+                            <li class="nav-item dropdown" style="list-style: none;">
+                                <a class="nav-link dropdown-toggle d-flex flex-column align-items-center" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fa-regular fa-user fa-fade" style="font-size: 2.5rem;"></i>
+                                    <samp>@User.Identity.Name</samp>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="@Url.Action("Logout","Login")"><samp>Cerrar sesión</samp></a></li>
+                                    @if (!Context.Request.Path.Equals("/MiPerfil/MiPerfil", StringComparison.OrdinalIgnoreCase))
+                                    {
+                                        <li><a class="dropdown-item" href="@Url.Action("MiPerfil","MiPerfil")"><samp>Mi Perfil</samp></a></li>
+                                    }
+                                </ul>
+                            </li>
+                        </div>
+                    }
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    @RenderBody()
+
+    <footer class="bg-transparent border-top fixed-bottom">
+        <div class="container-fluid py-3" style="background-color:#C2E6D6;">
+            <div class="row justify-content-between align-items-center text-center text-md-start">
+                <div class="col-auto">
+                    <img src="~/img/LOGO_UDLA.webp" alt="Logo" class="img-fluid footer-img">
+                </div>
+
+                <div class="col-auto d-flex flex-column flex-md-row align-items-center footer-text">
+                    <img src="~/img/planta.webp" alt="Ícono" class="img-fluid footer-icon">
+                    <p class="mx-2 mb-0 footer-title">Herbario Digital de la Amazonía</p>
+                    <img src="~/img/planta.webp" alt="Ícono" class="img-fluid footer-icon">
+                </div>
+
+                <div class="col-auto">
+                    <img src="~/img/LOGO_UDLA.webp" alt="Logo" class="img-fluid footer-img">
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    @*BURBUJA DE COMENTARIOS PRIVADOS:*@
+    <samp>
+        <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1250; margin-bottom: 100px;">
+            <div class="card shadow-lg chat-bubble" id="chatBubble" style="display: none;">
+                <div class="card-header text-dark d-flex justify-content-between align-items-center" style="background-color:#C2E6D6;">
+                    ¡Bienvenido!
+                    <button type="button" class="btn btn-outline-danger ms-auto" id="closeChat" aria-label="Close">X</button>
+                </div>
+
+                <div class="row card-body">
+                    <div class="col-auto">
+                        <img src="~/img/PC.webp" alt="Logo" class="img-fluid footer-img">
+                    </div>
+                    <div class="col-auto">
+                        <p>
+                            Puedes dejarnos tus <br> comentarios, opiniones y/o <br> sugerencias acá...</p>
+                    </div>
+                </div>
+                <div class="card-footer d-flex">
+                    <input id="mensaje" type="text" class="form-control me-2" placeholder="Escribir...">
+                    <button id="enviar" type="submit" class="btn btn-outline-success btn-sm">Enviar</button>
+                </div>
+            </div>
+
+            <button class="btn p-0" id="chatToggle" style="background: none; border: none;">
+                <img src="~/img/globo.webp" class="card-img-top" style="height: 4rem; object-fit: contain;">
+            </button>
+        </div>
+    </samp>
+
+
+
+    <!-- Modal Historia -->
+    <div class="modal fade mt-5" id="modalHistoria" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Historia del Herbario HUAZ</h5>
+                    <button type="button" class="btn btn-outline-danger ms-auto" id="cerrarHistoria" data-bs-dismiss="modal" aria-label="Close"><samp>X</samp></button>
+                </div>
+                <div class="modal-body">
+                    <div id="modoVisualizacionHistoria">
+
+                    </div>
+                    <div id="modoEdicionHistoria" style="display: none;">
+                        <textarea id="txtHistoria" class="form-control" rows="5"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-outline-success" data-bs-dismiss="modal"><samp>←Volver</samp></button>
+
+                    @{
+                        if (User.IsInRole("ADMINISTRADOR"))
+                        {
+                            <button type="button" class="btn btn-secondary" id="btnEditarHistoria">Editar</button>
+                            <button type="button" class="btn btn-primary" id="btnGuardarHistoria" style="display: none;">Guardar</button>
+                        }
+                    }
+
+                    <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#modalDatos"><samp>Datos→</samp></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Datos -->
+    <div class="modal fade mt-5" id="modalDatos" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel"><samp>Repertorio del Herbario HUAZ</samp></h1>
+                    <button type="button" class="btn btn-outline-danger ms-auto" id="cerrarDatos" data-bs-dismiss="modal" aria-label="Close"><samp>X</samp></button>
+                </div>
+                <div class="modal-body">
+                    <div id="modoVisualizacionDatos">
+
+                    </div>
+                    <div id="modoEdicionDatos" style="display: none;">
+                        <textarea id="txtDatos" class="form-control" rows="5"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#modalHistoria"><samp>←Historia</samp></button>
+
+                    @{
+                        if (User.IsInRole("ADMINISTRADOR"))
+                        {
+
+                            <button type="button" class="btn btn-secondary" id="btnEditarDatos">Editar</button>
+                            <button type="button" class="btn btn-primary" id="btnGuardarDatos" style="display: none;">Guardar</button>
+                        }
+                    }
+
+                    <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#modalContactos"><samp>Contactos→</samp></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Contactos -->
+    <div class="modal fade mt-5" id="modalContactos" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel"><samp>Personal encargado del Herbario</samp></h1>
+                    <button type="button" class="btn btn-outline-danger ms-auto" id="cerrarContactos" data-bs-dismiss="modal" aria-label="Close"><samp>X</samp></button>
+                </div>
+                <div class="modal-body">
+                    <div id="modoVisualizacionContactos">
+
+                    </div>
+                    <div id="modoEdicionContactos" style="display: none;">
+                        <textarea id="txtContactos" class="form-control" rows="5"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#modalDatos"><samp>←Datos</samp></button>
+
+                    @{
+                        if (User.IsInRole("ADMINISTRADOR"))
+                        {
+                                <button type="button" class="btn btn-secondary" id="btnEditarContactos">Editar</button>
+                                <button type="button" class="btn btn-primary" id="btnGuardarContactos" style="display: none;">Guardar</button>
+                        }
+                    }
+
+                    <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#modalT&C"><samp>T&C→</samp></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal T&C -->
+    <div class="modal fade mt-5" id="modalT&C" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel"><samp>Términos y condiciones</samp></h1>
+                    <button type="button" class="btn btn-outline-danger ms-auto" id="cerrarTYC" data-bs-dismiss="modal" aria-label="Close"><samp>X</samp></button>
+                </div>
+                <div class="modal-body">
+                    <div id="modoVisualizacionTYC">
+
+                    </div>
+                    <div id="modoEdicionTYC" style="display: none;">
+                        <textarea id="txtTYC" class="form-control" rows="5"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#modalContactos"><samp>←Contactos</samp></button>
+
+                    @{
+                        if (User.IsInRole("ADMINISTRADOR"))
+                        {
+                            <button type="button" class="btn btn-secondary" id="btnEditarTYC">Editar</button>
+                            <button type="button" class="btn btn-primary" id="btnGuardarTYC" style="display: none;">Guardar</button>
+                        }
+                    }
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script>
+
+        const chatToggle = document.getElementById('chatToggle');
+        const chatBubble = document.getElementById('chatBubble');
+        const closeChat = document.getElementById('closeChat');
+
+        // Mostrar la burbuja de chat cuando se hace clic en el botón de chat
+        chatToggle.addEventListener('click', () => {
+            chatBubble.style.display = 'block';
+            chatToggle.style.display = 'none';
+        });
+
+        // Cerrar la burbuja de chat cuando se hace clic en la "X"
+        closeChat.addEventListener('click', () => {
+            chatBubble.style.display = 'none';
+            chatToggle.style.display = 'block';
+        });
+
+        // Cerrar la burbuja de chat cuando se hace clic fuera de ella
+        document.addEventListener('click', (event) => {
+            if (!chatBubble.contains(event.target) && !chatToggle.contains(event.target)) {
+                chatBubble.style.display = 'none';
+                chatToggle.style.display = 'block';
+            }
+        });
+
+        $(document).ready(function () {
+            $('#enviar').click(function () {
+                var mensaje = $('#mensaje').val();
+
+                if (mensaje.trim() !== '') {
+                    $.ajax({
+                        url: '@Url.Action("EnviarComentario", "Correo")',
+                        type: 'POST',
+                        data: { mensaje: mensaje },
+                        success: function (response) {
+                            if (response.success) {
+                                alert(response.message);
+                                $('#mensaje').val('');  // Limpiar el input después de enviar el mensaje
+                            } else {
+                                alert(response.message);
+                            }
+                        },
+                        error: function () {
+                            alert('Error al intentar enviar el comentario.');
+                        }
+                    });
+                } else {
+                    alert('El mensaje no puede estar vacío.');
+                }
+            });
+        });
+
+
+
+        $(document).ready(function () {
+            $.ajax({
+                url: '@Url.Action("CargarInformacion", "Informacion")',
+                type: 'GET',
+                success: function (data) {
+                    $('#modoVisualizacionHistoria').html(data.historia);
+                    $('#txtHistoria').html(data.historia);
+
+                    $('#modoVisualizacionDatos').html(data.datos);
+                    $('#txtDatos').html(data.datos);
+
+                    $('#modoVisualizacionContactos').html(data.contactos);
+                    $('#txtContactos').html(data.contactos);
+
+                    $('#modoVisualizacionTYC').html(data.tyc);
+                    $('#txtTYC').html(data.tyc);
+                },
+
+                error: function (xhr, status, error) {
+                    console.error(error);
+                }
+            });
+        });
+
+        //......................................................
+        $(document).ready(function () {
+            $('#btnEditarHistoria').click(function () {
+                $('#modoVisualizacionHistoria').hide();
+                $('#modoEdicionHistoria').show();
+                $('#btnEditarHistoria').hide();
+                $('#btnGuardarHistoria').show();
+
+                $('#cerrarHistoria').click(function () {
+                    $('#modoVisualizacionHistoria').show();
+                    $('#modoEdicionHistoria').hide();
+                    $('#btnEditarHistoria').show();
+                    $('#btnGuardarHistoria').hide();
+                });
+
+            });
+        });
+
+        $(document).ready(function () {
+            $('#btnEditarDatos').click(function () {
+                $('#modoVisualizacionDatos').hide();
+                $('#modoEdicionDatos').show();
+                $('#btnEditarDatos').hide();
+                $('#btnGuardarDatos').show();
+
+                $('#cerrarDatos').click(function () {
+                    $('#modoVisualizacionDatos').show();
+                    $('#modoEdicionDatos').hide();
+                    $('#btnEditarDatos').show();
+                    $('#btnGuardarDatos').hide();
+                });
+
+            });
+        });
+
+        $(document).ready(function () {
+            $('#btnEditarContactos').click(function () {
+                $('#modoVisualizacionContactos').hide();
+                $('#modoEdicionContactos').show();
+                $('#btnEditarContactos').hide();
+                $('#btnGuardarContactos').show();
+
+                $('#cerrarContactos').click(function () {
+                    $('#modoVisualizacionContactos').show();
+                    $('#modoEdicionContactos').hide();
+                    $('#btnEditarContactos').show();
+                    $('#btnGuardarContactos').hide();
+                });
+
+            });
+        });
+
+        $(document).ready(function () {
+            $('#btnEditarTYC').click(function () {
+                $('#modoVisualizacionTYC').hide();
+                $('#modoEdicionTYC').show();
+                $('#btnEditarTYC').hide();
+                $('#btnGuardarTYC').show();
+
+                $('#cerrarTYC').click(function () {
+                    $('#modoVisualizacionTYC').show();
+                    $('#modoEdicionTYC').hide();
+                    $('#btnEditarTYC').show();
+                    $('#btnGuardarTYC').hide();
+                });
+
+            });
+        });
+
+        //......................................................
+        $(document).ready(function () {
+            $('#btnGuardarHistoria').click(function () {
+                actualizarInformacion('txtHistoria', 'modoVisualizacionHistoria', 'btnEditarHistoria', 'btnGuardarHistoria', 'Historia');
+            });
+
+            $('#btnGuardarDatos').click(function () {
+                actualizarInformacion('txtDatos', 'modoVisualizacionDatos', 'btnEditarDatos', 'btnGuardarDatos', 'Datos');
+            });
+
+            $('#btnGuardarContactos').click(function () {
+                actualizarInformacion('txtContactos', 'modoVisualizacionContactos', 'btnEditarContactos', 'btnGuardarContactos', 'Contactos');
+            });
+
+            $('#btnGuardarTYC').click(function () {
+                actualizarInformacion('txtTYC', 'modoVisualizacionTYC', 'btnEditarTYC', 'btnGuardarTYC', 'TYC');
+            });
+        });
+
+        function actualizarInformacion(txtId, modoVisualizacionId, btnEditarId, btnGuardarId, propiedad) {
+            var nuevoValor = $('#' + txtId).val();
+
+            $('#' + modoVisualizacionId).show();
+            $('#modoEdicion' + propiedad).hide();
+            $('#' + btnEditarId).show();
+            $('#' + btnGuardarId).hide();
+
+            var data = {};
+            data[propiedad.toLowerCase()] = nuevoValor;
+
+            $.ajax({
+                url: '@Url.Action("ActualizarInformacion", "Informacion")',
+                type: 'POST',
+                data: JSON.stringify(data),
+                contentType: 'application/json',
+                success: function (response) {
+                    $('#' + modoVisualizacionId).html(nuevoValor);
+                    console.log("Información actualizada correctamente");
+                },
+                error: function (xhr, status, error) {
+                    console.error(error);
+                    alert('Ha ocurrido un error al intentar actualizar la ' + propiedad + '.');
+                }
+            });
+        }
+
+    </script>
+
+
+</body>
+</html>

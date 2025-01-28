@@ -1,0 +1,1095 @@
+﻿@model List<MuestraModel>
+@{
+    ViewData["Title"] = "Resultado";
+    Layout = "~/Views/Shared/layau2.cshtml";
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.3/js/bootstrap.min.js"></script>
+    <title>HDUA</title>
+    <style>
+        .content-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .form-row {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        body {
+            background-image: url('/img/DSC_7852.webp');
+            background-size: cover; /* Permite que la imagen cubra el área visible */
+            background-position: center;
+            background-repeat: repeat-y; /* Repite la imagen solo verticalmente */
+            width: 100%;
+            height: auto; /* Deja que el fondo cubra toda la página según el contenido */
+            min-height: 100vh; /* Asegura que siempre cubra al menos la pantalla visible */
+        }
+
+        /* Estilos generales para el modal */
+    .modal-content {
+        width: 100%;
+        padding: 20px;
+    }
+
+    .modal-header,
+    .modal-footer {
+        text-align: center;
+    }
+
+    .carousel-inner .container {
+        max-width: 100%;
+        padding: 0 15px;
+    }
+
+    .col {
+        padding: 10px;
+    }
+
+    .row.mt-5 {
+        margin-top: 3rem;
+    }
+/* Media query para pantallas menores o iguales a 900px */
+@@media (max-width: 900px) {
+    .row.mt-5 {
+        margin-top: 2rem;
+    }
+
+    .col {
+        padding: 10px;
+    }
+
+    .panel-heading {
+        font-size: 1.5rem;
+    }
+
+    .modal-dialog {
+        max-width: 700px;
+        margin: 20px auto;
+    }
+
+    .carousel-inner .container {
+        padding: 0 10px;
+    }
+
+    .col {
+        margin-bottom: 20px;
+    }
+}
+
+/* Media query para pantallas menores o iguales a 480px */
+@@media (max-width: 480px) {
+    .row.mt-5 {
+        margin-top: 1.5rem;
+    }
+
+    .col {
+        padding: 5px;
+        text-align: center;
+    }
+
+    .panel-heading {
+        font-size: 1.2rem;
+    }
+
+    .modal-dialog {
+        max-width: 90%;
+        margin: 20px auto;
+    }
+
+    .modal-header h5 {
+        font-size: 1.2rem;
+    }
+
+    .col {
+        padding: 5px;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    input[type="date"],
+    select {
+        font-size: 0.9rem;
+    }
+
+    .carousel-control-prev-icon,
+    .carousel-control-next-icon {
+        width: 30px;
+        height: 30px;
+    }
+}
+
+/* Media query para pantallas menores o iguales a 420px */
+@@media (max-width: 420px) {
+    .row.mt-5 {
+        margin-top: 1rem;
+    }
+
+    .col {
+        padding: 5px;
+        text-align: center;
+    }
+
+    .panel-heading {
+        font-size: 1rem;
+    }
+
+    .modal-dialog {
+        max-width: 95%;
+    }
+
+    .modal-header h5 {
+        font-size: 1rem;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    input[type="date"],
+    select {
+        font-size: 0.8rem;
+    }
+
+    .btn {
+        font-size: 0.8rem;
+    }
+
+    .carousel-control-prev,
+    .carousel-control-next {
+        width: 50%;
+    }
+
+    .form-check-label {
+        font-size: 0.8rem;
+    }
+}
+
+    </style>
+</head>
+
+
+<body>
+
+    <div class="row mt-5">
+        <div class="col d-flex justify-content-center align-items-center" style="background-color: rgba(128, 128, 128, 0.5);">
+            <h3 class="panel-heading"><samp>RESULTADOS DE LA BÚSQUEDA</samp></h3>
+        </div>
+    </div>
+
+    <!--................................................................-->
+    <samp>
+        <div class="row row-cols-auto" style="justify-content:center;">
+            @if (Model != null && Model.Any(m => User.IsInRole("ADMINISTRADOR") || m.Estado))
+            {
+                @foreach (MuestraModel m in Model)
+                {
+                    bool isAdmin = User.IsInRole("ADMINISTRADOR");
+                    bool isVisitor = User.IsInRole("VISITANTE");
+
+                    // Mostrar la muestra solo si el usuario es administrador o si la muestra está habilitada
+                    if (isAdmin || m.Estado)
+                    {
+                        <div class="col mt-3">
+                            <div class="card" style="width: 20rem;">
+                                <div class="card-body text-center">
+                                    @if (!string.IsNullOrEmpty(m.Cientifico))
+                                    {
+                                        <h5 class="card-title">@m.Cientifico</h5>
+                                    }
+                                    else if (!string.IsNullOrEmpty(m.Vulgar))
+                                    {
+                                        <h5 class="card-title">@m.Vulgar</h5>
+                                    }
+                                </div>
+
+                                <img src="data:image/jpg;base64,@m.Imagen2.Imagen" class="card-img-top" style="height:15rem; object-fit: contain;">
+                                <div class="card-footer text-center">
+                                    <form id="formFichaMuestra" method="post" action="@Url.Action("FichaMuestra", "Principal")">
+                                        <input type="hidden" id="idMuestra" name="id" value="@m.Id" />
+                                        @if (m.Estado)
+                                        {
+                                            <button type="submit" class="btn btn-outline-success btn-auto">Ver ficha técnica</button>
+                                        }
+                                        else
+                                        {
+                                            <button type="button" class="btn btn-outline-danger btn-auto" disabled>Muestra inhabilitada</button>
+                                        }
+                                    </form>
+                                    @{
+                                        if (isAdmin)
+                                        {
+                                            <button type="button" class="btn btn-outline-success btn-auto mt-2"
+                                                    data-id="@m.Id"
+                                                    data-nombrecientifico="@m.Cientifico"
+                                                    data-nombrevulgar="@m.Vulgar"
+                                                    data-venacion="@m.Venacion"
+                                                    data-forma="@m.Forma"
+                                                    data-margen="@m.Margen"
+                                                    data-procedencia="@m.Procedencia"
+                                                    data-altura="@m.Altura"
+                                                    data-clase="@m.Clase"
+                                                    data-especie="@m.Especie"
+                                                    data-genero="@m.Genero"
+                                                    data-orden="@m.Orden"
+                                                    data-familia="@m.Familia"
+                                                    data-coordenada="@m.Coordenada"
+                                                    data-fecha="@m.Fecha"
+                                                    data-ubicacion="@m.Ubicacion"
+                                                    data-estado="@m.Estado"
+                                                    data-imagen="@m.Imagen"
+                                                    data-ids="@m.ListaRecolectores"
+                                                    data-division="@m.Division"
+                                                    data-proyecto="@m.Proyecto"
+                                                    data-adultos="@m.Adultos"
+                                                    data-jovenes="@m.Jovenes"
+                                                    data-condicion="@m.Condicion"
+                                                    data-origen="@m.Origen"
+                                                    data-elevacionmin="@m.Elevacionmin"
+                                                    data-elevacionmax="@m.Elevacionmax"
+                                                    data-habitad="@m.Habitad"
+                                                    data-observacion="@m.ObervacionLocal"
+                                                    data-catalogo="@m.Catalogo"
+                                                    data-registro="@m.Registro"
+                                                    data-autor="@m.Autor"
+                                                    data-bs-toggle="modal" data-bs-target="#modalEditarMuestra">
+                                                Editar muestra
+                                            </button>
+                                        }
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+            }
+            else
+            {
+                <div class="col-12 text-center">
+                    <h2>No hay muestras disponibles :(</h2>
+                </div>
+            }
+        </div>
+        
+
+    </samp>
+
+    <!--................................................................-->
+    <div class="col d-flex justify-content-center align-items-center flex-column">
+        <div class="row-md-auto text-center">
+            <a href="@Url.Action("Principal", "Principal")" class="btn btn-success" style="display: block; margin: 0 auto; color: lightgray">Volver a buscar</a>
+        </div>
+    </div>
+
+    <div class="mt-lg-5">
+        <div class="row mt-lg-5">
+            <div class="col mt-lg-5">
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-lg-5">
+        <div class="row mt-lg-5">
+            <div class="col mt-lg-5">
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-lg-5">
+        <div class="row mt-lg-5">
+            <div class="col mt-lg-5">
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade mt-5" id="modalEditarMuestra" tabindex="-1" aria-labelledby="modalEditarMuestraLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalEditarMuestraLabel"><samp>Editar Muestra - </samp><span id="modalNombreCientifico"></span></h5>
+                    <button type="button" class="btn btn-outline-danger ms-auto" id="cerrarHistoria" data-bs-dismiss="modal" aria-label="Close"><samp>X</samp></button>
+                </div>
+
+                <div class="modal-body" style="background-color: #C2E6D6">
+                    <div id="carouselExampleControls" class="carousel slide" data-bs-interval="false">
+                        <div class="carousel-inner ">
+                            <form action="@Url.Action("EditarMuestra","Principal")" method="post" id="formulario" enctype="multipart/form-data">
+                                <input type="hidden" id="idMuestra1" name="idMuestra1"/>
+                                <input type="hidden" id="ParaImagen" name="ParaImagen" />
+                                <!-- Parte 1 -->
+                                <div class="carousel-item active">
+                                    <div class="container">
+                                        <div class="row">
+
+                                            <h3 class="d-flex justify-content-center align-items-center"><samp>Generalidades</samp></h3>
+
+                                            <div class="col me-5 ms-5">
+                                                <div class="row mt-1">
+                                                    <h><samp>Nombre Cientifico</samp></h>
+                                                    <input type="text" class="form-control" placeholder="Nombre científico" oninput="this.value = this.value.toUpperCase()" id="cientifico" name="cientifico">
+                                                </div>
+                                                <div class="row mt-1">
+                                                    <h><samp>Nombre Vulgar</samp></h>
+                                                    <input type="text" class="form-control" placeholder="Nombre vulgar" oninput="this.value = this.value.toUpperCase()" id="vulgar" name="vulgar">
+                                                </div>
+                                                @* INSERTAR IMAGEN *@
+                                                <div class="row mt-1">
+                                                    <label for="formFile" class="form-label"><samp>Seleccionar imágen de muestra</samp></label>
+                                                    <input class="form-control" type="file" accept="image/*" id="File" name="File">
+                                                </div>
+
+                                                <div class="row mt-1">
+                                                    <label for="formFile" class="form-label"><samp>Fecha recolección</samp></label>
+                                                    <input type="date" class="form-control" id="fecharecoleccion" name="fecharecoleccion">
+                                                </div>
+
+                                                    <div class="row mt-3 justify-content-center">
+                                                        <div class="form-check d-flex justify-content-center align-items-center">
+                                                            <input class="form-check-input me-2" type="checkbox" id="estadoCheckbox" name="estadoCheckbox">
+                                                            <label class="form-check-label" for="estadoCheckbox">
+                                                                Estado
+                                                            </label>
+                                                        </div>
+                                                    </div>
+
+                                            </div>
+
+                                            <div class="col me-5 ms-5">
+                                                <div class="row mt-1">
+                                                    <h><samp>Tipo de venación</samp></h>
+                                                    <select class="form-select" id="venacion" name="venacion">
+                                                        @foreach (String i in ViewBag.ltv)
+                                                        {
+                                                            <option value="@i">@i</option>
+                                                        }
+                                                    </select>
+                                                </div>
+
+                                                <div class="row mt-1">
+                                                    <h><samp>Tipo de forma</samp></h>
+                                                    <select class="form-select" id="forma" name="forma">
+                                                        @foreach (String i in ViewBag.ltf)
+                                                        {
+                                                            <option value="@i">@i</option>
+                                                        }
+                                                    </select>
+                                                </div>
+
+
+                                                <div class="row mt-1">
+                                                    <h><samp>Tipo de margen</samp></h>
+                                                    <select class="form-select" id="margen" name="margen">
+                                                        @foreach (String i in @ViewBag.ltm)
+                                                        {
+                                                            <option value="@i">@i</option>
+                                                        }
+                                                    </select>
+                                                </div>
+
+                                                <div class="row mt-1">
+                                                    <h><samp>Procedencia</samp></h>
+                                                    <select class="form-select" id="procedencia" name="procedencia">
+                                                        @foreach (String i in ViewBag.ltp)
+                                                        {
+                                                            <option value="@i">@i</option>
+                                                        }
+                                                    </select>
+                                                </div>
+
+
+                                                <div class="row mt-1">
+                                                    <h><samp>Altura de la procedencia (metros)</samp></h>
+                                                    <input type="number" class="form-control" min="0.1" max="100" step="0.1" id="altura" name="altura">
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Parte 2 -->
+                                <div class="carousel-item">
+                                    <div class="container">
+                                        <div class="row">
+
+                                            <h3 class="d-flex justify-content-center align-items-center"><samp>Especificaciones</samp></h3>
+
+                                            <div class="col me-5 ms-5">
+                                                <div class="row mt-1">
+                                                    <h><samp>División</samp></h>
+                                                    <select class="form-select" id="division" name="division">
+                                                        @foreach (String i in @ViewBag.ldiv)
+                                                        {
+                                                            <option value="@i">@i</option>
+                                                        }
+                                                    </select>
+                                                </div>
+
+                                                <div class="row mt-1">
+                                                    <h><samp>Clase</samp></h>
+                                                    <select class="form-select" id="clase" name="clase">
+                                                        @foreach (String i in @ViewBag.ltc)
+                                                        {
+                                                            <option value="@i">@i</option>
+                                                        }
+                                                    </select>
+                                                </div>
+
+                                                <div class="row mt-1">
+                                                    <h><samp>Especie</samp></h>
+                                                    <select class="form-select" id="especie" name="especie">}
+                                                        @foreach (String i in @ViewBag.lte)
+                                                        {
+                                                            <option value="@i">@i</option>
+                                                        }
+                                                    </select>
+                                                </div>
+
+                                                <div class="row mt-1">
+                                                    <h><samp>Género</samp></h>
+                                                    <select class="form-select" id="genero" name="genero">
+                                                        @foreach (String i in @ViewBag.ltg)
+                                                        {
+                                                            <option value="@i">@i</option>
+                                                        }
+                                                    </select>
+                                                </div>
+
+                                                <div class="row mt-1">
+                                                    <h><samp>Departamento</samp></h>
+                                                    <select id="departmentSelect" class="form-select" name="departmentSelect">
+                                                        <option value="Seleccione">-</option>
+                                                        @foreach (String i in @ViewBag.ldep)
+                                                        {
+                                                            <option>
+                                                                @i
+                                                            </option>
+                                                        }
+                                                    </select>
+                                                </div>
+
+                                                <div class="row mt-1">
+                                                    <h><samp>Municipio</samp></h>
+                                                    <select id="municipioSelect" class="form-select" name="municipioSelect">
+                                                        <option selected>-</option>
+                                                    </select>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="col me-5 ms-5">
+                                                <div class="row mt-1">
+                                                    <h><samp>Orden</samp></h>
+                                                    <select class="form-select" id="orden" name="orden">
+                                                        @foreach (String i in @ViewBag.lto)
+                                                        {
+                                                            <option value="@i">@i</option>
+                                                        }
+                                                    </select>
+                                                </div>
+
+                                                <div class="row mt-1">
+                                                    <h><samp>Familia</samp></h>
+                                                    <select class="form-select" id="familia" name="familia">
+                                                        @foreach (String i in @ViewBag.ltfami)
+                                                        {
+                                                            <option value="@i">@i</option>
+                                                        }
+                                                    </select>
+                                                </div>
+
+                                                <div class="row mt-1">
+                                                    <h><samp>Tipo de ubicación</samp></h>
+                                                    <select class="form-select" id="tipoUbicacionSelect" name="tipoUbicacionSelect">
+                                                        <option selected>-</option>
+                                                    </select>
+                                                </div>
+
+                                                <div class="row mt-1">
+                                                    <h><samp>Ubicación</samp></h>
+                                                    <select class="form-select" id="ubicacionSelect" name="ubicacionSelect">
+                                                        <option value="-">-</option> <!-- Placeholder option -->
+                                                    </select>
+                                                </div>
+
+
+                                                <div class="row mt-1">
+                                                    <h><samp>Coordenadas</samp></h>
+                                                    <input type="text" class="form-control" id="coordenada" name="coordenada">
+                                                </div>
+
+                                                <div class="row mt-1">
+                                                    <h><samp>Proyecto de origen</samp></h>
+                                                    <select class="form-select" id="proyecto" name="proyecto">
+                                                        @foreach (String i in @ViewBag.lpro)
+                                                        {
+                                                            <option value="@i">@i</option>
+                                                        }
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Parte 3 -->
+                                <div class="carousel-item">
+                                    <div class="container">
+                                        <div class="row">
+
+                                            <h3 class="d-flex justify-content-center align-items-center"><samp> Más Especificaciones</samp></h3>
+
+                                            <div class="col me-5 ms-5">
+                                                <div class="row mt-3">
+                                                    <h><samp>Unidades de adultos</samp></h>
+                                                    <input type="number" class="form-control" min="0" max="100" id="adultos" name="adultos">
+                                                </div>
+
+                                                <div class="row mt-1">
+                                                    <h><samp>Unidades de juveniles</samp></h>
+                                                    <input type="number" class="form-control" min="0" max="100" id="jovenes" name="jovenes">
+                                                </div>
+
+                                                <div class="row mt-1">
+                                                    <h><samp>Condición Reproductiva</samp></h>
+                                                    <select class="form-select" id="condicion" name="condicion">
+                                                        @foreach (String i in @ViewBag.lcr)
+                                                        {
+                                                            <option value="@i">@i</option>
+                                                        }
+                                                    </select>
+                                                </div>
+
+                                                <div class="row mt-1">
+                                                    <h><samp>Origen</samp></h>
+                                                    <select class="form-select" id="origen" name="origen">
+                                                        @foreach (String i in @ViewBag.lor)
+                                                        {
+                                                            <option value="@i">@i</option>
+                                                        }
+                                                    </select>
+                                                </div>
+
+                                                <div class="row mt-1">
+                                                    <h><samp>Número de catálogo</samp></h>
+                                                    <input type="text" class="form-control" placeholder="Número de catálogo" oninput="this.value = this.value.toUpperCase()" id="catalogo" name="catalogo">
+                                                </div>
+
+                                                <div class="row mt-1">
+                                                    <h><samp>Número de registro</samp></h>
+                                                    <input type="text" class="form-control" placeholder="Número de registro" oninput="this.value = this.value.toUpperCase()" id="registro" name="registro">
+                                                </div>
+
+                                            </div>
+
+                                            <div class="col me-5 ms-5">
+
+                                                <div class="row mt-1">
+                                                    <h><samp>Elevación mínima (metros)</samp></h>
+                                                    <input type="number" class="form-control" min="0" max="5000" id="elevacionmin" name="elevacionmin">
+                                                </div>
+
+                                                <div class="row mt-1">
+                                                    <h><samp>Elevación máxima (metros)</samp></h>
+                                                    <input type="number" class="form-control" min="0" max="5000" id="elevacionmax" name="elevacionmax">
+                                                </div>
+
+                                                <div class="row mt-1">
+                                                    <h><samp>Condición Reproductiva</samp></h>
+                                                    <select class="form-select" id="habitad" name="habitad">
+                                                        @foreach (String i in @ViewBag.lhab)
+                                                        {
+                                                            <option value="@i">@i</option>
+                                                        }
+                                                    </select>
+                                                </div>
+
+                                                <div class="row mt-1">
+                                                    <h><samp>Origen</samp></h>
+                                                    <select class="form-select" id="observacion" name="observacion">
+                                                        @foreach (String i in @ViewBag.lobl)
+                                                        {
+                                                            <option value="@i">@i</option>
+                                                        }
+                                                    </select>
+                                                </div>
+
+                                                <div class="row mt-1">
+                                                    <h><samp>Autor nombre científico</samp></h>
+                                                    <input type="text" class="form-control" placeholder="Autor nombre científico" oninput="this.value = this.value.toUpperCase()" id="autor" name="autor">
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Parte 4 -->
+                                <div class="carousel-item">
+                                    <div class="container">
+
+                                        <h3 class="d-flex justify-content-center align-items-center"><samp>Asociar recolectores</samp></h3>
+
+
+                                        <div class="row mt-3 ms-5 justify-content-end">
+                                            <div class="col-auto">
+                                                <button type="button" class="btn btn-link btn-buscar" id="buscarbtn">
+                                                    <i class='bx bx-search-alt' style="font-size: 1.5rem;"></i>
+                                                </button>
+
+                                            </div>
+                                            <div class="col-auto">
+                                                <input type="text" class="form-control" id="buscar-recolector" placeholder="Buscar recolector">
+                                            </div>
+                                        </div>
+
+                                        <table id="tabla-recolectores" class="table table-striped table-hover mt-3">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col"><samp>Nombre</samp></th>
+                                                    <th scope="col"><samp>Muestras ligadas</samp></th>
+                                                    <th scope="col"><samp>Seleccionar</samp></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (RecolectorModel i in ViewBag.mostrarrecolector)
+                                                {
+                                                    <tr>
+                                                        <td>@i.Nombre</td>
+                                                        <td>@i.Cantidad</td>
+                                                        <td>
+                                                            <input type="checkbox" name="usuariosSeleccionados" value="@i.Id" />
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- Controles del carrusel -->
+                        <button class="carousel-control-prev btn btn-outline-success me-5" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+
+                        <button class="carousel-control-next btn btn-outline-success ms-5" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+
+                    </div>
+                </div>
+
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal"><samp>Cancelar</samp></button>
+                    <button type="submit" class="btn btn-outline-success" form="formulario"><samp>Finalizar</samp></button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const formulario = document.getElementById('formulario');
+
+            formulario.addEventListener('submit', function (event) {
+                // Mostrar la alerta
+                alert("La muestra ha sido editada");
+            });
+        });
+
+        $(document).ready(function () {
+            $('#verFichaBtn').click(function (e) {
+                e.preventDefault(); // Evitar que se ejecute el comportamiento predeterminado del enlace
+                $('#formFichaMuestra').submit(); // Enviar el formulario
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var modalEditarMuestra = document.getElementById('modalEditarMuestra');
+            var initialState = {};
+            
+
+            modalEditarMuestra.addEventListener('show.bs.modal', function (event) {
+                var button = event.relatedTarget; // Botón que activó el modal
+                var nombreCientifico = button.getAttribute('data-nombrecientifico');
+                var nombreVulgar = button.getAttribute('data-nombrevulgar');
+                var idMuestra = button.getAttribute('data-id');
+                var venacion = button.getAttribute('data-venacion');
+                var forma = button.getAttribute('data-forma');
+                var margen = button.getAttribute('data-margen');
+                var procedencia = button.getAttribute('data-procedencia');
+                var altura = button.getAttribute('data-altura');
+                var clase = button.getAttribute('data-clase');
+                var especie = button.getAttribute('data-especie');
+                var genero = button.getAttribute('data-genero');
+                var orden = button.getAttribute('data-orden');
+                var familia = button.getAttribute('data-familia');
+                var coordenada = button.getAttribute('data-coordenada');
+                var fecha = button.getAttribute('data-fecha');
+                var ubicacion = button.getAttribute('data-ubicacion'); // nuevo
+                var estado = button.getAttribute('data-estado') === 'True';
+                var imagen = button.getAttribute('data-imagen');
+                var idsRecolectores = button.getAttribute('data-ids').split(',').map(id => id.trim());
+                var division = button.getAttribute('data-division');
+                var proyecto = button.getAttribute('data-proyecto');
+                var adultos = button.getAttribute('data-adultos');
+                var jovenes = button.getAttribute('data-jovenes');
+                var condicion = button.getAttribute('data-condicion');
+                var origen = button.getAttribute('data-origen');
+                var elevacionmin = button.getAttribute('data-elevacionmin');
+                var elevacionmax = button.getAttribute('data-elevacionmax');
+                var habitad = button.getAttribute('data-habitad');
+                var observacion = button.getAttribute('data-observacion');
+                var catalogo = button.getAttribute('data-catalogo');
+                var registro = button.getAttribute('data-registro');
+                var autor = button.getAttribute('data-autor');
+
+                console.log(catalogo, registro, autor)
+
+                altura = altura.replace(',', '.');
+
+
+                // Actualizar el contenido del modal
+                var modalTitle = modalEditarMuestra.querySelector('#modalNombreCientifico');
+                modalTitle.textContent = nombreCientifico;
+
+                // Actualizar los campos del formulario del modal
+                var inputCientifico = modalEditarMuestra.querySelector('#cientifico');
+                var inputVulgar = modalEditarMuestra.querySelector('#vulgar');
+                var inputId = modalEditarMuestra.querySelector('#idMuestra1');
+                var selectVenacion = modalEditarMuestra.querySelector('#venacion');
+                var selectForma = modalEditarMuestra.querySelector('#forma');
+                var selectMargen = modalEditarMuestra.querySelector('#margen');
+                var selectProcedencia = modalEditarMuestra.querySelector('#procedencia');
+                var inputAltura = modalEditarMuestra.querySelector('#altura');
+                var selectClase = modalEditarMuestra.querySelector('#clase');
+                var selectEspecie = modalEditarMuestra.querySelector('#especie');
+                var selectGenero = modalEditarMuestra.querySelector('#genero');
+                var selectOrden = modalEditarMuestra.querySelector('#orden');
+                var selectFamilia = modalEditarMuestra.querySelector('#familia');
+                var inputCoordenada = modalEditarMuestra.querySelector('#coordenada');
+                var inputFecha = modalEditarMuestra.querySelector('#fecharecoleccion');
+                var selectUbicacion = modalEditarMuestra.querySelector('#ubicacionSelect');
+                var estadoCheckbox = modalEditarMuestra.querySelector('#estadoCheckbox');
+                var inputImagen = modalEditarMuestra.querySelector('#ParaImagen');
+                var selectDivision = modalEditarMuestra.querySelector('#division');
+                var selectProyecto = modalEditarMuestra.querySelector('#proyecto');
+                var inputAdultos = modalEditarMuestra.querySelector('#adultos');
+                var inputJovenes = modalEditarMuestra.querySelector('#jovenes');
+                var selectCondicion = modalEditarMuestra.querySelector('#condicion');
+                var selectOrigen = modalEditarMuestra.querySelector('#origen');
+                var inputElevacionmin = modalEditarMuestra.querySelector('#elevacionmin');
+                var inputElevacionmax = modalEditarMuestra.querySelector('#elevacionmax');
+                var selectHabitad = modalEditarMuestra.querySelector('#habitad');
+                var selectObservacion = modalEditarMuestra.querySelector('#observacion');
+                var inputCatalogo = modalEditarMuestra.querySelector('#catalogo');
+                var inputRegistro = modalEditarMuestra.querySelector('#registro');
+                var inputAutor = modalEditarMuestra.querySelector('#autor');
+
+                inputCientifico.value = nombreCientifico;
+                inputVulgar.value = nombreVulgar;
+                inputAltura.value = altura;
+                inputCoordenada.value = coordenada;
+                inputFecha.value = fecha;
+                estadoCheckbox.checked = estado;
+                inputImagen.value = imagen;
+                inputAdultos.value = adultos;
+                inputJovenes.value = jovenes;
+                inputElevacionmin.value = elevacionmin;
+                inputElevacionmax.value = elevacionmax;
+                inputCatalogo.value = catalogo;
+                inputRegistro.value = registro;
+                inputAutor.value = autor;
+
+                // Actualizar la tabla de recolectores
+                var tablaRecolectores = document.getElementById('tabla-recolectores').querySelector('tbody');
+                var filas = Array.from(tablaRecolectores.rows);
+
+                // Ordenar las filas: seleccionadas primero
+                filas.sort(function (a, b) {
+                    var idA = a.querySelector('input[type="checkbox"]').value;
+                    var idB = b.querySelector('input[type="checkbox"]').value;
+                    var seleccionadaA = idsRecolectores.includes(idA);
+                    var seleccionadaB = idsRecolectores.includes(idB);
+                    return (seleccionadaA === seleccionadaB) ? 0 : seleccionadaA ? -1 : 1;
+                });
+
+                // Vaciar la tabla y volver a insertar las filas en el nuevo orden
+                tablaRecolectores.innerHTML = '';
+                filas.forEach(function (fila) {
+                    tablaRecolectores.appendChild(fila);
+                });
+
+                // Marcar los checkboxes de los recolectores seleccionados
+                filas.forEach(function (fila) {
+                    var checkbox = fila.querySelector('input[type="checkbox"]');
+                    if (idsRecolectores.includes(checkbox.value)) {
+                        checkbox.checked = true;
+                    } else {
+                        checkbox.checked = false;
+                    }
+                });
+                // Guardar el estado inicial
+                initialState = {
+                    cientifico: nombreCientifico,
+                    vulgar: nombreVulgar,
+                    altura: altura,
+                    coordenada: coordenada,
+                    fecha: fecha,
+                    venacion: venacion,
+                    forma: forma,
+                    margen: margen,
+                    procedencia: procedencia,
+                    clase: clase,
+                    especie: especie,
+                    genero: genero,
+                    orden: orden,
+                    familia: familia,
+                    ubicacion: ubicacion,
+                    division: division,
+                    proyecto: proyecto
+                };
+
+                // Seleccionar el option correcto en el select de venacion
+                if (selectVenacion) {
+                    for (var i = 0; i < selectVenacion.options.length; i++) {
+                        if (selectVenacion.options[i].value === venacion) {
+                            selectVenacion.selectedIndex = i;
+                            break;
+                        }
+                    }
+                }
+
+                // Seleccionar el option correcto en el select de forma
+                if (selectForma) {
+                    for (var i = 0; i < selectForma.options.length; i++) {
+                        if (selectForma.options[i].value === forma) {
+                            selectForma.selectedIndex = i;
+                            break;
+                        }
+                    }
+                }
+
+                // Seleccionar el option correcto en el select de margen
+                if (selectMargen) {
+                    for (var i = 0; i < selectMargen.options.length; i++) {
+                        if (selectMargen.options[i].value === margen) {
+                            selectMargen.selectedIndex = i;
+                            break;
+                        }
+                    }
+                }
+
+                // Seleccionar el option correcto en el select de la procedencia
+                if (selectProcedencia) {
+                    for (var i = 0; i < selectProcedencia.options.length; i++) {
+                        if (selectProcedencia.options[i].value === procedencia) {
+                            selectProcedencia.selectedIndex = i;
+                            break;
+                        }
+                    }
+                }
+
+                // Seleccionar el option correcto en el select de la clase
+                if (selectClase) {
+                    for (var i = 0; i < selectClase.options.length; i++) {
+                        if (selectClase.options[i].value === clase) {
+                            selectClase.selectedIndex = i;
+                            break;
+                        }
+                    }
+                }
+
+                // Seleccionar el option correcto en el select de la especie
+                if (selectEspecie) {
+                    for (var i = 0; i < selectEspecie.options.length; i++) {
+                        if (selectEspecie.options[i].value === especie) {
+                            selectEspecie.selectedIndex = i;
+                            break;
+                        }
+                    }
+                }
+
+                // Seleccionar el option correcto en el select del genero
+                if (selectGenero) {
+                    for (var i = 0; i < selectGenero.options.length; i++) {
+                        if (selectGenero.options[i].value === genero) {
+                            selectGenero.selectedIndex = i;
+                            break;
+                        }
+                    }
+                }
+
+                // Seleccionar el option correcto en el select de la orden
+                if (selectOrden) {
+                    for (var i = 0; i < selectOrden.options.length; i++) {
+                        if (selectOrden.options[i].value === orden) {
+                            selectOrden.selectedIndex = i;
+                            break;
+                        }
+                    }
+                }
+
+                // Seleccionar el option correcto en el select de la familia
+                if (selectFamilia) {
+                    for (var i = 0; i < selectFamilia.options.length; i++) {
+                        if (selectFamilia.options[i].value === familia) {
+                            selectFamilia.selectedIndex = i;
+                            break;
+                        }
+                    }
+                }
+
+                // Seleccionar el option correcto en el select de la division
+                if (selectDivision) {
+                    for (var i = 0; i < selectDivision.options.length; i++) {
+                        if (selectDivision.options[i].value === division) {
+                            selectDivision.selectedIndex = i;
+                            break;
+                        }
+                    }
+                }
+
+                // Seleccionar el option correcto en el select del proyecto
+                if (selectDivision) {
+                    for (var i = 0; i < selectProyecto.options.length; i++) {
+                        if (selectProyecto.options[i].value === proyecto) {
+                            selectProyecto.selectedIndex = i;
+                            break;
+                        }
+                    }
+                }
+
+                // Seleccionar el option correcto en el select de la condicion
+                if (selectCondicion) {
+                    for (var i = 0; i < selectCondicion.options.length; i++) {
+                        if (selectCondicion.options[i].value === condicion) {
+                            selectCondicion.selectedIndex = i;
+                            break;
+                        }
+                    }
+                }
+
+                // Seleccionar el option correcto en el select del origen
+                if (selectOrigen) {
+                    for (var i = 0; i < selectOrigen.options.length; i++) {
+                        if (selectOrigen.options[i].value === origen) {
+                            selectOrigen.selectedIndex = i;
+                            break;
+                        }
+                    }
+                }
+
+                // Seleccionar el option correcto en el select del habitad
+                if (selectHabitad) {
+                    for (var i = 0; i < selectHabitad.options.length; i++) {
+                        if (selectHabitad.options[i].value === habitad) {
+                            selectHabitad.selectedIndex = i;
+                            break;
+                        }
+                    }
+                }
+
+                // Seleccionar el option correcto en el select de la observacion
+                if (selectObservacion) {
+                    for (var i = 0; i < selectObservacion.options.length; i++) {
+                        if (selectObservacion.options[i].value === observacion) {
+                            selectObservacion.selectedIndex = i;
+                            break;
+                        }
+                    }
+                }
+
+                if (selectUbicacion && selectUbicacion.options.length > 0) {
+                    selectUbicacion.options[0].value = ubicacion;
+                    selectUbicacion.options[0].text = ubicacion;
+                    selectUbicacion.selectedIndex = 0;
+                }
+
+                // Actualizar el campo oculto del ID
+                var inputId = modalEditarMuestra.querySelector('#idMuestra1');
+                inputId.value = idMuestra;
+            });
+
+        });
+
+        $(document).ready(function () {
+            $('#departmentSelect').change(function () {
+                $('#ubicacionSelect').empty();
+                var departamentoSeleccionado = $(this).val();
+                if (departamentoSeleccionado !== 'Seleccione') {
+                    $.ajax({
+                        url: "@Url.Action("ObtenerMunicipiosPorDepartamento", "Admin")",
+                        type: 'POST',
+                        data: { nombreDepartamento: departamentoSeleccionado },
+                        success: function (data) {
+                            $('#municipioSelect').empty();
+                            $('#municipioSelect').append('<option>' + "Seleccione municipio" + '</option>');
+                            $.each(data, function (index, municipio) {
+                                $('#municipioSelect').append('<option>' + municipio + '</option>');
+                            });
+                        }
+                    });
+                }
+            });
+        });
+
+        $(document).ready(function () {
+            $('#municipioSelect').change(function () {
+                var municipioSeleccionado = $(this).val();
+                if (municipioSeleccionado !== 'Seleccione') {
+                    $.ajax({
+                        url: "@Url.Action("ObtenerTiposUbicacionPorMunicipio", "Admin")",
+                        type: 'POST',
+                        data: { nombreMunicipio: municipioSeleccionado },
+                        success: function (data) {
+                            $('#tipoUbicacionSelect').empty();
+                            $('#tipoUbicacionSelect').append('<option>' + "Seleccione el tipo de ubicación" + '</option>');
+                            $.each(data, function (index, tipoUbicacion) {
+                                $('#tipoUbicacionSelect').append('<option>' + tipoUbicacion + '</option>');
+                            });
+                        }
+                    });
+                }
+            });
+        });
+
+        $(document).ready(function () {
+            $('#tipoUbicacionSelect').change(function () {
+                var tipoSeleccionado = $('#tipoUbicacionSelect').val();
+                var municipioSeleccionado = $('#municipioSelect').val();
+                $.ajax({
+                    url: "@Url.Action("ObtenerUbicacionesPorTipoYMunicipio", "Admin")",
+                    type: 'POST',
+                    data: { nombreTipo: tipoSeleccionado, nombreMunicipio: municipioSeleccionado },
+                    success: function (data) {
+                        $('#ubicacionSelect').empty();
+                        $('#ubicacionSelect').append('<option>' + "Seleccione ubicación" + '</option>');
+                        $.each(data, function (index, ubicacion) {
+                            $('#ubicacionSelect').append('<option>' + ubicacion + '</option>');
+                        });
+                    }
+                });
+            });
+        });
+
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,207 @@
+﻿@{
+    Layout = "~/Views/Shared/layau2.cshtml";
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.3/js/bootstrap.min.js"></script>
+    <title>HDUA</title>
+    <style>
+        body {
+            background-color: lightgray;
+        }
+
+        /* Estilos generales */
+.container {
+    max-width: 100%;
+}
+
+.border {
+    padding: 15px;
+    border-radius: 10px;
+}
+
+.row .col {
+    text-align: center;
+}
+
+/* Media query para pantallas menores o iguales a 900px */
+@@media (max-width: 900px) {
+    .panel-heading {
+        font-size: 1.8rem;
+        text-align: center;
+    }
+
+    .border {
+        margin: 20px auto;
+        padding: 15px;
+    }
+
+    .border .row {
+        flex-direction: column;
+    }
+
+    .col img {
+        max-width: 70px;
+        height: auto;
+        margin: 10px 0;
+    }
+
+    .col {
+        margin-bottom: 10px;
+    }
+
+    .col a {
+        font-size: 1.2rem;
+    }
+}
+
+/* Media query para pantallas menores o iguales a 480px */
+@@media (max-width: 480px) {
+    .panel-heading {
+        font-size: 1.5rem;
+    }
+
+    .border {
+        padding: 10px;
+    }
+
+    .col img {
+        max-width: 60px;
+        height: auto;
+        margin: 8px 0;
+    }
+
+    .col a {
+        font-size: 1rem;
+    }
+
+    .border .row {
+        gap: 10px;
+    }
+
+    .fs-4 {
+        font-size: 1.2rem;
+    }
+}
+
+/* Media query para pantallas menores o iguales a 420px */
+@@media (max-width: 420px) {
+    .panel-heading {
+        font-size: 1.2rem;
+    }
+
+    .border {
+        padding: 8px;
+    }
+
+    .col img {
+        max-width: 50px;
+        height: auto;
+        margin: 5px 0;
+    }
+
+    .col a {
+        font-size: 0.9rem;
+    }
+
+    .fs-4 {
+        font-size: 1rem;
+        padding: 8px 16px;
+    }
+
+    /* Ajuste del enlace al inicio */
+    .mt-4 {
+        margin-top: 20px;
+    }
+
+    a.fs-4 {
+        width: 100%;
+        display: block;
+        text-align: center;
+        margin-bottom: 15px;
+    }
+}
+
+    </style>
+</head>
+
+<body>
+    <div class="row mt-4">
+        <div class="col d-flex justify-content-center align-items-center" style="background-color: rgba(128, 128, 128, 0.5);">
+            <h3 class="panel-heading"><samp>PANEL DE CONTROL DEL SISTEMA</samp></h3>
+        </div>
+    </div>
+
+    <div class="container mt-3">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <!-- Gestión de muestras -->
+                <div class="border border-black mb-4 mt-5" style="background-color:#C2E6D6">
+                    <div class="row align-items-center">
+                        <div class="col d-flex justify-content-center align-items-center">
+                            <img src="~/img/gestionmuestra.webp" alt="Ícono" width="80" height="80">
+                        </div>
+                        <div class="col d-flex justify-content-center align-items-center">
+                            <samp>Gestión de muestras botánicas</samp>
+                        </div>
+                        <div class="col d-flex flex-column justify-content-center align-items-center">
+                            <img src="~/img/seleccionar.webp" alt="Ícono" width="50" height="50">
+                            <div class="mt-0">
+                                <a href="@Url.Action("GestionMuestra", "Admin")"><samp>Seleccionar</samp></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @if (User.IsInRole("ADMINISTRADOR"))
+                {
+                    <!-- Gestión de usuarios -->
+                    <div class="border border-black mb-4" style="background-color:#C2E6D6">
+                        <div class="row align-items-center">
+                            <div class="col d-flex justify-content-center align-items-center">
+                                <img src="~/img/users.webp" alt="Ícono" width="80" height="80">
+                            </div>
+                            <div class="col d-flex justify-content-center align-items-center">
+                                <samp>Gestión de usuarios registrados</samp>
+                            </div>
+                            <div class="col d-flex flex-column justify-content-center align-items-center">
+                                <img src="~/img/seleccionar.webp" alt="Ícono" width="50" height="50">
+                                <div class="mt-0">
+                                    <a href="@Url.Action("GestionUsuario", "Admin")"><samp>Seleccionar</samp></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                <!-- Gestión de informes -->
+                <div class="border border-black" style="background-color:#C2E6D6">
+                    <div class="row align-items-center">
+                        <div class="col d-flex justify-content-center align-items-center">
+                            <img src="~/img/informe.webp" alt="Ícono" width="80" height="80">
+                        </div>
+                        <div class="col d-flex justify-content-center align-items-center">
+                            <samp>Generar informes parametrizados</samp>
+                        </div>
+                        <div class="col d-flex flex-column justify-content-center align-items-center">
+                            <img src="~/img/seleccionar.webp" alt="Ícono" width="50" height="50">
+                            <div class="mt-0">
+                                <a href="@Url.Action("GenerarInformes", "Admin")"><samp>Seleccionar</samp></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="text-align: center; padding-bottom: 100px;" class="mt-4">
+                    <a href="@Url.Action("Principal", "Principal")" class="fs-4" style="color: #fff; text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5); padding: 10px 20px; border: 2px solid #fff; border-radius: 8px; display: inline-block; background-color: rgba(255, 255, 255, 0.1);"><samp>Volver a inicio</samp><i class='bx bxs-home'></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,59 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Informe de Muestras por Recolector</title>
+    <style>
+        /* Agrega los estilos que necesites para el PDF */
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Informe de Muestras por Recolector</h1>
+
+    @foreach (var recolector in ViewBag.informe)
+    {
+        <h2>Recolector: @recolector.nombre</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nombre de las muestras</th>
+                    <th>Fecha de asignación</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var dato in recolector.datos)
+                {
+                    <tr>
+                        <td>@dato.Item1</td>
+                        <td>@dato.Item2</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</body>
+</html>
