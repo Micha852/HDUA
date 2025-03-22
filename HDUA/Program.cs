@@ -23,6 +23,11 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         opcion.AccessDeniedPath = "/Principal/Principal";
     });
 
+builder.WebHost.ConfigureKestrel(serverOptions =>
+{
+    serverOptions.ListenAnyIP(7185);
+});
+
 var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())
