@@ -27,8 +27,8 @@ namespace HDUA.DATA{
 
         public void conectar(){
             try{
-                var client = new MongoClient("mongodb://localhost:27017");
-                cnm = client.GetDatabase("HDUA");
+                var client = new MongoClient("mongodb+srv://cejota1992grovestreet:Olemeeldedoatlas@cluster0.svjpc.mongodb.net/HDUA?retryWrites=true&w=majority");
+                cnm = client.GetDatabase("hdua");
             }catch (Exception ex){
                 Console.WriteLine(ex.Message);
             }
