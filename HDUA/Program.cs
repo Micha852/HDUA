@@ -2,13 +2,23 @@ using DinkToPdf.Contracts;
 using DinkToPdf;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using HDUA.Helpers;
+using System.Runtime.InteropServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
 
 var context = new CustomAssemblyLoadContext();
-context.LoadUnmanagedLibrary(Path.Combine(Directory.GetCurrentDirectory(), "LibreriaPDF/libwkhtmltox.dll"));
+
+if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+{
+    context.LoadUnmanagedLibrary(Path.Combine(Directory.GetCurrentDirectory(), "LibreriaPDF", "libwkhtmltox.dll"));
+}
+else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+{
+    context.LoadUnmanagedLibrary("/usr/lib/x86_64-linux-gnu/libwkhtmltox.so");
+}
+
 builder.Services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
