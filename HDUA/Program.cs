@@ -16,7 +16,7 @@ if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
 }
 else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
 {
-    context.LoadUnmanagedLibrary("/usr/lib/x86_64-linux-gnu/libwkhtmltox.so");
+    context.LoadUnmanagedLibrary("/usr/lib/x86_64-linux-gnu/libwkhtmltox.so"); // Ruta Linux
 }
 
 builder.Services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));

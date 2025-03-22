@@ -270,23 +270,20 @@ namespace HDUA.Controllers
                     Orientation = Orientation.Portrait
                 },
                 Objects =
-                {
-                    new ObjectSettings()
-                    {
-                        Page=url_pagina
-                    }
-                }
+        {
+            new ObjectSettings()
+            {
+                Page = url_pagina
+            }
+        }
             };
+
             var archivoPDF = _converter.Convert(pdf);
 
-            MemoryStream pdfStream = new MemoryStream(archivoPDF);
-            pdfStream.Position = 0;
-
             string nombrePDF = "reporte_" + DateTime.Now.ToString("ddMMyyyyHHmmss") + ".pdf";
-
-
             return File(archivoPDF, "application/pdf", nombrePDF);
         }
+
 
         public IActionResult DescargarEXCEL1(){
             List<MuestraPorRecolector> informe1 = procesos.InformeMuestrasRecolector1();

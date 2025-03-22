@@ -7,6 +7,21 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="LibreriaPDF\libwkhtmltox.dll" />
+    <None Remove="LibreriaPDF\libwkhtmltox.dylib" />
+    <None Remove="LibreriaPDF\libwkhtmltox.so" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="LibreriaPDF\libwkhtmltox.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="LibreriaPDF\libwkhtmltox.so">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
     <PackageReference Include="bootstrap" Version="5.3.3" />
     <PackageReference Include="ClosedXML" Version="0.102.2" />
@@ -21,15 +36,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="LibreriaPDF\libwkhtmltox.dll">
+    <Page Include="LibreriaPDF\libwkhtmltox.dylib">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="LibreriaPDF\libwkhtmltox.dylib">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="LibreriaPDF\libwkhtmltox.so">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    </Page>
   </ItemGroup>
 
 </Project>
