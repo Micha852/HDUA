@@ -10,14 +10,8 @@ builder.Services.AddControllersWithViews();
 
 var context = new CustomAssemblyLoadContext();
 
-if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-{
-    context.LoadUnmanagedLibrary(Path.Combine(Directory.GetCurrentDirectory(), "LibreriaPDF", "libwkhtmltox.dll"));
-}
-else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-{
-    context.LoadUnmanagedLibrary("/usr/lib/x86_64-linux-gnu/libwkhtmltox.so"); // Ruta Linux
-}
+context.LoadUnmanagedLibrary(Path.Combine(Directory.GetCurrentDirectory(), "LibreriaPDF",
+    RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "libwkhtmltox.dll" : "libwkhtmltox.so"));
 
 builder.Services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
 
