@@ -7,7 +7,7 @@ namespace HDUA.DATA{
 
         protected void conectar(){
             try{
-                cn = new MySqlConnection("Server=localhost;Port=3306;Database=hdua;Uid=root;Pwd=root");
+                cn = new MySqlConnection("Server=127.0.0.1;Port=3306;Database=hdua;Uid=root;Pwd=root");
                 cn.Open();
             }catch (Exception ex){
                 Console.WriteLine(ex.Message);
